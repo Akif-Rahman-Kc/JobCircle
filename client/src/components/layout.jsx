@@ -1,6 +1,6 @@
 import Head from "next/head";
-import Footer from "./footer";
-import Navbar from "./navbar";
+import Footer from "./Footer";
+import Navbar from "./Navbar";
 
 const Layout = ({ children }) => {
     return ( 
@@ -8,7 +8,6 @@ const Layout = ({ children }) => {
         <Head>
             <title>Job Circle</title>
         </Head>
-        <Navbar/>
         {children}
         <Footer/>
         </>

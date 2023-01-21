@@ -17,6 +17,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import EngineeringIcon from '@mui/icons-material/Engineering';
 import HomeIcon from '@mui/icons-material/Home';
+import Link from 'next/link';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -100,8 +101,8 @@ export default function Navbar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Sign In</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Sign Up</MenuItem>
+      <Link href='/signin'><MenuItem onClick={handleMenuClose}>Sign In</MenuItem></Link>
+      <Link href='/signup'><MenuItem onClick={handleMenuClose}>Sign Up</MenuItem></Link>
     </Menu>
   );
 
@@ -171,34 +172,24 @@ export default function Navbar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-            
-          </IconButton>
           <Typography
             variant="h6"
             noWrap
             component="a"
-            href="/"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
+              fontFamily: 'fantasy',
               fontWeight: 700,
               letterSpacing: '.3rem',
               color: 'inherit',
               textDecoration: 'none',
             }}
           >
-            LOGO
+            <img src="/logo.png" style={{width:'50px'}}  alt="Loading." />
+            <h3 style={{margin:'auto'}}>JobCircle</h3>
           </Typography>
           <Search>
             <SearchIconWrapper>
@@ -211,21 +202,19 @@ export default function Navbar() {
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-          
-            <IconButton size="large" aria-label="home page" color="inherit">
+            <IconButton sx={{ borderRadius:'10px' }} size="large" aria-label="home page" color="inherit">
               <Box sx={{ display: { xs: 'none', md: 'block', textAlign:'center' } }}>
                 <HomeIcon />
                 <h6 style={{fontSize:'12px'}}>Home</h6>
               </Box>
             </IconButton>
-            
-            <IconButton size="large" aria-label="show the workers" color="inherit">
+            <IconButton sx={{ borderRadius:'10px' }} size="large" aria-label="show the workers" color="inherit">
               <Box sx={{ display: { xs: 'none', md: 'block', textAlign:'center' } }}>
                 <EngineeringIcon/>
                 <h6 style={{fontSize:'12px'}}>Workers</h6>
               </Box>
             </IconButton>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+            <IconButton sx={{ borderRadius:'10px' }} size="large" aria-label="show 4 new mails" color="inherit">
               <Box sx={{ display: { xs: 'none', md: 'block', textAlign:'center' } }}>
               <Badge badgeContent={4} color="error">
                 <MailIcon />
@@ -234,6 +223,7 @@ export default function Navbar() {
               </Box>
             </IconButton>
             <IconButton
+              sx={{ borderRadius:'10px' }}
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
@@ -246,6 +236,7 @@ export default function Navbar() {
               </Box>
             </IconButton>
             <IconButton
+              sx={{ borderRadius:'10px' }}
               size="large"
               edge="end"
               aria-label="account of current user"
@@ -279,3 +270,19 @@ export default function Navbar() {
     </Box>
   );
 }
+
+// import styles from '@/styles/Navbar.module.css'
+
+// const Navbar = () => {
+//     return ( 
+//         <>
+//         <nav className={styles.navbar}>
+//             <div>
+
+//             </div>
+//         </nav>
+//         </>
+//      );
+// }
+ 
+// export default Navbar;
