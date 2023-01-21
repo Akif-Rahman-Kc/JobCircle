@@ -33,7 +33,7 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function SignIn() {
+export default function AdminSignIn() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -44,6 +44,7 @@ export default function SignIn() {
   };
 
   return (
+    <Box>
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="md">
         <CssBaseline />
@@ -75,22 +76,18 @@ export default function SignIn() {
               </Box>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <Box sx={{ mt: 4 , display: "flex", justifyContent: "center" }}>
                 <Avatar sx={{ bgcolor: "secondary.main" }}>
                   <LockOutlinedIcon />
                 </Avatar>
               </Box>
               <Typography
-                sx={{ textAlign: "center", fontWeight: "bold" }}
+                sx={{ mt: 1 , textAlign: "center", fontWeight: "bold" }}
                 component="h1"
                 variant="h5"
               >
-                Sign in
+                Admin
               </Typography>
-              <Box sx={{ border:'1px solid lightgray' , borderRadius:'20px' , mt: 3 , mb: 5 }}>
-                        <p>Sign Up With Google</p>
-                </Box>
-                <hr />
               <Box
                 component="form"
                 onSubmit={handleSubmit}
@@ -125,18 +122,6 @@ export default function SignIn() {
                 >
                   Sign In
                 </Button>
-                <Grid sm={12} container>
-                  <Grid sm={5} item xs>
-                    <Link href="#" variant="body2">
-                      Forgot password?
-                    </Link>
-                  </Grid>
-                  <Grid sm={7} item>
-                    <Link href="/signup" variant="body2">
-                      {"Don't have an account? Sign Up"}
-                    </Link>
-                  </Grid>
-                </Grid>
               </Box>
             </Grid>
           </Grid>
@@ -144,5 +129,6 @@ export default function SignIn() {
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
     </ThemeProvider>
+    </Box>
   );
 }
