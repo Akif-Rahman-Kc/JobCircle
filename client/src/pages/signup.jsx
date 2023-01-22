@@ -14,18 +14,36 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from 'axios';
+import { useRouter } from 'next/router';
 
 
 const theme = createTheme();
 
 export default function SignUp() {
+  const router = useRouter()
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    let data = new FormData(event.currentTarget);
     console.log({
+      firstName: data.get('firstName'),
+      lastName: data.get('lastName'),
+      firstName: data.get('firstName'),
       email: data.get('email'),
       password: data.get('password'),
     });
+    console.log("aaaaaaaaaaaabbbb");
+    data = {
+      firstName: data.get('firstName'),
+      lastName: data.get('lastName'),
+      firstName: data.get('firstName'),
+      email: data.get('email'),
+      password: data.get('password'),
+    }
+
+    return axios.post('http://localhost:4000/signup',{data}).then((response)=>{
+      router.push('/signup_details')
+    })
   };
 
   return (
@@ -126,7 +144,7 @@ export default function SignUp() {
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}
                         >
-                        Sign Up
+                        Next
                         </Button>
                         <Grid container justifyContent="flex-end">
                         <Grid item>
