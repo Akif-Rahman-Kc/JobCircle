@@ -270,19 +270,3 @@ export default function Navbar() {
     </Box>
   );
 }
-
-// import styles from '@/styles/Navbar.module.css'
-
-// const Navbar = () => {
-//     return ( 
-//         <>
-//         <nav className={styles.navbar}>
-//             <div>
-
-//             </div>
-//         </nav>
-//         </>
-//      );
-// }
- 
-// export default Navbar;

@@ -13,23 +13,6 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="#">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
 
 const theme = createTheme();
 
@@ -66,12 +49,16 @@ export default function SignIn() {
             spacing={2}
           >
             <Grid sx={{display: { xs: 'none', sm: 'flex' }}} item xs={12} sm={6}>
-              <Box>
+              <Box sx={{ textAlign:'center' }}>
                 <img
                   style={{ margin: "60px", width: "65%", height: "55vh" }}
                   src="/logo.png"
                   alt="Loading..."
                 />
+                <br />
+                        <Link href="/vendor/signin" variant="body2">
+                            Are You Vendor
+                          </Link>
               </Box>
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -141,7 +128,6 @@ export default function SignIn() {
             </Grid>
           </Grid>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
     </ThemeProvider>
   );

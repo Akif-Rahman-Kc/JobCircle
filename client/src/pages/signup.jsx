@@ -15,18 +15,6 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="#">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const theme = createTheme();
 
@@ -55,8 +43,12 @@ export default function SignUp() {
         >
             <Grid sx={{ backgroundColor:'#fff' , border:'1px solid lightgray', p:2 , borderRadius:'10px'}} container spacing={2}>
                 <Grid item sx={{display: { xs: 'none', sm: 'flex' }}} xs={12} sm={6}>
-                    <Box>
+                    <Box sx={{ textAlign:'center' }}>
                         <img style={{margin:'60px',width:'65%',height:'55vh'}} src="/logo.png" alt="Loading..."/>
+                        <br />
+                        <Link href="/vendor/signup" variant="body2">
+                            Are You Vendor
+                          </Link>
                     </Box>
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -68,7 +60,7 @@ export default function SignUp() {
                     <Typography sx={{ textAlign:'center', fontWeight:'bold' }} component="h1" variant="h5">
                         Sign up
                     </Typography>
-                    <Box sx={{ border:'1px solid lightgray' , borderRadius:'20px' , mt: 3 , mb: 5 }}>
+                    <Box sx={{p:1 , border:'1px solid lightgray' , borderRadius:'20px' , mt: 3 , mb: 5 }}>
                         <p>Sign Up With Google</p>
                     </Box>
                     <hr />
@@ -147,7 +139,6 @@ export default function SignUp() {
                 </Grid>
             </Grid>
         </Box>
-        <Copyright sx={{ mt: 5 }} />
       </Container>
     </ThemeProvider>
     </>

@@ -49,3 +49,13 @@ h1 ,h2, h3, h4, h5, h6, a, p {
 .comp::-webkit-scrollbar {
   display: none;
 }
+
+.css-11xur9t-MuiPaper-root-MuiTableContainer-root{
+  background-color: transparent;
+  border-radius: 15px;
+  box-shadow: -3px 3px 3px 1px rgb(0 0 0 / 20%), 1px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
+}
+
+.css-132a6sb-MuiTableCell-root , .css-1bhpkcd-MuiTableCell-root{
+  color: #fff;
+}
