@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt')
 const User = require('../model/userSchema')
 
 module.exports = {
-    userRegister: async (req, res) => {
+    userSignUp: async (req, res) => {
         try {
             console.log(req.body,"---");
             // const Email = req.body.data.email;
@@ -21,6 +21,14 @@ module.exports = {
             //         console.log(error.message);
             //     }
             // }
+            res.json()
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    userSignUpDetails: async (req, res) => {
+        try {
+            console.log(req.body,"===");
             res.json()
         } catch (error) {
             console.log(error);

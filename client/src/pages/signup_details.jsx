@@ -14,18 +14,27 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useRouter } from 'next/router';
+import axios from 'axios';
 
 
 const theme = createTheme();
 
 export default function SignUpDetails() {
+  const router = useRouter()
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    let data = new FormData(event.currentTarget);
+    data = {
+      phoneNo: data.get('phoneNo'),
+      locality: data.get('locality'),
+      city: data.get('city'),
+      state: data.get('state'),
+    }
+
+    return axios.post('http://localhost:4000/signup_details',{data}).then((response)=>{
+      router.push('/')
+    })
   };
 
   return (
