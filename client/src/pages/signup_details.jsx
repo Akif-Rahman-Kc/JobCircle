@@ -22,6 +22,7 @@ const theme = createTheme();
 
 export default function SignUpDetails() {
   const router = useRouter()
+
   const handleSubmit = (event) => {
     event.preventDefault();
     let data = new FormData(event.currentTarget);
