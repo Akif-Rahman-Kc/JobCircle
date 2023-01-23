@@ -59,3 +59,8 @@ h1 ,h2, h3, h4, h5, h6, a, p {
 .css-132a6sb-MuiTableCell-root , .css-1bhpkcd-MuiTableCell-root{
   color: #fff;
 }
+
+.css-1wc848c-MuiFormHelperText-root{
+  font-size: 10px;
+  font-weight: 900;
+}

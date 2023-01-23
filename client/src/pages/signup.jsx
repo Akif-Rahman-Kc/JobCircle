@@ -1,6 +1,5 @@
 
 
-import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -16,26 +15,82 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 
 const theme = createTheme();
 
 export default function SignUp() {
   const router = useRouter()
+
+  const [ firstName, setFirstName ] = useState(false)
+  const [ firstNameError, setFirstNameError ] = useState('')
+  const [ lastName, setLastName ] = useState(false)
+  const [ lastNameError, setLastNameError ] = useState('')
+  const [ email, setEmail ] = useState(false)
+  const [ emailError, setEmailError ] = useState('')
+  const [ password, setPassword ] = useState(false)
+  const [ passwordError, setPasswordError ] = useState('')
+  const [ confPassword, setConfPassword ] = useState(false)
+  const [ confPasswordError, setConfPasswordError ] = useState('')
+  const [ totalRequired, setTotalRequired ] = useState('')
+
   const handleSubmit = (event) => {
     event.preventDefault();
     let data = new FormData(event.currentTarget);
     data = {
       firstName: data.get('firstName'),
       lastName: data.get('lastName'),
-      firstName: data.get('firstName'),
       email: data.get('email'),
       password: data.get('password'),
+      confPassword: data.get('confPassword'),
     }
 
-    return axios.post('http://localhost:4000/signup',{data}).then((response)=>{
-      router.push('/signup_details')
-    })
+    if(data.firstName && data.email && data.password && data.confPassword){
+      let regName =/^[a-zA-Z]+$/;
+      let regEmail =/^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/
+      setTotalRequired('')
+      if(regName.test(data.firstName)){
+        setFirstName(false)
+        setFirstNameError('')
+        if(regEmail.test(data.email)){
+          setEmail(false)
+          setEmailError('')
+          if( data.password.length >= 6 ){
+            setPassword(false)
+            setPasswordError('')
+            if(data.password === data.confPassword){
+              setPassword(false)
+              setConfPassword(false)
+              setPasswordError('')
+              setConfPasswordError('')
+
+              //axios set
+              return axios.post('http://localhost:4000/signup',{data}).then((response)=>{
+                router.push('/signup_details')
+              })
+
+            }else{
+              setPassword(true)
+              setConfPassword(true)
+              setPasswordError('Password is not match')
+              setConfPasswordError('Password is not match')
+            }
+          }else{
+            setPassword(true)
+            setPasswordError('Minimum 6 character')
+          }
+        }else{
+          setEmail(true)
+          setEmailError('Please enter valid Email')
+        }
+     }else{
+      setFirstName(true)
+      setFirstNameError('Please enter valid Name')
+     }
+    }else{
+      setTotalRequired('Please enter your Details')
+    }
   };
 
   return (
@@ -74,6 +129,11 @@ export default function SignUp() {
                         <p>Sign Up With Google</p>
                     </Box>
                     <hr />
+                    <br/>
+                    <Box sx={{ backgroundColor:'#ffc5c5' , borderRadius:'3px' , pl:2 }}>
+                      <p style={{ color:'red' }}>{totalRequired}</p>
+                    </Box>
+                    
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 5 }}>
                         <Grid container spacing={2}>
                         <Grid item xs={6} sm={6}>
@@ -84,6 +144,8 @@ export default function SignUp() {
                             fullWidth
                             id="firstName"
                             label="First Name"
+                            error={firstName}
+                            helperText={firstNameError}
                             autoFocus
                             />
                         </Grid>
@@ -95,6 +157,8 @@ export default function SignUp() {
                             label="Last Name"
                             name="lastName"
                             autoComplete="family-name"
+                            error={lastName}
+                            helperText={lastNameError}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -105,6 +169,8 @@ export default function SignUp() {
                             label="Email Address"
                             name="email"
                             autoComplete="email"
+                            error={email}
+                            helperText={emailError}
                             />
                         </Grid>
                         <Grid item xs={6} sm={6}>
@@ -116,17 +182,21 @@ export default function SignUp() {
                             type="password"
                             id="password"
                             autoComplete="new-password"
+                            error={password}
+                            helperText={passwordError}
                             />
                         </Grid>
                         <Grid item xs={6} sm={6}>
                             <TextField
                             required
                             fullWidth
-                            name="password"
+                            name="confPassword"
                             label="Confirm Password"
                             type="password"
-                            id="password"
+                            id="confPassword"
                             autoComplete="confirm-password"
+                            error={confPassword}
+                            helperText={confPasswordError}
                             />
                         </Grid>
                         </Grid>
