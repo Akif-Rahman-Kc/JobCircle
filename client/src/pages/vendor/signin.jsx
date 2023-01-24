@@ -94,7 +94,7 @@ export default function VendorSignIn() {
                 component="h1"
                 variant="h5"
               >
-                Sign in
+                Vendor Sign in
               </Typography>
               <Box sx={{ border:'1px solid lightgray' , borderRadius:'20px' , mt: 3 , mb: 5 }}>
                         <p>Sign Up With Google</p>

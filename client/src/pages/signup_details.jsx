@@ -15,6 +15,8 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '@/store/Context';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const theme = createTheme();
@@ -63,7 +65,34 @@ export default function SignUpDetails() {
 
           //axios
           return axios.post('http://localhost:4000/signup',{data}).then((response)=>{
-            router.push('/')
+            if (response.data.status == "success") {
+              toast.success('Registered', {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                })
+                setTimeout(() => {
+                  router.push('/')
+                }, 2000);
+                
+            } else {
+              toast.error('This email is already registered!', {
+                position: "top-right",
+                autoClose: 4000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                })
+            }
+            
           })
         }else{
           setPhoneNo(true)
@@ -96,6 +125,7 @@ export default function SignUpDetails() {
   return (
     <>
     <ThemeProvider theme={theme}>
+    <ToastContainer/>
       <Container component="main" maxWidth="md">
         <CssBaseline />
         <Box

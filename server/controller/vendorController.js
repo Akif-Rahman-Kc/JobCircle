@@ -2,22 +2,27 @@ import { hash, compare } from 'bcrypt'
 import Vendor from '../model/vendorSchema.js'
 import jwt from 'jsonwebtoken'
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 export async function vendorSignUp(req, res) {
     try {
         const vendorUser = await Vendor.findOne({ email: req.body.data.email })
 
         if (vendorUser) {
-            console.log("email already registerd")
+            res.json({status:"failed"})
         } else {
             let vendorDetails = req.body.data
             vendorDetails.password = await hash(vendorDetails.password, 10)
             await Vendor.create(vendorDetails)
-            res.json('Registered')
+            res.json({status:"success"})
         }
     } catch (error) {
         console.log(error)
     }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 export async function vendorSignIn(req, res) {
     try {
         const vendor = await Vendor.findOne({ email: req.body.data.email })
@@ -38,3 +43,5 @@ export async function vendorSignIn(req, res) {
         console.log(error)
     }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////

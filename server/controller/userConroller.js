@@ -8,12 +8,12 @@ export async function userSignUp(req, res) {
         const existUser = await User.findOne({ email: req.body.data.email })
 
         if (existUser) {
-            console.log("email already registerd")
+            res.json({status:"failed"})
         } else {
             let userDetails = req.body.data
             userDetails.password = await hash(userDetails.password, 10)
             await User.create(userDetails)
-            res.json('Registered')
+            res.json({status:"success"})
         }
     } catch (error) {
         console.log(error)
