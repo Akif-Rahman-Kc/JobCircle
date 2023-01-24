@@ -4,8 +4,6 @@ import { Inter } from '@next/font/google'
 import Navbar from '@/components/Navbar'
 import { Box } from '@mui/system'
 import { Avatar, Grid, IconButton } from '@mui/material'
-import PhotoSizeSelectActualIcon from '@mui/icons-material/PhotoSizeSelectActual';
-import SmartDisplayIcon from '@mui/icons-material/SmartDisplay';
 import Notifications from '@/components/Notification'
 import Messages from '@/components/Message'
 

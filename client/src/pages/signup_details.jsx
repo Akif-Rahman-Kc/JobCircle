@@ -1,6 +1,3 @@
-
-
-import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -16,12 +13,16 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import axios from 'axios';
+import { useContext } from 'react';
+import { AuthContext } from '@/store/Context';
 
 
 const theme = createTheme();
 
 export default function SignUpDetails() {
   const router = useRouter()
+
+  const { userDetails, setUserDetails } = useContext(AuthContext)
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -31,9 +32,13 @@ export default function SignUpDetails() {
       locality: data.get('locality'),
       city: data.get('city'),
       state: data.get('state'),
+      ...userDetails
     }
 
-    return axios.post('http://localhost:4000/signup_details',{data}).then((response)=>{
+    // setUserDetails(data)
+
+    //axios
+    return axios.post('http://localhost:4000/signup',{data}).then((response)=>{
       router.push('/')
     })
   };

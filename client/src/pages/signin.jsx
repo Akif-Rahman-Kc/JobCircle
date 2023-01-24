@@ -1,4 +1,3 @@
-import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -12,20 +11,47 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { useState } from "react";
 
 
 const theme = createTheme();
 
 export default function SignIn() {
+  const router = useRouter()
+
+  const [ email, setEmail ] = useState(false)
+  const [ emailError, setEmailError ] = useState('')
+  const [ password, setPassword ] = useState(false)
+  const [ passwordError, setPasswordError ] = useState('')
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
+    let data = new FormData(event.currentTarget);
+    data = {
       email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
+      password: data.get("password")
+    }
 
+    //axios
+    return axios.post('http://localhost:4000/signin',{data}).then((response)=>{
+      console.log(response.data)
+      if (response.data.status === 'failed') {
+        if (response.data.emailErr) {
+          setEmail(true)
+          setEmailError(response.data.message)
+        } else {
+          setPassword(true)
+          setPasswordError(response.data.message)
+        }
+      } else {
+        router.push('/')
+      }
+    
+    })
+  };
+  
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="md">
@@ -91,6 +117,8 @@ export default function SignIn() {
                   id="email"
                   label="Email Address"
                   name="email"
+                  error={email}
+                  helperText={emailError}
                   autoComplete="email"
                   autoFocus
                 />
@@ -102,6 +130,8 @@ export default function SignIn() {
                   label="Password"
                   type="password"
                   id="password"
+                  error={password}
+                  helperText={passwordError}
                   autoComplete="current-password"
                 />
                 <Button

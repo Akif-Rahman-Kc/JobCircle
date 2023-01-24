@@ -15,13 +15,16 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { AuthContext } from '@/store/Context';
 
 
 const theme = createTheme();
 
 export default function SignUp() {
   const router = useRouter()
+
+  const { userDetails, setUserDetails } = useContext(AuthContext)
 
   const [ firstName, setFirstName ] = useState(false)
   const [ firstNameError, setFirstNameError ] = useState('')
@@ -65,10 +68,9 @@ export default function SignUp() {
               setPasswordError('')
               setConfPasswordError('')
 
-              //axios set
-              return axios.post('http://localhost:4000/signup',{data}).then((response)=>{
-                router.push('/signup_details')
-              })
+              //context
+              setUserDetails(data)
+              router.push('/signup_details')
 
             }else{
               setPassword(true)
