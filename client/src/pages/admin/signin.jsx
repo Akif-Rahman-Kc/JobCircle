@@ -69,7 +69,7 @@ export default function AdminSignIn() {
             <Grid sx={{display: { xs: 'none', sm: 'flex' }}} item xs={12} sm={6}>
               <Box>
                 <img
-                  style={{ margin: "60px", width: "65%", height: "55vh" }}
+                  style={{ margin: "40px", width: "300px", height: "55vh" }}
                   src="/logo.png"
                   alt="Loading..."
                 />

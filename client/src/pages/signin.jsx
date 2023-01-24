@@ -77,14 +77,10 @@ export default function SignIn() {
             <Grid sx={{display: { xs: 'none', sm: 'flex' }}} item xs={12} sm={6}>
               <Box sx={{ textAlign:'center' }}>
                 <img
-                  style={{ margin: "60px", width: "65%", height: "55vh" }}
+                  style={{ margin: "40px", width: "300px", height: "55vh" }}
                   src="/logo.png"
                   alt="Loading..."
                 />
-                <br />
-                        <Link href="/vendor/signin" variant="body2">
-                            Are You Vendor
-                          </Link>
               </Box>
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -152,6 +148,10 @@ export default function SignIn() {
                     <Link href="/signup" variant="body2">
                       {"Don't have an account? Sign Up"}
                     </Link>
+                    <br/>
+                    <Link href="/vendor/signup" variant="body2">
+                        Are You Vendor
+                      </Link>
                   </Grid>
                 </Grid>
               </Box>

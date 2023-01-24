@@ -13,7 +13,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '@/store/Context';
 
 
@@ -23,6 +23,21 @@ export default function SignUpDetails() {
   const router = useRouter()
 
   const { userDetails, setUserDetails } = useContext(AuthContext)
+
+  useEffect(()=>{
+    if (Object.keys(userDetails) == 0) {
+      router.push('/signup')
+    }
+  },[])
+
+  const [ locality, setLocality ] = useState(false)
+  const [ localityError, setLocalityError ] = useState('')
+  const [ city, setCity ] = useState(false)
+  const [ cityError, setCityError ] = useState('')
+  const [ state, setState ] = useState(false)
+  const [ stateError, setStateError ] = useState('')
+  const [ phoneNo, setPhoneNo ] = useState(false)
+  const [ phoneNoError, setPhoneNoError ] = useState('')
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -35,13 +50,48 @@ export default function SignUpDetails() {
       ...userDetails
     }
 
-    // setUserDetails(data)
+    if(data.phoneNo && data.locality && data.city && data.state){
+      let regPhone =/^[0-9]+$/;
+      if(regPhone.test(data.phoneNo)){
+        setPhoneNo(false)
+        setPhoneNoError('')
+        if(data.phoneNo.length == 10){
+          setPhoneNo(false)
+          setPhoneNoError('')
 
-    //axios
-    return axios.post('http://localhost:4000/signup',{data}).then((response)=>{
-      router.push('/')
-    })
-  };
+          // setUserDetails(data)
+
+          //axios
+          return axios.post('http://localhost:4000/signup',{data}).then((response)=>{
+            router.push('/')
+          })
+        }else{
+          setPhoneNo(true)
+          setPhoneNoError('Please enter 10 digit')
+        }
+     }else{
+        setPhoneNo(true)
+        setPhoneNoError('Please Enter valid Phone no')
+     }
+    }else{
+      if (data.phoneNo == '') {
+        setPhoneNo(true)
+        setPhoneNoError('Please enter your Phone no')
+      }
+      if (data.locality == '') {
+        setLocality(true)
+        setLocalityError('Please enter your Locality')
+      }
+      if (data.city == '') {
+        setCity(true)
+        setCityError('Please enter your City')
+      }
+      if (data.state == '') {
+        setState(true)
+        setStateError('Please enter your State')
+      }
+    }
+  };  
 
   return (
     <>
@@ -59,7 +109,7 @@ export default function SignUpDetails() {
             <Grid sx={{ backgroundColor:'#fff' , border:'1px solid lightgray', p:2 , borderRadius:'10px'}} container spacing={2}>
                 <Grid item sx={{display: { xs: 'none', sm: 'flex' }}} xs={12} sm={6}>
                     <Box>
-                        <img style={{margin:'60px',width:'65%',height:'55vh'}} src="/logo.png" alt="Loading..."/>
+                        <img style={{margin:'40px',width:'300px',height:'55vh'}} src="/logo.png" alt="Loading..."/>
                     </Box>
                 </Grid>
                 <Grid sx={{ marginTop:'50px' }} item xs={12} sm={6}>
@@ -67,23 +117,15 @@ export default function SignUpDetails() {
                         <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <TextField
-                            autoComplete="given-name"
-                            name="phoneNo"
-                            required
-                            fullWidth
-                            id="phoneNo"
-                            label="Phone No"
-                            autoFocus
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
                             required
                             fullWidth
                             id="locality"
                             label="Locality"
                             name="locality"
+                            error={locality}
+                            helperText={localityError}
                             autoComplete="family-name"
+                            autoFocus
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -94,7 +136,8 @@ export default function SignUpDetails() {
                             fullWidth
                             id="city"
                             label="City"
-                            autoFocus
+                            error={city}
+                            helperText={cityError}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -105,6 +148,20 @@ export default function SignUpDetails() {
                             label="State"
                             name="state"
                             autoComplete="family-name"
+                            error={state}
+                            helperText={stateError}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                            autoComplete="given-name"
+                            name="phoneNo"
+                            required
+                            fullWidth
+                            id="phoneNo"
+                            label="Phone No"
+                            error={phoneNo}
+                            helperText={phoneNoError}
                             />
                         </Grid>
                         </Grid>

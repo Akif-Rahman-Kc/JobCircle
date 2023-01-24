@@ -1,13 +1,11 @@
-const jwt = require('jsonwebtoken')
+import { verify } from 'jsonwebtoken';
 
-module.exports = {
-    userJWT: async (req, res) => {
-        const token = req.headers["x-access-token"]
-        console.log(req.body);
-        if (!token) {
-            console.log("You need token");
-        } else {
-            jwt.verify(token)
-        }
+export async function userJWT(req, res) {
+    const token = req.headers["x-access-token"];
+    console.log(req.body);
+    if (!token) {
+        console.log("You need token");
+    } else {
+        verify(token);
     }
 }

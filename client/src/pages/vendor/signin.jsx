@@ -1,4 +1,3 @@
-import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -12,19 +11,47 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { useState } from "react";
+
 
 const theme = createTheme();
 
-export default function SignIn() {
+export default function VendorSignIn() {
+  const router = useRouter()
+
+  const [ email, setEmail ] = useState(false)
+  const [ emailError, setEmailError ] = useState('')
+  const [ password, setPassword ] = useState(false)
+  const [ passwordError, setPasswordError ] = useState('')
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
+    let data = new FormData(event.currentTarget);
+    data = {
       email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
+      password: data.get("password")
+    }
 
+    //axios
+    return axios.post('http://localhost:4000/vendor/signin',{data}).then((response)=>{
+      console.log(response.data)
+      if (response.data.status === 'failed') {
+        if (response.data.emailErr) {
+          setEmail(true)
+          setEmailError(response.data.message)
+        } else {
+          setPassword(true)
+          setPasswordError(response.data.message)
+        }
+      } else {
+        router.push('/')
+      }
+    
+    })
+  };
+  
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="md">
@@ -50,7 +77,7 @@ export default function SignIn() {
             <Grid sx={{display: { xs: 'none', sm: 'flex' }}} item xs={12} sm={6}>
               <Box sx={{ textAlign:'center' }}>
                 <img
-                  style={{ margin: "60px", width: "65%", height: "55vh" }}
+                  style={{ margin: "40px", width: "300px", height: "55vh" }}
                   src="/logo.png"
                   alt="Loading..."
                 />
@@ -67,7 +94,7 @@ export default function SignIn() {
                 component="h1"
                 variant="h5"
               >
-                Vendor Sign in
+                Sign in
               </Typography>
               <Box sx={{ border:'1px solid lightgray' , borderRadius:'20px' , mt: 3 , mb: 5 }}>
                         <p>Sign Up With Google</p>
@@ -86,6 +113,8 @@ export default function SignIn() {
                   id="email"
                   label="Email Address"
                   name="email"
+                  error={email}
+                  helperText={emailError}
                   autoComplete="email"
                   autoFocus
                 />
@@ -97,6 +126,8 @@ export default function SignIn() {
                   label="Password"
                   type="password"
                   id="password"
+                  error={password}
+                  helperText={passwordError}
                   autoComplete="current-password"
                 />
                 <Button
@@ -114,9 +145,13 @@ export default function SignIn() {
                     </Link>
                   </Grid>
                   <Grid sm={7} item>
-                    <Link href="/vendor/signup" variant="body2">
+                    <Link href="/signup" variant="body2">
                       {"Don't have an account? Sign Up"}
                     </Link>
+                    <br/>
+                    <Link href="/vendor/signup" variant="body2">
+                        Are You Vendor
+                      </Link>
                   </Grid>
                 </Grid>
               </Box>

@@ -29,6 +29,16 @@ const userSchema = new schema({
         type: String,
         trim: true
     },
+    job:{
+        required: true,
+        type: String,
+        trim: true
+    },
+    experiance:{
+        required: true,
+        type: String,
+        trim: true
+    },
     locality:{
         required: true,
         type: String,
@@ -47,4 +57,4 @@ const userSchema = new schema({
     
 },{ timestamps: true })
 
-export default model('users',userSchema);
+export default model('vendors',userSchema);

@@ -111,11 +111,7 @@ export default function SignUp() {
             <Grid sx={{ backgroundColor:'#fff' , border:'1px solid lightgray', p:2 , borderRadius:'10px'}} container spacing={2}>
                 <Grid item sx={{display: { xs: 'none', sm: 'flex' }}} xs={12} sm={6}>
                     <Box sx={{ textAlign:'center' }}>
-                        <img style={{margin:'60px',width:'65%',height:'55vh'}} src="/logo.png" alt="Loading..."/>
-                        <br />
-                        <Link href="/vendor/signup" variant="body2">
-                            Are You Vendor
-                          </Link>
+                        <img style={{margin:'40px',width:'300px',height:'55vh'}} src="/logo.png" alt="Loading..."/>
                     </Box>
                 </Grid>
                 <Grid item xs={12} sm={6}>
