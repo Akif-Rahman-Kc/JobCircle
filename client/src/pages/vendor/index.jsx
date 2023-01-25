@@ -12,6 +12,7 @@ import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import { useEffect } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/router'
+import VendorNavbar from '@/components/VendorNavbar'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,24 +20,24 @@ export default function Home() {
   const router = useRouter()
 
   useEffect(()=>{
-    let token=  localStorage.getItem('usertoken')
+    let token=  localStorage.getItem('vendortoken')
     if (token) {
-      axios.post('http://localhost:4000/userAuth',{headers:{"accessToken":token}}).then((response)=>{
+      axios.post('http://localhost:4000/vendor/vendorAuth',{headers:{"accessVendorToken":token}}).then((response)=>{
         if (response.data.auth) {
           console.log("success");
         } else {
-          router.push('/signin')
+          router.push('/vendor/signin')
         }
       })
     } else {
-      router.push('/signin')
+      router.push('/vendor/signin')
     }
   })
 
   return (
     <>
     <div>
-      <Navbar/>
+      <VendorNavbar/>
       <Box>
           <Grid container sx={{ justifyContent:'center' , mt: 10 , display:'flex' }}>
             <Grid md={3}>

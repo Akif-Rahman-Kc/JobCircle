@@ -70,7 +70,7 @@ export default function SignUpDetails() {
           // setUserDetails(data)
 
           //axios
-          return axios.post('http://localhost:4000/vendor/signup',{data}).then((response)=>{
+          axios.post('http://localhost:4000/vendor/signup',{data}).then((response)=>{
             if (response.data.status == "success") {
                 toast.success('Registered', {
                   position: "top-right",
@@ -83,6 +83,7 @@ export default function SignUpDetails() {
                   theme: "colored",
                   })
                   setTimeout(() => {
+                    localStorage.setItem('vendortoken', response.data.token)
                     router.push('/')
                   }, 2000);
                   

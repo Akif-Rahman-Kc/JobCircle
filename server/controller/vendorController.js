@@ -14,7 +14,10 @@ export async function vendorSignUp(req, res) {
             let vendorDetails = req.body.data
             vendorDetails.password = await hash(vendorDetails.password, 10)
             await Vendor.create(vendorDetails)
-            res.json({status:"success"})
+            const vendor = await Vendor.findOne({ email: vendorDetails.email })
+            const vendorId = vendor._id
+            const token = jwt.sign({ vendorId }, process.env.JWT_SECRET_KEY, { expiresIn: 60 * 60 * 24 })
+            res.json({auth: true, token: token,status:"success"})
         }
     } catch (error) {
         console.log(error)
@@ -45,3 +48,14 @@ export async function vendorSignIn(req, res) {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function vendorAuth(req, res) {
+    try {
+        let vendorDetails = await Vendor.findById(req.vendorId)
+        vendorDetails.auth = true
+
+        res.json({username:`${vendorDetails.firstName} ${vendorDetails.lastName}`,email:vendorDetails.email,auth:true,image:vendorDetails.image||null})
+    } catch (error) {
+        console.log(error)
+    }
+}

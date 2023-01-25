@@ -13,13 +13,28 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 const theme = createTheme();
 
 export default function SignIn() {
   const router = useRouter()
+
+  useEffect(()=>{
+    let token=  localStorage.getItem('usertoken')
+    if (token) {
+      axios.post('http://localhost:4000/userAuth',{headers:{"accessToken":token}}).then((response)=>{
+        if (response.data.auth) {
+          router.push('/')
+        } else {
+          console.log("failed");
+        }
+      })
+    } else {
+      console.log("failed");
+    }
+  })
 
   const [ email, setEmail ] = useState(false)
   const [ emailError, setEmailError ] = useState('')
@@ -35,7 +50,7 @@ export default function SignIn() {
     }
 
     //axios
-    return axios.post('http://localhost:4000/signin',{data}).then((response)=>{
+    axios.post('http://localhost:4000/signin',{data}).then((response)=>{
       console.log(response.data)
       if (response.data.status === 'failed') {
         if (response.data.emailErr) {
@@ -46,6 +61,7 @@ export default function SignIn() {
           setPasswordError(response.data.message)
         }
       } else {
+        localStorage.setItem('usertoken', response.data.token)
         router.push('/')
       }
     

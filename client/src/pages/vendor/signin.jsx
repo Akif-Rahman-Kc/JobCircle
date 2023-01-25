@@ -13,13 +13,28 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 const theme = createTheme();
 
 export default function VendorSignIn() {
   const router = useRouter()
+
+  useEffect(()=>{
+    let token=  localStorage.getItem('vendortoken')
+    if (token) {
+      axios.post('http://localhost:4000/vendor/vendorAuth',{headers:{"accessVendorToken":token}}).then((response)=>{
+        if (response.data.auth) {
+          router.push('/vendor')
+        } else {
+          console.log("failed");
+        }
+      })
+    } else {
+      console.log("failed");
+    }
+  })
 
   const [ email, setEmail ] = useState(false)
   const [ emailError, setEmailError ] = useState('')
@@ -35,7 +50,7 @@ export default function VendorSignIn() {
     }
 
     //axios
-    return axios.post('http://localhost:4000/vendor/signin',{data}).then((response)=>{
+    axios.post('http://localhost:4000/vendor/signin',{data}).then((response)=>{
       console.log(response.data)
       if (response.data.status === 'failed') {
         if (response.data.emailErr) {
@@ -46,6 +61,7 @@ export default function VendorSignIn() {
           setPasswordError(response.data.message)
         }
       } else {
+        localStorage.setItem('vendortoken', response.data.token)
         router.push('/')
       }
     
@@ -148,10 +164,6 @@ export default function VendorSignIn() {
                     <Link href="/signup" variant="body2">
                       {"Don't have an account? Sign Up"}
                     </Link>
-                    <br/>
-                    <Link href="/vendor/signup" variant="body2">
-                        Are You Vendor
-                      </Link>
                   </Grid>
                 </Grid>
               </Box>

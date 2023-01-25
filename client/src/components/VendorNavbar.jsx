@@ -17,6 +17,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import EngineeringIcon from '@mui/icons-material/Engineering';
 import HomeIcon from '@mui/icons-material/Home';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -60,8 +61,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function Navbar() {
-  const router = useRouter()
+export default function VendorNavbar() {
+    const router = useRouter()
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState(null);
@@ -87,9 +88,9 @@ export default function Navbar() {
   };
 
   const logout=()=>{
-    localStorage.removeItem('usertoken')
-    router.push('/signin')
-  }   
+    localStorage.removeItem('vendortoken')
+    router.push('/vendor/signin')
+  }  
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -108,8 +109,8 @@ export default function Navbar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <Link href='/signin'><MenuItem onClick={handleMenuClose}>Sign In</MenuItem></Link>
-      <Link href='/signup'><MenuItem onClick={handleMenuClose}>Sign Up</MenuItem></Link>
+      <Link href='/vendor/signin'><MenuItem onClick={handleMenuClose}>Sign In</MenuItem></Link>
+      <Link href='/vendor/signup'><MenuItem onClick={handleMenuClose}>Sign Up</MenuItem></Link>
       <MenuItem onClick={logout}>Log Out</MenuItem>
     </Menu>
   );
@@ -162,6 +163,12 @@ export default function Navbar() {
           </Badge>
         </IconButton>
         <p>Notifications</p>
+      </MenuItem>
+      <MenuItem>
+        <IconButton size="large" aria-label="show the workers" color="inherit">
+        <ReceiptLongIcon/>
+        </IconButton>
+        <p>Work List</p>
       </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
@@ -241,6 +248,12 @@ export default function Navbar() {
                 <NotificationsIcon />
               </Badge>
                 <h6 style={{fontSize:'12px'}}>Notifications</h6>
+              </Box>
+            </IconButton>
+            <IconButton sx={{ borderRadius:'10px' }} size="large" aria-label="show the workers" color="inherit">
+              <Box sx={{ display: { xs: 'none', md: 'block', textAlign:'center' } }}>
+                <ReceiptLongIcon/>
+                <h6 style={{fontSize:'12px'}}>Work List</h6>
               </Box>
             </IconButton>
             <IconButton
