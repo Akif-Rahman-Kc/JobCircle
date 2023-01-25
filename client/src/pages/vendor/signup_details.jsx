@@ -84,7 +84,7 @@ export default function SignUpDetails() {
                   })
                   setTimeout(() => {
                     localStorage.setItem('vendortoken', response.data.token)
-                    router.push('/')
+                    router.push('/vendor')
                   }, 2000);
                   
               } else {

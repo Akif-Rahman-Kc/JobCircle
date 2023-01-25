@@ -62,7 +62,7 @@ export default function VendorSignIn() {
         }
       } else {
         localStorage.setItem('vendortoken', response.data.token)
-        router.push('/')
+        router.push('/vendor')
       }
     
     })
