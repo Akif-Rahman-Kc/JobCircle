@@ -35,7 +35,7 @@ export async function vendorSignIn(req, res) {
             if (isMatch) {
                 const vendorId = vendor._id
                 const token = jwt.sign({ vendorId }, process.env.JWT_SECRET_KEY, { expiresIn: 60 * 60 * 24 })
-                res.json({ auth: true, token: token, result: vendor, status: "success", message: "signin success" })
+                res.json({ auth: true, token: token, status: "success" })
             } else {
                 res.json({ auth: false, passwordErr: true, status: "failed", message: "Your Password is Incorrect" })
             }

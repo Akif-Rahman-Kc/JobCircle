@@ -1,7 +1,6 @@
 import { Schema, model } from 'mongoose';
-const schema = Schema;
 
-const userSchema = new schema({
+const vendorSchema = new Schema({
     firstName:{
         type:String,
         required:true,
@@ -57,4 +56,4 @@ const userSchema = new schema({
     
 },{ timestamps: true })
 
-export default model('vendors',userSchema);
+export default model('vendors',vendorSchema);

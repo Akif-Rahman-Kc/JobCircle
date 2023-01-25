@@ -1,4 +1,3 @@
-import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -12,27 +11,67 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 const theme = createTheme();
 
 export default function AdminSignIn() {
+  const router = useRouter()
+
+  useEffect(()=>{
+    let token=  localStorage.getItem('admintoken')
+    if (token) {
+      axios.post('http://localhost:4000/admin/adminAuth',{headers:{"accessAdminToken":token}}).then((response)=>{
+        if (response.data.auth) {
+          router.push('/admin')
+        } else {
+          console.log("failed");
+        }
+      })
+    } else {
+      console.log("failed");
+    }
+  })
+
+  const [ email, setEmail ] = useState(false)
+  const [ emailError, setEmailError ] = useState('')
+  const [ password, setPassword ] = useState(false)
+  const [ passwordError, setPasswordError ] = useState('')
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
+    let data = new FormData(event.currentTarget);
+    data = {
       email: data.get("email"),
       password: data.get("password"),
-    });
+    }
+    axios.post('http://localhost:4000/admin/signin', data).then((response)=>{
+      if (response.data.status === 'failed') {
+        if (response.data.emailErr) {
+          setEmail(true)
+          setEmailError(response.data.message)
+        } else {
+          setPassword(true)
+          setPasswordError(response.data.message)
+        }
+      } else {
+        localStorage.setItem('admintoken', response.data.token)
+        router.push('/admin')
+      }
+    })
   };
 
   return (
-    <Box>
+    <Box sx={{backgroundColor:'#1976d2'}}>
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="md">
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 10,
+            paddingTop: 12,
+            minHeight:'100vh',
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -85,6 +124,8 @@ export default function AdminSignIn() {
                   name="email"
                   autoComplete="email"
                   autoFocus
+                  error={email}
+                  helperText={emailError}
                 />
                 <TextField
                   margin="normal"
@@ -95,6 +136,8 @@ export default function AdminSignIn() {
                   type="password"
                   id="password"
                   autoComplete="current-password"
+                  error={password}
+                  helperText={passwordError}
                 />
                 <Button
                   type="submit"

@@ -36,7 +36,7 @@ export async function userSignIn(req, res) {
             if (isMatch) {
                 const userId = user._id
                 const token = jwt.sign({ userId }, process.env.JWT_SECRET_KEY, { expiresIn: 60 * 60 * 24 })
-                res.json({ auth: true, token: token, result: user, status: "success", message: "signin success" })
+                res.json({ auth: true, token: token, status: "success" })
             } else {
                 res.json({ auth: false, passwordErr: true, status: "failed", message: "Your Password is Incorrect" })
             }

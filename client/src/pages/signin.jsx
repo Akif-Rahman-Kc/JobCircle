@@ -51,7 +51,6 @@ export default function SignIn() {
 
     //axios
     axios.post('http://localhost:4000/signin',{data}).then((response)=>{
-      console.log(response.data)
       if (response.data.status === 'failed') {
         if (response.data.emailErr) {
           setEmail(true)

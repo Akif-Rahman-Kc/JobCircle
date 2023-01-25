@@ -4,10 +4,18 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
-import { Avatar, Grid } from "@mui/material";
+import { Avatar, Button, Grid } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import { useRouter } from "next/router";
 
 export default function AdminNavbar() {
+  const router = useRouter()
+
+  const logout=()=>{
+    localStorage.removeItem('admintoken')
+    router.push('/admin/signin')
+  }   
+
   return (
     <>
       <AppBar sx={{ boxShadow: 3, borderRadius: "20px" }} position="static">
@@ -24,6 +32,7 @@ export default function AdminNavbar() {
           <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
             Admin
           </Typography>
+          <Button onClick={logout} sx={{color:'#fff'}}>Logout</Button>
           <h6>Akif Rahman</h6>
           <IconButton sx={{ ml: 1, p: 0 }}>
             <Avatar alt="Remy Sharp" src="/null-profile.jpg" />

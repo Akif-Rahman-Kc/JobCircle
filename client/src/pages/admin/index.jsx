@@ -1,10 +1,29 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import { Avatar, Grid } from '@mui/material';
 import Sidebar from '@/components/Sidebar';
 import AdminNavbar from '@/components/AdminNavbar';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import axios from 'axios';
 
 const AdminHome = () => {
+const router = useRouter()
+
+  useEffect(()=>{
+    let token=  localStorage.getItem('admintoken')
+    if (token) {
+      axios.post('http://localhost:4000/admin/adminAuth',{headers:{"accessAdminToken":token}}).then((response)=>{
+        if (response.data.auth) {
+          console.log("success");
+        } else {
+          router.push('/admin/signin')
+        }
+      })
+    } else {
+      router.push('/admin/signin')
+    }
+  })
+
     return ( 
         <>
         <Box>
