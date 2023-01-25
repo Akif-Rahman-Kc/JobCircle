@@ -165,7 +165,7 @@ export default function SignIn() {
                       {"Don't have an account? Sign Up"}
                     </Link>
                     <br/>
-                    <Link href="/vendor/signup" variant="body2">
+                    <Link href="/vendor/signin" variant="body2">
                         Are You Vendor
                       </Link>
                   </Grid>
