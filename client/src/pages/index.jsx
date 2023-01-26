@@ -29,20 +29,20 @@ const inter = Inter({ subsets: ["latin"] });
 export default function Home() {
   const router = useRouter();
 
-  // useEffect(()=>{
-  //   let token=  localStorage.getItem('usertoken')
-  //   if (token) {
-  //     axios.post('http://localhost:4000/userAuth',{headers:{"accessToken":token}}).then((response)=>{
-  //       if (response.data.auth) {
-  //         console.log("success");
-  //       } else {
-  //         router.push('/signin')
-  //       }
-  //     })
-  //   } else {
-  //     router.push('/signin')
-  //   }
-  // })
+  useEffect(()=>{
+    let token=  localStorage.getItem('usertoken')
+    if (token) {
+      axios.post('http://localhost:4000/userAuth',{headers:{"accessToken":token}}).then((response)=>{
+        if (response.data.auth) {
+          console.log("success");
+        } else {
+          router.push('/signin')
+        }
+      })
+    } else {
+      router.push('/signin')
+    }
+  })
 
   const [open, setOpen] = useState(false);
 
