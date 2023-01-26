@@ -113,6 +113,8 @@ export default function Home() {
                     <Button className="workerList" sx={{ p: 1.5 , m: 1 }}>Mechanical Engineer</Button>
                     <Button className="workerList" sx={{ p: 1.5 , m: 1 }}>Interior Designer</Button>
                     <Button className="workerList" sx={{ p: 1.5 , m: 1 }}>Electrical Engineer</Button>
+                    <Button className="workerList" sx={{ p: 1.5 , m: 1 }}>Software Engineer</Button>
+                    <Button className="workerList" sx={{ p: 1.5 , m: 1 }}>Barber</Button>
                   </Box>
                 </Grid>
               </Grid>
