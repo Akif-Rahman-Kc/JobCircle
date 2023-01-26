@@ -7,6 +7,6 @@ import { adminJWT } from '../middleware/auth.js';
 
 router.post('/signup', vendorSignUp)
 router.post('/signin', vendorSignIn)
-router.post('/vendorAuth', adminJWT, )
+router.post('/vendorAuth', adminJWT,vendorAuth )
 
 export default router;
