@@ -71,7 +71,7 @@ export default function SignIn() {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 10,
+            marginTop: 8,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -98,16 +98,16 @@ export default function SignIn() {
             </Grid>
             <Grid item xs={12} sm={6}>
               <Box sx={{ display: "flex", justifyContent: "center" }}>
-                <Avatar sx={{ bgcolor: "secondary.main" }}>
+                <Avatar sx={{ mb: 1 , bgcolor: "secondary.main" }}>
                   <LockOutlinedIcon />
                 </Avatar>
               </Box>
               <Typography
-                sx={{ textAlign: "center", fontWeight: "bold" }}
+                sx={{ textAlign: "center", fontWeight: "900" }}
                 component="h1"
                 variant="h5"
               >
-                Sign in
+                SIGN IN
               </Typography>
               <Box sx={{ border:'1px solid lightgray' , borderRadius:'20px' , mt: 3 , mb: 5 }}>
                         <p>Sign Up With Google</p>
@@ -147,7 +147,7 @@ export default function SignIn() {
                   type="submit"
                   fullWidth
                   variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
+                  sx={{ mt: 3, mb: 2 , p: 1.4 , fontWeight:'900' }}
                 >
                   Sign In
                 </Button>
@@ -165,7 +165,7 @@ export default function SignIn() {
                 </Grid>
                 <br />
                 <Link href="/vendor/signin" variant="body2">
-                    <Button sx={{ width:'100%' , border:'1px solid gray' }}>
+                    <Button sx={{ width:'100%' , border:'1px solid gray' , fontWeight:'bold ' }}>
                       Are You Vendor
                     </Button>
                 </Link>

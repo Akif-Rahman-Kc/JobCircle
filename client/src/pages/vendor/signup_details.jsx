@@ -143,7 +143,7 @@ export default function SignUpDetails() {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 10,
+            marginTop: 9,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -236,7 +236,7 @@ export default function SignUpDetails() {
                         type="submit"
                         fullWidth
                         variant="contained"
-                        sx={{ mt: 3, mb: 2 }}
+                        sx={{ mt: 3, mb: 2 , p: 1.4 , fontWeight:'900' }}
                         >
                         Sign Up
                         </Button>

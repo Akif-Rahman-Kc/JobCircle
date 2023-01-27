@@ -98,16 +98,16 @@ export default function AdminSignIn() {
             </Grid>
             <Grid item xs={12} sm={6}>
               <Box sx={{ mt: 4 , display: "flex", justifyContent: "center" }}>
-                <Avatar sx={{ bgcolor: "secondary.main" }}>
+                <Avatar sx={{ mb: 1 , bgcolor: "secondary.main" }}>
                   <LockOutlinedIcon />
                 </Avatar>
               </Box>
               <Typography
-                sx={{ mt: 1 , textAlign: "center", fontWeight: "bold" }}
+                sx={{ mt: 1 , textAlign: "center", fontWeight: "900" }}
                 component="h1"
                 variant="h5"
               >
-                Admin
+                ADMIN
               </Typography>
               <Box
                 component="form"
@@ -143,7 +143,7 @@ export default function AdminSignIn() {
                   type="submit"
                   fullWidth
                   variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
+                  sx={{ mt: 3, mb: 2 , p: 1.4 , fontWeight:'900' }}
                 >
                   Sign In
                 </Button>
