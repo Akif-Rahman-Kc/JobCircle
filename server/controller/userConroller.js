@@ -7,12 +7,12 @@ import jwt from 'jsonwebtoken'
 export async function userSignUp(req, res) {
     try {
 
-        const existUser = await User.findOne({ email: req.body.data.email })
+        const existUser = await User.findOne({ email: req.body.email })
 
         if (existUser) {
             res.json({status:"failed"})
         } else {
-            let userDetails = req.body.data
+            let userDetails = req.body
             userDetails.password = await hash(userDetails.password, 10)
             await User.create(userDetails)
             const user = await User.findOne({ email: userDetails.email })
@@ -29,10 +29,10 @@ export async function userSignUp(req, res) {
 
 export async function userSignIn(req, res) {
     try {
-        const user = await User.findOne({ email: req.body.data.email })
+        const user = await User.findOne({ email: req.body.email })
 
         if (user) {
-            const isMatch = await compare(req.body.data.password, user.password)
+            const isMatch = await compare(req.body.password, user.password)
             if (isMatch) {
                 const userId = user._id
                 const token = jwt.sign({ userId }, process.env.JWT_SECRET_KEY, { expiresIn: 60 * 60 * 24 })
@@ -53,6 +53,7 @@ export async function userSignIn(req, res) {
 export async function userAuth(req, res) {
     try {
         let userDetails = await User.findById(req.userId)
+        console.log(userDetails,"aa");
         userDetails.auth = true
 
         res.json({username:`${userDetails.firstName} ${userDetails.lastName}`,email:userDetails.email,auth:true,image:userDetails.image||null})

@@ -14,6 +14,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { AdminSigninApi } from "@/Apis/adminApi";
 
 const theme = createTheme();
 
@@ -40,27 +41,26 @@ export default function AdminSignIn() {
   const [ password, setPassword ] = useState(false)
   const [ passwordError, setPasswordError ] = useState('')
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     let data = new FormData(event.currentTarget);
     data = {
       email: data.get("email"),
       password: data.get("password"),
     }
-    axios.post('http://localhost:4000/admin/signin', data).then((response)=>{
-      if (response.data.status === 'failed') {
-        if (response.data.emailErr) {
+    const response = await AdminSigninApi(data)
+      if (response.status === 'failed') {
+        if (response.emailErr) {
           setEmail(true)
-          setEmailError(response.data.message)
+          setEmailError(response.message)
         } else {
           setPassword(true)
-          setPasswordError(response.data.message)
+          setPasswordError(response.message)
         }
       } else {
-        localStorage.setItem('admintoken', response.data.token)
+        localStorage.setItem('admintoken', response.token)
         router.push('/admin')
       }
-    })
   };
 
   return (

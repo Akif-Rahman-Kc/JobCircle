@@ -14,6 +14,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { SigninApi } from "@/Apis/userApi";
 
 
 const theme = createTheme();
@@ -41,7 +42,7 @@ export default function SignIn() {
   const [ password, setPassword ] = useState(false)
   const [ passwordError, setPasswordError ] = useState('')
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     let data = new FormData(event.currentTarget);
     data = {
@@ -49,22 +50,19 @@ export default function SignIn() {
       password: data.get("password")
     }
 
-    //axios
-    axios.post('http://localhost:4000/signin',{data}).then((response)=>{
-      if (response.data.status === 'failed') {
-        if (response.data.emailErr) {
+    const response = await SigninApi(data)
+      if (response.status === 'failed') {
+        if (response.emailErr) {
           setEmail(true)
-          setEmailError(response.data.message)
+          setEmailError(response.message)
         } else {
           setPassword(true)
-          setPasswordError(response.data.message)
+          setPasswordError(response.message)
         }
       } else {
-        localStorage.setItem('usertoken', response.data.token)
+        localStorage.setItem('usertoken', response.token)
         router.push('/')
       }
-    
-    })
   };
   
   return (
@@ -163,12 +161,14 @@ export default function SignIn() {
                     <Link href="/signup" variant="body2">
                       {"Don't have an account? Sign Up"}
                     </Link>
-                    <br/>
-                    <Link href="/vendor/signin" variant="body2">
-                        Are You Vendor
-                      </Link>
                   </Grid>
                 </Grid>
+                <br />
+                <Link href="/vendor/signin" variant="body2">
+                    <Button sx={{ width:'100%' , border:'1px solid gray' }}>
+                      Are You Vendor
+                    </Button>
+                </Link>
               </Box>
             </Grid>
           </Grid>

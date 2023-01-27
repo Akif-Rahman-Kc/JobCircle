@@ -14,6 +14,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { VendorSigninApi } from "@/Apis/vendorApi";
 
 
 const theme = createTheme();
@@ -41,7 +42,7 @@ export default function VendorSignIn() {
   const [ password, setPassword ] = useState(false)
   const [ passwordError, setPasswordError ] = useState('')
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     let data = new FormData(event.currentTarget);
     data = {
@@ -49,22 +50,19 @@ export default function VendorSignIn() {
       password: data.get("password")
     }
 
-    //axios
-    axios.post('http://localhost:4000/vendor/signin',{data}).then((response)=>{
-      if (response.data.status === 'failed') {
-        if (response.data.emailErr) {
+    const response = await VendorSigninApi(data)
+      if (response.status === 'failed') {
+        if (response.emailErr) {
           setEmail(true)
-          setEmailError(response.data.message)
+          setEmailError(response.message)
         } else {
           setPassword(true)
-          setPasswordError(response.data.message)
+          setPasswordError(response.message)
         }
       } else {
-        localStorage.setItem('vendortoken', response.data.token)
+        localStorage.setItem('vendortoken', response.token)
         router.push('/vendor')
       }
-    
-    })
   };
   
   return (
@@ -160,7 +158,7 @@ export default function VendorSignIn() {
                     </Link>
                   </Grid>
                   <Grid sm={7} item>
-                    <Link href="/signup" variant="body2">
+                    <Link href="/vendor/signup" variant="body2">
                       {"Don't have an account? Sign Up"}
                     </Link>
                   </Grid>

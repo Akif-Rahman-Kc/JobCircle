@@ -6,12 +6,12 @@ import jwt from 'jsonwebtoken'
 
 export async function vendorSignUp(req, res) {
     try {
-        const vendorUser = await Vendor.findOne({ email: req.body.data.email })
+        const vendorUser = await Vendor.findOne({ email: req.body.email })
 
         if (vendorUser) {
             res.json({status:"failed"})
         } else {
-            let vendorDetails = req.body.data
+            let vendorDetails = req.body
             vendorDetails.password = await hash(vendorDetails.password, 10)
             await Vendor.create(vendorDetails)
             const vendor = await Vendor.findOne({ email: vendorDetails.email })
@@ -28,10 +28,10 @@ export async function vendorSignUp(req, res) {
 
 export async function vendorSignIn(req, res) {
     try {
-        const vendor = await Vendor.findOne({ email: req.body.data.email })
+        const vendor = await Vendor.findOne({ email: req.body.email })
 
         if (vendor) {
-            const isMatch = await compare(req.body.data.password, vendor.password)
+            const isMatch = await compare(req.body.password, vendor.password)
             if (isMatch) {
                 const vendorId = vendor._id
                 const token = jwt.sign({ vendorId }, process.env.JWT_SECRET_KEY, { expiresIn: 60 * 60 * 24 })

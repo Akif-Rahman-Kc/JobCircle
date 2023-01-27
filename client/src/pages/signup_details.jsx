@@ -17,6 +17,7 @@ import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '@/store/Context';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { SignupApi } from '@/Apis/userApi';
 
 
 const theme = createTheme();
@@ -41,7 +42,7 @@ export default function SignUpDetails() {
   const [ phoneNo, setPhoneNo ] = useState(false)
   const [ phoneNoError, setPhoneNoError ] = useState('')
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     let data = new FormData(event.currentTarget);
     data = {
@@ -63,9 +64,8 @@ export default function SignUpDetails() {
 
           // setUserDetails(data)
 
-          //axios
-          axios.post('http://localhost:4000/signup',{data}).then((response)=>{
-            if (response.data.status == "success") {
+          const response = await SignupApi(data)
+            if (response.status == "success") {
               toast.success('Registered', {
                 position: "top-right",
                 autoClose: 2000,
@@ -77,7 +77,7 @@ export default function SignUpDetails() {
                 theme: "colored",
                 })
                 setTimeout(() => {
-                  localStorage.setItem('usertoken', response.data.token)
+                  localStorage.setItem('usertoken', response.token)
                   router.push('/')
                 }, 2000);
                 
@@ -94,7 +94,6 @@ export default function SignUpDetails() {
                 })
             }
             
-          })
         }else{
           setPhoneNo(true)
           setPhoneNoError('Please enter 10 digit')
