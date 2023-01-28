@@ -95,6 +95,10 @@ export default function SignUp() {
     }
   };
 
+  const getOtp = (e) => {
+    
+  }
+
   return (
     <>
     <ThemeProvider theme={theme}>
