@@ -95,9 +95,7 @@ export default function SignUp() {
     }
   };
 
-  const getOtp = (e) => {
-    
-  }
+  
 
   return (
     <>
