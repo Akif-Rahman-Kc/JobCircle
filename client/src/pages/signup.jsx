@@ -95,8 +95,6 @@ export default function SignUp() {
     }
   };
 
-  
-
   return (
     <>
     <ThemeProvider theme={theme}>

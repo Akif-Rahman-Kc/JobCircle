@@ -18,6 +18,8 @@ import { AuthContext } from '@/store/Context';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { SignupApi } from '@/Apis/userApi';
+import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
+import { auth } from '@/firebase/config';
 
 
 const theme = createTheme();
@@ -41,6 +43,10 @@ export default function SignUpDetails() {
   const [ stateError, setStateError ] = useState('')
   const [ phoneNo, setPhoneNo ] = useState(false)
   const [ phoneNoError, setPhoneNoError ] = useState('')
+  const [ otp, setOtp] = useState('')
+  const [ otpErr, setOtpErr ] = useState(false)
+  const [ otpErrMsg, setOtpErrMsg ] = useState('')
+  const [ flag, setFlag ] = useState(false)
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -64,35 +70,54 @@ export default function SignUpDetails() {
 
           // setUserDetails(data)
 
-          const response = await SignupApi(data)
-            if (response.status == "success") {
-              toast.success('Registered', {
-                position: "top-right",
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-                })
-                setTimeout(() => {
-                  localStorage.setItem('usertoken', response.token)
-                  router.push('/')
-                }, 2000);
+          try {
+            setUpRecaptcha("+91" + data.phoneNo).then((res)=>{
+              setFlag(true)
+              if (otp === "" || otp === null) {
+                setOtpErr(true)
+                setOtpErrMsg("Please Enter The Otp number")
+              };
+              try {
+                res.confirm(otp)
+              } catch (error) {
+                setOtpErr(true)
+                setOtpErrMsg("Please Enter the correct Otp number")
+              }
+            })
+          } catch (error) {
+            setPhoneNo(true)
+            setPhoneNoError(error.message)
+          }
+
+          // const response = await SignupApi(data)
+          //   if (response.status == "success") {
+          //     toast.success('Registered', {
+          //       position: "top-right",
+          //       autoClose: 2000,
+          //       hideProgressBar: false,
+          //       closeOnClick: true,
+          //       pauseOnHover: true,
+          //       draggable: true,
+          //       progress: undefined,
+          //       theme: "colored",
+          //       })
+          //       setTimeout(() => {
+          //         localStorage.setItem('usertoken', response.token)
+          //         router.push('/')
+          //       }, 2000);
                 
-            } else {
-              toast.error('This email is already registered!', {
-                position: "top-right",
-                autoClose: 4000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-                })
-            }
+          //   } else {
+          //     toast.error('This email is already registered!', {
+          //       position: "top-right",
+          //       autoClose: 4000,
+          //       hideProgressBar: false,
+          //       closeOnClick: true,
+          //       pauseOnHover: true,
+          //       draggable: true,
+          //       progress: undefined,
+          //       theme: "colored",
+          //       })
+          //   }
             
         }else{
           setPhoneNo(true)
@@ -120,7 +145,17 @@ export default function SignUpDetails() {
         setStateError('Please enter your State')
       }
     }
-  };  
+  }; 
+  
+  function setUpRecaptcha(number) {
+    const recaptchaVerifier = new RecaptchaVerifier(
+      "recaptcha-container",
+      {},
+      auth
+    );
+    recaptchaVerifier.render();
+    return signInWithPhoneNumber(auth, number, recaptchaVerifier)
+  }
 
   return (
     <>
@@ -194,12 +229,37 @@ export default function SignUpDetails() {
                             helperText={phoneNoError}
                             />
                         </Grid>
+                        <Grid item xs={12}>
+                            <div id='recaptcha-container'/>
+                        </Grid>
+                        <Grid item xs={12} sx={{ display: flag ? 'block' : 'none' }}>
+                          <Grid item xs={12}>
+                              <TextField
+                              autoComplete="given-name"
+                              name="otp"
+                              fullWidth
+                              id="otp"
+                              label="OTP"
+                              onChange={(e)=> setOtp(e.target.value)}
+                              error={otpErr}
+                              helperText={otpErrMsg}
+                              />
+                          </Grid>
+                        </Grid>
                         </Grid>
                         <Button
                         type="submit"
                         fullWidth
                         variant="contained"
-                        sx={{ mt: 3, mb: 2 , p: 1.4 , fontWeight:'900' }}
+                        sx={{ mt: 3, mb: 2 , p: 1.4 , fontWeight:'900' , display: flag ? 'none' : 'block' }}
+                        >
+                        Get Otp
+                        </Button>
+                        <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        sx={{ mt: 3, mb: 2 , p: 1.4 , fontWeight:'900' , display: flag ? 'block' : 'none' }}
                         >
                         Sign Up
                         </Button>
