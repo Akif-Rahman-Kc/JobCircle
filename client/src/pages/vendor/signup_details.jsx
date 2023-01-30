@@ -18,6 +18,8 @@ import { AuthContext } from '@/store/Context';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { VendorSignupApi } from '@/Apis/vendorApi';
+import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
+import { auth } from '@/firebase/config';
 
 
 const theme = createTheme();
@@ -26,6 +28,7 @@ export default function SignUpDetails() {
   const router = useRouter()
 
   const { vendorDetails, setVendorDetails } = useContext(AuthContext)
+  const { vendorOtpConf, setVendorOtpConf } = useContext(AuthContext)
 
   useEffect(()=>{
     if (Object.keys(vendorDetails) == 0) {
@@ -45,6 +48,7 @@ export default function SignUpDetails() {
   const [ experianceError, setExperianceError ] = useState('')
   const [ phoneNo, setPhoneNo ] = useState(false)
   const [ phoneNoError, setPhoneNoError ] = useState('')
+  const [ flag, setFlag ] = useState(false)
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -68,37 +72,25 @@ export default function SignUpDetails() {
           setPhoneNo(false)
           setPhoneNoError('')
 
-          // setUserDetails(data)
-
-          const response = await VendorSignupApi(data)
-            if (response.status == "success") {
-                toast.success('Registered', {
-                  position: "top-right",
-                  autoClose: 2000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                  theme: "colored",
-                  })
-                  setTimeout(() => {
-                    localStorage.setItem('vendortoken', response.token)
-                    router.push('/vendor')
-                  }, 2000);
-                  
-              } else {
-                toast.error('This email is already registered!', {
-                  position: "top-right",
-                  autoClose: 4000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                  theme: "colored",
-                  })
-              }
+          setVendorDetails(data)
+          try {
+            setUpRecaptcha("+91" + data.phoneNo).then((res)=>{
+              setFlag(true)
+              setVendorOtpConf(res)
+              router.push('/vendor/otp')
+            })
+          } catch (error) {
+            toast.warning(`${error.message}`, {
+              position: "top-right",
+              autoClose: 4000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            })
+          }
         }else{
           setPhoneNo(true)
           setPhoneNoError('Please enter 10 digit')
@@ -134,6 +126,16 @@ export default function SignUpDetails() {
       }
     }
   };  
+
+  function setUpRecaptcha(number) {
+    const recaptchaVerifier = new RecaptchaVerifier(
+      "recaptcha-vendor-container",
+      {},
+      auth
+    );
+    recaptchaVerifier.render();
+    return signInWithPhoneNumber(auth, number, recaptchaVerifier)
+  }
 
   return (
     <>
@@ -231,22 +233,18 @@ export default function SignUpDetails() {
                             helperText={phoneNoError}
                             />
                         </Grid>
+                        <Grid item xs={12}>
+                            <div id='recaptcha-vendor-container'/>
+                        </Grid>
                         </Grid>
                         <Button
                         type="submit"
                         fullWidth
                         variant="contained"
-                        sx={{ mt: 3, mb: 2 , p: 1.4 , fontWeight:'900' }}
+                        sx={{ mt: 3, mb: 2 , p: 1.4 , fontWeight:'900' , display: flag ? 'none' : 'block' }}
                         >
-                        Sign Up
+                        Verify
                         </Button>
-                        <Grid container justifyContent="flex-end">
-                        <Grid item>
-                            <Link href="/vendor/signin" variant="body2">
-                            Already have an account? Sign in
-                            </Link>
-                        </Grid>
-                        </Grid>
                     </Box>
                 </Grid>
             </Grid>

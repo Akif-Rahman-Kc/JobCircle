@@ -6,10 +6,12 @@ import { useState } from 'react'
 export default function App({ Component, pageProps }) {
   const [ userDetails, setUserDetails ] = useState({})
   const [ vendorDetails, setVendorDetails ] = useState({})
+  const [ otpConf, setOtpConf ] = useState({})
+  const [ vendorOtpConf, setVendorOtpConf ] = useState({})
 
   return (
     <Layout>
-      <AuthContext.Provider value={{ userDetails, setUserDetails, vendorDetails, setVendorDetails}}>
+      <AuthContext.Provider value={{ userDetails, setUserDetails, vendorDetails, setVendorDetails, otpConf, setOtpConf, vendorOtpConf, setVendorOtpConf}}>
             <Component {...pageProps} />
         </AuthContext.Provider>
     </Layout>

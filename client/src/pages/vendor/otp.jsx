@@ -1,39 +1,30 @@
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useRouter } from "next/router";
-import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "@/store/Context";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { SignupApi } from "@/Apis/userApi";
-import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
-import { auth } from "@/firebase/config";
+import { VendorSignupApi } from "@/Apis/vendorApi";
 
 const theme = createTheme();
 
-export default function OTP() {
+export default function VendorOTP() {
   const router = useRouter();
 
-  const { userDetails, setUserDetails } = useContext(AuthContext);
-  const { otpConf, setOtpConf } = useContext(AuthContext);
+  const { vendorDetails, setVendorDetails } = useContext(AuthContext)
+  const { vendorOtpConf, setVendorOtpConf } = useContext(AuthContext)
 
-  useEffect(() => {
-    if (Object.keys(userDetails) == 0) {
-      router.push("/signup");
+  useEffect(()=>{
+    if (Object.keys(vendorDetails) == 0) {
+        router.push('/vendor/signup')
     }
-  }, []);
+  },[])
 
   const [otp, setOtp] = useState(false);
   const [otpErr, setOtpErr] = useState("");
@@ -50,8 +41,8 @@ export default function OTP() {
       setOtpErr("Please Enter The Otp number");
     } else {
       try {
-        await otpConf.confirm(data.otp);
-        const response = await SignupApi(userDetails);
+        await vendorOtpConf.confirm(data.otp);
+        const response = await VendorSignupApi(vendorDetails);
         if (response.status == "success") {
           toast.success("Registered", {
             position: "top-right",
@@ -64,8 +55,8 @@ export default function OTP() {
             theme: "colored",
           });
           setTimeout(() => {
-            localStorage.setItem("usertoken", response.token);
-            router.push("/");
+            localStorage.setItem('vendortoken', response.token)
+            router.push("/vendor");
           }, 2000);
         } else {
           toast.error("This email is already registered!", {

@@ -15,9 +15,12 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '@/store/Context';
-
+import { FcGoogle } from "react-icons/fc";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { auth } from '@/firebase/config';
+import { useAuthState } from 'react-firebase-hooks/auth'
 
 const theme = createTheme();
 
@@ -95,6 +98,19 @@ export default function SignUp() {
     }
   };
 
+  // Google Authentication
+
+  // const googleAuth = new GoogleAuthProvider();
+  // const [ user, setUser ] = useAuthState(auth)
+
+  // useEffect(()=>{
+  //   console.log(user);
+  // },[user])
+
+  const googleSignUp = async ()=>{
+    // const result = await signInWithPopup(auth , googleAuth)
+  }
+
   return (
     <>
     <ThemeProvider theme={theme}>
@@ -123,9 +139,10 @@ export default function SignUp() {
                     <Typography sx={{ textAlign:'center', fontWeight:'900' }} component="h1" variant="h5">
                         SIGN UP
                     </Typography>
-                    <Box sx={{p:1 , border:'1px solid lightgray' , borderRadius:'20px' , mt: 3 , mb: 5 }}>
-                        <p>Sign Up With Google</p>
-                    </Box>
+                    <a onClick={googleSignUp}><Box sx={{p:1 , border:'1px solid lightgray' , borderRadius:'20px' , mt: 3 , mb: 5 , justifyContent:'center' , display:'flex' }}>
+                        <FcGoogle size={23}/>
+                        <p style={{ marginLeft:'5px' , fontWeight:'700'}}>Sign Up With Google</p>
+                    </Box></a>
                     <hr />
                     <br/>
                     <Box sx={{ backgroundColor:'#ffc5c5' , borderRadius:'3px' , pl:2 }}>

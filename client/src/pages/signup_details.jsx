@@ -17,7 +17,6 @@ import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '@/store/Context';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { SignupApi } from '@/Apis/userApi';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 import { auth } from '@/firebase/config';
 
@@ -28,6 +27,7 @@ export default function SignUpDetails() {
   const router = useRouter()
 
   const { userDetails, setUserDetails } = useContext(AuthContext)
+  const { otpConf, setOtpConf } = useContext(AuthContext)
 
   useEffect(()=>{
     if (Object.keys(userDetails) == 0) {
@@ -43,9 +43,6 @@ export default function SignUpDetails() {
   const [ stateError, setStateError ] = useState('')
   const [ phoneNo, setPhoneNo ] = useState(false)
   const [ phoneNoError, setPhoneNoError ] = useState('')
-  const [ otp, setOtp] = useState('')
-  const [ otpErr, setOtpErr ] = useState(false)
-  const [ otpErrMsg, setOtpErrMsg ] = useState('')
   const [ flag, setFlag ] = useState(false)
 
   const handleSubmit = async (event) => {
@@ -68,56 +65,25 @@ export default function SignUpDetails() {
           setPhoneNo(false)
           setPhoneNoError('')
 
-          // setUserDetails(data)
-
+          setUserDetails(data)
           try {
             setUpRecaptcha("+91" + data.phoneNo).then((res)=>{
               setFlag(true)
-              if (otp === "" || otp === null) {
-                setOtpErr(true)
-                setOtpErrMsg("Please Enter The Otp number")
-              };
-              try {
-                res.confirm(otp)
-              } catch (error) {
-                setOtpErr(true)
-                setOtpErrMsg("Please Enter the correct Otp number")
-              }
+              setOtpConf(res)
+              router.push('/otp')
             })
           } catch (error) {
-            setPhoneNo(true)
-            setPhoneNoError(error.message)
+            toast.warning(`${error.message}`, {
+              position: "top-right",
+              autoClose: 4000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            })
           }
-
-          // const response = await SignupApi(data)
-          //   if (response.status == "success") {
-          //     toast.success('Registered', {
-          //       position: "top-right",
-          //       autoClose: 2000,
-          //       hideProgressBar: false,
-          //       closeOnClick: true,
-          //       pauseOnHover: true,
-          //       draggable: true,
-          //       progress: undefined,
-          //       theme: "colored",
-          //       })
-          //       setTimeout(() => {
-          //         localStorage.setItem('usertoken', response.token)
-          //         router.push('/')
-          //       }, 2000);
-                
-          //   } else {
-          //     toast.error('This email is already registered!', {
-          //       position: "top-right",
-          //       autoClose: 4000,
-          //       hideProgressBar: false,
-          //       closeOnClick: true,
-          //       pauseOnHover: true,
-          //       draggable: true,
-          //       progress: undefined,
-          //       theme: "colored",
-          //       })
-          //   }
             
         }else{
           setPhoneNo(true)
@@ -232,20 +198,6 @@ export default function SignUpDetails() {
                         <Grid item xs={12}>
                             <div id='recaptcha-container'/>
                         </Grid>
-                        <Grid item xs={12} sx={{ display: flag ? 'block' : 'none' }}>
-                          <Grid item xs={12}>
-                              <TextField
-                              autoComplete="given-name"
-                              name="otp"
-                              fullWidth
-                              id="otp"
-                              label="OTP"
-                              onChange={(e)=> setOtp(e.target.value)}
-                              error={otpErr}
-                              helperText={otpErrMsg}
-                              />
-                          </Grid>
-                        </Grid>
                         </Grid>
                         <Button
                         type="submit"
@@ -253,23 +205,8 @@ export default function SignUpDetails() {
                         variant="contained"
                         sx={{ mt: 3, mb: 2 , p: 1.4 , fontWeight:'900' , display: flag ? 'none' : 'block' }}
                         >
-                        Get Otp
+                        Verify
                         </Button>
-                        <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2 , p: 1.4 , fontWeight:'900' , display: flag ? 'block' : 'none' }}
-                        >
-                        Sign Up
-                        </Button>
-                        <Grid container justifyContent="flex-end">
-                        <Grid item>
-                            <Link href="/signin" variant="body2">
-                            Already have an account? Sign in
-                            </Link>
-                        </Grid>
-                        </Grid>
                     </Box>
                 </Grid>
             </Grid>
