@@ -19,6 +19,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 import { auth } from '@/firebase/config';
+import { FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@mui/material';
 
 
 const theme = createTheme();
@@ -44,6 +45,7 @@ export default function SignUpDetails() {
   const [ phoneNo, setPhoneNo ] = useState(false)
   const [ phoneNoError, setPhoneNoError ] = useState('')
   const [ flag, setFlag ] = useState(false)
+  const [age, setAge] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -123,6 +125,10 @@ export default function SignUpDetails() {
     return signInWithPhoneNumber(auth, number, recaptchaVerifier)
   }
 
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
+
   return (
     <>
     <ThemeProvider theme={theme}>
@@ -147,7 +153,7 @@ export default function SignUpDetails() {
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <TextField
+                            {/* <TextField
                             required
                             fullWidth
                             id="locality"
@@ -157,7 +163,26 @@ export default function SignUpDetails() {
                             helperText={localityError}
                             autoComplete="family-name"
                             autoFocus
-                            />
+                            /> */}
+                            <FormControl sx={{ width:'100%' }}>
+                            <InputLabel id="locality">Locality *</InputLabel>
+                            <Select
+                              labelId="locality"
+                              fullWidth
+                              id="locality"
+                              value={age}
+                              name='locality'
+                              label="locality"
+                              onChange={handleChange}
+                            >
+                              <MenuItem value="">
+                                <em>None</em>
+                              </MenuItem>
+                              <MenuItem value={10}>Ten</MenuItem>
+                              <MenuItem value={20}>Twenty</MenuItem>
+                              <MenuItem value={30}>Thirty</MenuItem>
+                            </Select>
+                            </FormControl>
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
