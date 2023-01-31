@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import { Inter } from "@next/font/google";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/Navabar/Navbar";
 import { Box } from "@mui/system";
 import {
   Avatar,
@@ -12,8 +12,8 @@ import {
   Grid,
   IconButton,
 } from "@mui/material";
-import Notifications from "@/components/Notification";
-import Messages from "@/components/Message";
+import Notifications from "@/components/Notifications/Notification";
+import Messages from "@/components/Messages/Message";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlined";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
@@ -23,18 +23,23 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+import { userDetails } from "@/redux/user";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const { user } = useSelector((state)=>state.userInfo)
+  const dispatch = useDispatch()
 
   useEffect(()=>{
     let token=  localStorage.getItem('usertoken')
     if (token) {
       axios.post('http://localhost:4000/userAuth',{headers:{"accessToken":token}}).then((response)=>{
         if (response.data.auth) {
-          console.log("success");
+          dispatch(userDetails(response.data))
         } else {
           router.push('/signin')
         }
@@ -43,8 +48,6 @@ export default function Home() {
       router.push('/signin')
     }
   },[])
-
-  const [open, setOpen] = useState(false);
 
   return (
     <>

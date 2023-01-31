@@ -1,7 +1,7 @@
 const { createSlice } = require("@reduxjs/toolkit");
 
 export const userSlice = createSlice({
-    name:'user',
+    name:'User',
     initialState:{
         user:{}
     },
@@ -12,5 +12,5 @@ export const userSlice = createSlice({
     }
 })
 
-export const userActions = userSlice.actions
+export const { userDetails } = userSlice.actions
 export default userSlice

@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import { Avatar, Grid } from '@mui/material';
-import Sidebar from '@/components/Sidebar';
-import AdminNavbar from '@/components/AdminNavbar';
+import Sidebar from '@/components/Navabar/Sidebar';
+import AdminNavbar from '@/components/Navabar/AdminNavbar';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import axios from 'axios';

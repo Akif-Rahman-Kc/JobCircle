@@ -106,3 +106,8 @@ h1 ,h2, h3, h4, h5, h6, a, p {
     width: 27px;
     margin: -19px;
 }
+
+.swal-wide{
+  width:300px !important;
+  font-size: 13px !important;
+}

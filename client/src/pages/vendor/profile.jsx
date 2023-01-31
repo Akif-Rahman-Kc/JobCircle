@@ -1,11 +1,10 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from '@next/font/google'
-import Navbar from '@/components/Navbar'
 import { Box } from '@mui/system'
 import { Avatar, Badge, Button, colors, Grid, IconButton, Modal, Typography } from '@mui/material'
-import Messages from '@/components/Message'
-import Notifications from '@/components/Notification'
+import Messages from '@/components/Messages/Message'
+import Notifications from '@/components/Notifications/Notification'
 import Link from 'next/link';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -16,6 +15,7 @@ import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlin
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import { useState } from 'react'
 import { useRouter } from 'next/router'
+import VendorNavbar from '@/components/Navabar/VendorNavbar'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -43,7 +43,7 @@ export default function VendorProfile() {
   return (
     <>
     <div>
-      <Navbar/>
+      <VendorNavbar/>
       <Box>
           <Grid container sx={{ justifyContent:'center' , mt: 10 , display:'flex' }}>
             <Grid md={3}>

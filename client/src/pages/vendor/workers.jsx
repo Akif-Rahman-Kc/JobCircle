@@ -24,35 +24,37 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { vendorDetails } from "@/redux/vendor";
+import VendorNavbar from "@/components/Navabar/VendorNavbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Workers() {
+export default function VendorWorkers() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const { user } = useSelector((state)=>state.userInfo)
-  console.log(user,"///");
+  const { vendor } = useSelector((state)=>state.vendorInfo)
+  const dispatch = useDispatch()
 
   useEffect(()=>{
-    let token=  localStorage.getItem('usertoken')
+    let token=  localStorage.getItem('vendortoken')
     if (token) {
-      axios.post('http://localhost:4000/userAuth',{headers:{"accessToken":token}}).then((response)=>{
+      axios.post('http://localhost:4000/vendor/vendorAuth',{headers:{"accessVendorToken":token}}).then((response)=>{
         if (response.data.auth) {
-          console.log("success");
+          dispatch(vendorDetails(response.data))
         } else {
-          router.push('/signin')
+          router.push('/vendor/signin')
         }
       })
     } else {
-      router.push('/signin')
+      router.push('/vendor/signin')
     }
   },[])
 
   return (
     <>
       <div>
-        <Navbar />
+        <VendorNavbar />
         <Box>
           <Grid
             container

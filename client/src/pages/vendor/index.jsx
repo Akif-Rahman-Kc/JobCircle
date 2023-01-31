@@ -1,30 +1,34 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from '@next/font/google'
-import Navbar from '@/components/Navbar'
+import Navbar from '@/components/Navabar/Navbar'
 import { Box } from '@mui/system'
 import { Avatar, Grid, IconButton } from '@mui/material'
-import Notifications from '@/components/Notification'
-import Messages from '@/components/Message'
+import Notifications from '@/components/Notifications/Notification'
+import Messages from '@/components/Messages/Message'
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import { useEffect } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/router'
-import VendorNavbar from '@/components/VendorNavbar'
+import VendorNavbar from '@/components/Navabar/VendorNavbar'
+import { useDispatch, useSelector } from 'react-redux'
+import { vendorDetails } from '@/redux/vendor'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function VendorHome() {
   const router = useRouter()
+  const { vendor } = useSelector((state)=>state.vendorInfo)
+  const dispatch = useDispatch()
 
   useEffect(()=>{
     let token=  localStorage.getItem('vendortoken')
     if (token) {
       axios.post('http://localhost:4000/vendor/vendorAuth',{headers:{"accessVendorToken":token}}).then((response)=>{
         if (response.data.auth) {
-          console.log("success");
+          dispatch(vendorDetails(response.data))
         } else {
           router.push('/vendor/signin')
         }

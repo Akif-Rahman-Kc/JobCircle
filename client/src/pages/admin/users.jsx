@@ -1,5 +1,5 @@
-import AdminNavbar from "@/components/AdminNavbar";
-import Sidebar from "@/components/Sidebar";
+import AdminNavbar from "@/components/Navabar/AdminNavbar";
+import Sidebar from "@/components/Navabar/Sidebar";
 import { Grid } from "@mui/material";
 import { Box } from "@mui/system";
 import { styled } from '@mui/material/styles';

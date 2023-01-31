@@ -20,6 +20,9 @@ import HomeIcon from '@mui/icons-material/Home';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import Swal from 'sweetalert2';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -63,23 +66,18 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function VendorNavbar() {
     const router = useRouter()
-  const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState(null);
 
-  const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const { vendor } = useSelector((state)=>state.vendorInfo)
 
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
   };
 
   const handleMenuClose = () => {
-    setAnchorEl(null);
     handleMobileMenuClose();
   };
 
@@ -87,15 +85,24 @@ export default function VendorNavbar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  const logout=()=>{
-    localStorage.removeItem('vendortoken')
-    router.push('/vendor/signin')
-  }  
+  const logout = () => {
+    Swal.fire({
+      title: "Are You Sure",
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+      showCancelButton: true,
+      customClass: "swal-wide",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem('vendortoken')
+        router.push('/vendor/signin')
+      }
+    });
+  };
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
-      anchorEl={anchorEl}
       anchorOrigin={{
         vertical: 'top',
         horizontal: 'right',
@@ -106,12 +113,8 @@ export default function VendorNavbar() {
         vertical: 'top',
         horizontal: 'right',
       }}
-      open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <Link href='/vendor/signin'><MenuItem onClick={handleMenuClose}>Sign In</MenuItem></Link>
-      <Link href='/vendor/signup'><MenuItem onClick={handleMenuClose}>Sign Up</MenuItem></Link>
-      <MenuItem onClick={logout}>Log Out</MenuItem>
     </Menu>
   );
 
@@ -132,45 +135,56 @@ export default function VendorNavbar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
+      <Link href='/vendor'>
+      <MenuItem sx={{ color:'#111' }}>
         <IconButton size="large" aria-label="show the vendors" color="inherit">
-        <HomeIcon />
+          <HomeIcon />
         </IconButton>
         <p>Home</p>
       </MenuItem>
-      <MenuItem>
+      </Link>
+      <Link href='/vendor/workers'>
+      <MenuItem sx={{ color:'#111' }}>
         <IconButton size="large" aria-label="show the workers" color="inherit">
-        <EngineeringIcon/>
+          <EngineeringIcon />
         </IconButton>
         <p>Workers</p>
       </MenuItem>
-      <MenuItem>
+      </Link>
+      <Link href='/vendor/messages'>
+      <MenuItem sx={{ color:'#111' }}>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
+          <MailIcon />
         </IconButton>
         <p>Messages</p>
       </MenuItem>
-      <MenuItem>
+      </Link>
+      <Link href='/vendor/notifications'>
+      <MenuItem sx={{ color:'#111' }}>
         <IconButton
           size="large"
           aria-label="show 17 new notifications"
           color="inherit"
         >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
+          <NotificationsIcon />
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
-      <MenuItem>
-        <IconButton size="large" aria-label="show the workers" color="inherit">
-        <ReceiptLongIcon/>
+      </Link>
+      <Link href='/vendor/work_list'>
+      <MenuItem sx={{ color:'#111' }}>
+        <IconButton
+          size="large"
+          aria-label="show the works"
+          color="inherit"
+        >
+          <ReceiptLongIcon />
         </IconButton>
         <p>Work List</p>
       </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
+      </Link>
+      <Link href='/vendor/profile'>
+      <MenuItem sx={{ color:'#111' }}>
         <IconButton
           size="large"
           aria-label="account of current user"
@@ -178,9 +192,26 @@ export default function VendorNavbar() {
           aria-haspopup="true"
           color="inherit"
         >
-          <AccountCircle />
+          <img
+            src={vendor.image ? vendor.image : "/null-profile.jpg"}
+            style={{ m: 0, width: "24px", borderRadius: "50%" }}
+            alt=""
+          />
         </IconButton>
-        <p>Profile</p>
+        <p>{vendor.username}</p>
+      </MenuItem>
+      </Link>
+      <MenuItem onClick={logout}>
+        <IconButton
+          size="large"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <LogoutOutlinedIcon />
+        </IconButton>
+        <p>Logout</p>
       </MenuItem>
     </Menu>
   );
@@ -217,59 +248,120 @@ export default function VendorNavbar() {
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton sx={{ borderRadius:'10px' }} size="large" aria-label="home page" color="inherit">
-              <Box sx={{ display: { xs: 'none', md: 'block', textAlign:'center' } }}>
-                <HomeIcon />
-                <h6 style={{fontSize:'12px'}}>Home</h6>
-              </Box>
-            </IconButton>
-            <IconButton sx={{ borderRadius:'10px' }} size="large" aria-label="show the workers" color="inherit">
-              <Box sx={{ display: { xs: 'none', md: 'block', textAlign:'center' } }}>
-                <EngineeringIcon/>
-                <h6 style={{fontSize:'12px'}}>Workers</h6>
-              </Box>
-            </IconButton>
-            <IconButton sx={{ borderRadius:'10px' }} size="large" aria-label="show 4 new mails" color="inherit">
-              <Box sx={{ display: { xs: 'none', md: 'block', textAlign:'center' } }}>
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
-                <h6 style={{fontSize:'12px'}}>Messages</h6>
-              </Box>
-            </IconButton>
+          <Link href='/vendor'>
             <IconButton
-              sx={{ borderRadius:'10px' }}
+              sx={{ borderRadius: "10px", width: "98px" , color:'#111' }}
+              size="large"
+              aria-label="home page"
+              color="inherit"
+            >
+              <Box
+                sx={{
+                  display: { xs: "none", md: "block", textAlign: "center" },
+                }}
+              >
+                <HomeIcon />
+                <h6 style={{ fontSize: "12px" }}>Home</h6>
+              </Box>
+            </IconButton>
+            </Link>
+            <Link href='/vendor/workers'>
+            <IconButton
+              sx={{ borderRadius: "10px", width: "98px" , color:'#111' }}
+              size="large"
+              aria-label="show the workers"
+              color="inherit"
+            >
+              <Box
+                sx={{
+                  display: { xs: "none", md: "block", textAlign: "center" },
+                }}
+              >
+                <EngineeringIcon />
+                <h6 style={{ fontSize: "12px" }}>Workers</h6>
+              </Box>
+            </IconButton>
+            </Link>
+            <Link href='/vendor/messages'>
+            <IconButton
+              sx={{ borderRadius: "10px", width: "98px" , color:'#111' }}
+              size="large"
+              aria-label="show 4 new mails"
+              color="inherit"
+            >
+              <Box
+                sx={{
+                  display: { xs: "none", md: "block", textAlign: "center" },
+                }}
+              >
+                <MailIcon />
+                <h6 style={{ fontSize: "12px" }}>Messages</h6>
+              </Box>
+            </IconButton>
+            </Link>
+            <Link href='/vendor/notifications'>
+            <IconButton
+              sx={{ borderRadius: "10px", width: "98px" , color:'#111' }}
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
             >
-                <Box sx={{ display: { xs: 'none', md: 'block', textAlign:'center' } }}>
-                <Badge badgeContent={17} color="error">
+              <Box
+                sx={{
+                  display: { xs: "none", md: "block", textAlign: "center" },
+                }}
+              >
                 <NotificationsIcon />
-              </Badge>
-                <h6 style={{fontSize:'12px'}}>Notifications</h6>
+                <h6 style={{ fontSize: "12px" }}>Notifications</h6>
               </Box>
             </IconButton>
-            <IconButton sx={{ borderRadius:'10px' }} size="large" aria-label="show the workers" color="inherit">
-              <Box sx={{ display: { xs: 'none', md: 'block', textAlign:'center' } }}>
-                <ReceiptLongIcon/>
-                <h6 style={{fontSize:'12px'}}>Work List</h6>
-              </Box>
-            </IconButton>
+            </Link>
+            <Link href='/vendor/work_list'>
             <IconButton
-              sx={{ borderRadius:'10px' }}
+              sx={{ borderRadius: "10px", width: "98px" , color:'#111' }}
+              size="large"
+              aria-label="show the work list"
+              color="inherit"
+            >
+              <Box
+                sx={{
+                  display: { xs: "none", md: "block", textAlign: "center" },
+                }}
+              >
+                <ReceiptLongIcon />
+                <h6 style={{ fontSize: "12px" }}>Work List</h6>
+              </Box>
+            </IconButton>
+            </Link>
+            <Link href='/vendor/profile'>
+            <IconButton
+              sx={{ borderRadius: "10px", width: "98px" , color:'#111' }}
               size="large"
               edge="end"
               aria-label="account of current user"
               aria-controls={menuId}
               aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
               color="inherit"
             >
-                <Box sx={{ display: { xs: 'none', md: 'block', textAlign:'center' } }}>
-                <AccountCircle />
-                <h6 style={{fontSize:'12px'}}>Account</h6>
+              <Box
+                sx={{
+                  display: { xs: "none", md: "block", textAlign: "center" },
+                }}
+              >
+                <img
+                  src={vendor.image ? vendor.image : "/null-profile.jpg"}
+                  style={{ m: 0, width: "24px", borderRadius: "50%" }}
+                  alt=""
+                />
+                <h6 style={{ fontSize: "12px" }}>{vendor.username}</h6>
               </Box>
+            </IconButton>
+            </Link>
+            <IconButton
+              onClick={logout}
+              sx={{ ":hover": { backgroundColor: "#fff" }, ml: 3 }}
+            >
+              <LogoutOutlinedIcon />
             </IconButton>
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
@@ -281,7 +373,7 @@ export default function VendorNavbar() {
               onClick={handleMobileMenuOpen}
               color="inherit"
             >
-              <MoreIcon />
+              <MenuIcon />
             </IconButton>
           </Box>
         </Toolbar>
