@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box';
-import { Avatar, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import Sidebar from '@/components/Navabar/Sidebar';
 import AdminNavbar from '@/components/Navabar/AdminNavbar';
 import { useRouter } from 'next/router';
