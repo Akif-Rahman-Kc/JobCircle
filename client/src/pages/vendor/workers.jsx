@@ -12,6 +12,7 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { vendorDetails } from "@/redux/vendor";
 import VendorNavbar from "@/components/Navabar/VendorNavbar";
+import EngineeringIcon from "@mui/icons-material/Engineering";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -68,15 +69,17 @@ export default function VendorWorkers() {
                     sx={{
                       p: 2,
                       width: "-webkit-fill-available",
-                      textAlign: "center",
+                      justifyContent: "center",
                       boxShadow: 3,
+                      display:'flex',
                       border: "1px solid lightgray",
                       borderRadius: "15px",
                       minHeight: "4.0vw",
                       backgroundColor: "#fff",
                     }}
                   >
-                    <h2>Welcome To JobCircle</h2>
+                    <EngineeringIcon/>
+                    <h3 style={{ marginLeft:'7px' , fontSize:'22px' }}>Workers</h3>
                   </Grid>
                 </Grid>
                 <Grid sx={{ pt: 7 }}>
