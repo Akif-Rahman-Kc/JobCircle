@@ -34,7 +34,7 @@ export default function AdminSignIn() {
     } else {
       console.log("failed");
     }
-  })
+  },[])
 
   const [ email, setEmail ] = useState(false)
   const [ emailError, setEmailError ] = useState('')

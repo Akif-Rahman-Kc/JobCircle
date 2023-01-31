@@ -24,7 +24,7 @@ import { auth } from '@/firebase/config';
 
 const theme = createTheme();
 
-export default function SignUpDetails() {
+export default function VendorSignUpDetails() {
   const router = useRouter()
 
   const { vendorDetails, setVendorDetails } = useContext(AuthContext)

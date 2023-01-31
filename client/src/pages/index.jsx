@@ -42,7 +42,7 @@ export default function Home() {
     } else {
       router.push('/signin')
     }
-  })
+  },[])
 
   const [open, setOpen] = useState(false);
 

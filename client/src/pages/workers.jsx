@@ -27,7 +27,7 @@ import { useRouter } from "next/router";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home() {
+export default function Workers() {
   const router = useRouter();
 
   useEffect(()=>{
@@ -43,7 +43,7 @@ export default function Home() {
     } else {
       router.push('/signin')
     }
-  })
+  },[])
 
   const [open, setOpen] = useState(false);
 

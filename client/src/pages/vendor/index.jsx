@@ -16,7 +16,7 @@ import VendorNavbar from '@/components/VendorNavbar'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function Home() {
+export default function VendorHome() {
   const router = useRouter()
 
   useEffect(()=>{
@@ -32,7 +32,7 @@ export default function Home() {
     } else {
       router.push('/vendor/signin')
     }
-  })
+  },[])
 
   return (
     <>

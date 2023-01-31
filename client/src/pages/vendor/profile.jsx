@@ -33,7 +33,7 @@ const style = {
   borderRadius:'10px'
 };
 
-export default function Profile() {
+export default function VendorProfile() {
   const router = useRouter()
 
   const [open, setOpen] = useState(false);

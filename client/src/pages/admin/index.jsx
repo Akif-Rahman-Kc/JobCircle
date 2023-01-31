@@ -22,7 +22,7 @@ const router = useRouter()
     } else {
       router.push('/admin/signin')
     }
-  })
+  },[])
 
     return ( 
         <>
