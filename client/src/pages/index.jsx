@@ -1,5 +1,3 @@
-import Head from "next/head";
-import Image from "next/image";
 import { Inter } from "@next/font/google";
 import Navbar from "@/components/Navabar/Navbar";
 import { Box } from "@mui/system";
@@ -39,7 +37,7 @@ export default function Home() {
     if (token) {
       axios.post('http://localhost:4000/userAuth',{headers:{"accessToken":token}}).then((response)=>{
         if (response.data.auth) {
-          dispatch(userDetails(response.data))
+          dispatch(userDetails(response.data.userObj))
         } else {
           router.push('/signin')
         }

@@ -183,7 +183,7 @@ export default function Navbar() {
             alt=""
           />
         </IconButton>
-        <p>{user.username}</p>
+        <p>{user.firstName + ' ' + user.lastName}</p>
       </MenuItem>
       </Link>
       <MenuItem onClick={logout}>
@@ -321,7 +321,7 @@ export default function Navbar() {
                   style={{ m: 0, width: "24px", borderRadius: "50%" }}
                   alt=""
                 />
-                <h6 style={{ fontSize: "12px" }}>{user.username}</h6>
+                <h6 style={{ fontSize: "12px" }}>{user.firstName + ' ' + user.lastName}</h6>
               </Box>
             </IconButton>
             </Link>

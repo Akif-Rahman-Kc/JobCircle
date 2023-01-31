@@ -56,7 +56,7 @@ export async function userAuth(req, res) {
         console.log(userDetails,"aa");
         userDetails.auth = true
 
-        res.json({username:`${userDetails.firstName} ${userDetails.lastName}`,auth:true,image:userDetails.image||null})
+        res.json({userObj:userDetails,auth:true})
     } catch (error) {
         console.log(error)
     }

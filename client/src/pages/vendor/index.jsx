@@ -1,7 +1,4 @@
-import Head from 'next/head'
-import Image from 'next/image'
 import { Inter } from '@next/font/google'
-import Navbar from '@/components/Navabar/Navbar'
 import { Box } from '@mui/system'
 import { Avatar, Grid, IconButton } from '@mui/material'
 import Notifications from '@/components/Notifications/Notification'
@@ -28,7 +25,7 @@ export default function VendorHome() {
     if (token) {
       axios.post('http://localhost:4000/vendor/vendorAuth',{headers:{"accessVendorToken":token}}).then((response)=>{
         if (response.data.auth) {
-          dispatch(vendorDetails(response.data))
+          dispatch(vendorDetails(response.data.vendorObj))
         } else {
           router.push('/vendor/signin')
         }

@@ -1,14 +1,8 @@
-import Head from "next/head";
-import Image from "next/image";
 import { Inter } from "@next/font/google";
-import Navbar from "@/components/Navabar/Navbar";
 import { Box } from "@mui/system";
-import { Avatar, Button, Grid, IconButton, TextField } from "@mui/material";
+import { Button, Grid, TextField } from "@mui/material";
 import Notifications from "@/components/Notifications/Notification";
 import Messages from "@/components/Messages/Message";
-import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
-import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlined";
-import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import { useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";

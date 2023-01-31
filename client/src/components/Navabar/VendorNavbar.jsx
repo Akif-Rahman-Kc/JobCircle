@@ -66,8 +66,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function VendorNavbar() {
     const router = useRouter()
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
-    React.useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
   const { vendor } = useSelector((state)=>state.vendorInfo)
 
@@ -198,7 +197,7 @@ export default function VendorNavbar() {
             alt=""
           />
         </IconButton>
-        <p>{vendor.username}</p>
+        <p>{vendor.firstName + ' ' + vendor.lastName}</p>
       </MenuItem>
       </Link>
       <MenuItem onClick={logout}>
@@ -353,7 +352,7 @@ export default function VendorNavbar() {
                   style={{ m: 0, width: "24px", borderRadius: "50%" }}
                   alt=""
                 />
-                <h6 style={{ fontSize: "12px" }}>{vendor.username}</h6>
+                <h6 style={{ fontSize: "12px" }}>{vendor.firstName + ' ' + vendor.lastName}</h6>
               </Box>
             </IconButton>
             </Link>

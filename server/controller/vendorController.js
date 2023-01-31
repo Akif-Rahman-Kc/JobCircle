@@ -54,7 +54,7 @@ export async function vendorAuth(req, res) {
         let vendorDetails = await Vendor.findById(req.vendorId)
         vendorDetails.auth = true
 
-        res.json({username:`${vendorDetails.firstName} ${vendorDetails.lastName}`,email:vendorDetails.email,auth:true,image:vendorDetails.image||null})
+        res.json({vendorObj:vendorDetails,auth:true})
     } catch (error) {
         console.log(error)
     }

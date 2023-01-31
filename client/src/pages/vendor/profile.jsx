@@ -1,8 +1,6 @@
-import Head from 'next/head'
-import Image from 'next/image'
 import { Inter } from '@next/font/google'
 import { Box } from '@mui/system'
-import { Avatar, Badge, Button, colors, Grid, IconButton, Modal, Typography } from '@mui/material'
+import { Button, Grid, IconButton, Modal } from '@mui/material'
 import Messages from '@/components/Messages/Message'
 import Notifications from '@/components/Notifications/Notification'
 import Link from 'next/link';
@@ -13,9 +11,12 @@ import SmartDisplayIcon from '@mui/icons-material/SmartDisplay';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import VendorNavbar from '@/components/Navabar/VendorNavbar'
+import { useDispatch, useSelector } from 'react-redux'
+import axios from 'axios'
+import { vendorDetails } from '@/redux/vendor'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -35,6 +36,24 @@ const style = {
 
 export default function VendorProfile() {
   const router = useRouter()
+  const { vendor } = useSelector((state)=>state.vendorInfo)
+  const dispatch = useDispatch()
+
+  useEffect(()=>{
+    let token=  localStorage.getItem('vendortoken')
+    if (token) {
+      axios.post('http://localhost:4000/vendor/vendorAuth',{headers:{"accessVendorToken":token}}).then((response)=>{
+        if (response.data.auth) {
+          dispatch(vendorDetails(response.data.vendorObj))
+          console.log(vendor);
+        } else {
+          router.push('/vendor/signin')
+        }
+      })
+    } else {
+      router.push('/vendor/signin')
+    }
+  },[])
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -61,9 +80,9 @@ export default function VendorProfile() {
                   <Box sx={{ display:'flex' }}>
                     <Grid xs={12} sx={{ display:'flex' }}>
                       <Grid xs={4} sx={{ fontFamily:'sans-serif' }}>
-                      <img src="/null-profile.jpg" style={{ width:'35%' , height:'fit-content' ,borderRadius:'50%',border:'1px solid #000' }} alt="" />
-                        <h4 style={{fontWeight:'900'}}>Akif Rahman</h4>
-                        <h6>Software Developer</h6>
+                      <img src={vendor.image ? vendor.image : "/null-profile.jpg" } style={{ width:'35%' , height:'fit-content' ,borderRadius:'50%',border:'1px solid #000' }} alt="" />
+                        <h4 style={{fontWeight:'900'}}>{vendor.firstName + ' ' + vendor.lastName}</h4>
+                        <h6>{vendor.job}</h6>
                         <Link style={{fontSize:'10px' , fontWeight:'900' , textDecoration:'underline'}} href='#'>Contact info</Link>
                       </Grid >
                       <Grid xs={4} sx={{ color:'blue' , textAlign:'center' , fontFamily:'sans-serif' }}>
