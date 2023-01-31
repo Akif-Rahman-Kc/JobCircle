@@ -111,3 +111,11 @@ h1 ,h2, h3, h4, h5, h6, a, p {
   width:300px !important;
   font-size: 13px !important;
 }
+
+.css-11xur9t-MuiPaper-root-MuiTableContainer-root{
+  overflow-y: auto;
+  height: 550px;
+}
+.css-11xur9t-MuiPaper-root-MuiTableContainer-root::-webkit-scrollbar {
+  display: none;
+}

@@ -12,6 +12,7 @@ import { useRouter } from 'next/router'
 import VendorNavbar from '@/components/Navabar/VendorNavbar'
 import { useDispatch, useSelector } from 'react-redux'
 import { vendorDetails } from '@/redux/vendor'
+import HomeIcon from "@mui/icons-material/Home";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -47,9 +48,22 @@ export default function VendorHome() {
             <Grid sm={12} md={5}>
               <Grid sm={12} md={12}>
                 <Grid md={4.74} sx={{ width:'-webkit-fill-available' , backgroundColor:'#e9e5df' , borderRadius:'15px' , m: 2 , mt:-4 , pt: 4 , display:'flex' , position:'fixed' , zIndex: 99 }}>
-                <Grid sx={{ p: 2 , width: '-webkit-fill-available' , textAlign:'center' ,  boxShadow: 3 , border:'1px solid lightgray', borderRadius:'15px', minHeight: '4.0vw' , backgroundColor:'#fff'}}>
-                  <h2>Welcome To JobCircle</h2>
-                </Grid>
+                <Grid
+                    sx={{
+                      p: 2,
+                      width: "-webkit-fill-available",
+                      justifyContent: "center",
+                      boxShadow: 3,
+                      display:'flex',
+                      border: "1px solid lightgray",
+                      borderRadius: "15px",
+                      minHeight: "4.0vw",
+                      backgroundColor: "#fff",
+                    }}
+                  >
+                    <HomeIcon/>
+                    <h3 style={{ marginLeft:'7px' , fontSize:'22px' }}>Home</h3>
+                  </Grid>
                 </Grid>
                 <Grid sx={{ pt: 7 }}>
                 <Box sx={{ p: 2 , width: '-webkit-fill-available' , boxShadow: 3 , border:'1px solid lightgray', borderRadius:'15px', minHeight: '33.2vw' , backgroundColor:'#fff' , m: 2 }}>

@@ -8,6 +8,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import VendorNavbar from "@/components/Navabar/VendorNavbar";
 import AddAPhotoOutlinedIcon from "@mui/icons-material/AddAPhotoOutlined";
+import { AccountCircle } from "@mui/icons-material";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -65,15 +66,17 @@ export default function VendorEditProfile() {
                     sx={{
                       p: 2,
                       width: "-webkit-fill-available",
-                      textAlign: "center",
+                      justifyContent: "center",
                       boxShadow: 3,
+                      display:'flex',
                       border: "1px solid lightgray",
                       borderRadius: "15px",
                       minHeight: "4.0vw",
                       backgroundColor: "#fff",
                     }}
                   >
-                    <h2>Welcome To JobCircle</h2>
+                    <AccountCircle/>
+                    <h3 style={{ marginLeft:'7px' , fontSize:'22px' }}>Profile</h3>
                   </Grid>
                 </Grid>
                 <Grid sx={{ pt: 7 }}>

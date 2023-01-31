@@ -1,4 +1,6 @@
 import Admin from '../model/adminSchema.js'
+import User from '../model/userSchema.js'
+import Vendor from '../model/vendorSchema.js'
 import jwt from 'jsonwebtoken'
 import { compare } from 'bcrypt'
 
@@ -37,6 +39,30 @@ export async function adminAuth(req, res) {
         adminDetails.auth = true
 
         res.json({email:adminDetails.email,auth:true,image:adminDetails.image||null})
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function getUsers(req, res) {
+    try {
+        const users = await User.find()
+
+        res.json(users)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function getVendors(req, res) {
+    try {
+        const vendors = await Vendor.find()
+
+        res.json(vendors)
     } catch (error) {
         console.log(error)
     }

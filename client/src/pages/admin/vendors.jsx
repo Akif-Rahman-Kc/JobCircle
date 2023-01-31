@@ -46,7 +46,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   ];
 
 const Users = () => {
-  const [ users , setUsers ] = useState([])
+  const [ vendors , setVendors ] = useState([])
 
   useEffect(()=>{
     let token=  localStorage.getItem('admintoken')
@@ -62,9 +62,9 @@ const Users = () => {
       router.push('/admin/signin')
     }
 
-    axios.get('http://localhost:4000/admin/get_users').then((response)=>{
+    axios.get('http://localhost:4000/admin/get_vendors').then((response)=>{
       console.log(response.data);
-      setUsers(response.data)
+      setVendors(response.data)
     })
   },[])
 
@@ -93,17 +93,17 @@ const Users = () => {
                                     </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                    {users.map((user) => (
-                                        <StyledTableRow key={user._id}>
+                                    {vendors.map((vendor) => (
+                                        <StyledTableRow key={vendor._id}>
                                         <StyledTableCell component="th" scope="row">
                                             1
                                         </StyledTableCell>
                                         <StyledTableCell component="th" scope="row">
-                                            {user.firstName + ' ' + user.lastName}
+                                            {vendor.firstName + ' ' + vendor.lastName}
                                         </StyledTableCell>
-                                        <StyledTableCell align="right">{user.email}</StyledTableCell>
-                                        <StyledTableCell align="right">{user.locality + ', ' + user.city}</StyledTableCell>
-                                        <StyledTableCell align="right">{user.phoneNo}</StyledTableCell>
+                                        <StyledTableCell align="right">{vendor.email}</StyledTableCell>
+                                        <StyledTableCell align="right">{vendor.locality + ', ' + vendor.city}</StyledTableCell>
+                                        <StyledTableCell align="right">{vendor.phoneNo}</StyledTableCell>
                                         <StyledTableCell align="right">
                                           <Button sx={{ backgroundColor:'#e70202' , borderRadius:'29px' , boxShadow:3 , color:'#fff' , fontSize:'10px' , fontWeight:'800' , ":hover":{ backgroundColor:'red' } }}>
                                             block
