@@ -18,6 +18,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import { vendorDetails } from '@/redux/vendor'
 import { AccountCircle } from '@mui/icons-material'
+import {addDoc,collection,doc,serverTimestamp,updateDoc} from "@firebase/firestore"
+import { getDownloadURL, ref, uploadString } from 'firebase/storage'
+import { storage } from '@/firebase/config'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -39,6 +42,7 @@ export default function VendorProfile() {
   const router = useRouter()
   const { vendor } = useSelector((state)=>state.vendorInfo)
   const dispatch = useDispatch()
+  const [ selectedFile, setSelectedFile ] = useState()
 
   useEffect(()=>{
     let token=  localStorage.getItem('vendortoken')
@@ -55,13 +59,27 @@ export default function VendorProfile() {
     }
   },[])
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     let data = new FormData(event.currentTarget);
     data = {
       description: data.get('description'),
+      image: data.get('image'),
     }
-    console.log(data);
+    let dir = Date.now()
+    const imageRef = ref(storage,`posts/${dir+`${data?.image?.name}`}/${data?.image?.name}`)
+    const reader = new FileReader()
+    if (data.image) {
+      reader.readAsDataURL(data.image)
+    }
+    reader.onload = (readerEvent)=>{
+      setSelectedFile(readerEvent.target.result)
+    }
+            await uploadString(imageRef,selectedFile,"data_url").then(async()=>{
+                const downloadURL = await getDownloadURL(imageRef)
+                console.log(downloadURL);
+
+              })
     
   };
 

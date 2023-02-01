@@ -121,8 +121,7 @@ export default function VendorEditProfile() {
                       backgroundColor: "#fff",
                     }}
                   >
-                    <AccountCircle/>
-                    <h3 style={{ marginLeft:'7px' , fontSize:'22px' }}>Profile</h3>
+                    <h3 style={{ marginLeft:'7px' , fontSize:'22px' }}>Edit Profile</h3>
                   </Grid>
                 </Grid>
                 <Grid sx={{ pt: 7 }}>
