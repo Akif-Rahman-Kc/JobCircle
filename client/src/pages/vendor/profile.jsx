@@ -1,6 +1,6 @@
 import { Inter } from '@next/font/google'
 import { Box } from '@mui/system'
-import { Button, Grid, IconButton, Modal } from '@mui/material'
+import { Button, Grid, IconButton, Input, Modal, TextareaAutosize, TextField } from '@mui/material'
 import Messages from '@/components/Messages/Message'
 import Notifications from '@/components/Notifications/Notification'
 import Link from 'next/link';
@@ -46,7 +46,6 @@ export default function VendorProfile() {
       axios.post('http://localhost:4000/vendor/vendorAuth',{headers:{"accessVendorToken":token}}).then((response)=>{
         if (response.data.auth) {
           dispatch(vendorDetails(response.data.vendorObj))
-          console.log(vendor);
         } else {
           router.push('/vendor/signin')
         }
@@ -55,6 +54,16 @@ export default function VendorProfile() {
       router.push('/vendor/signin')
     }
   },[])
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    let data = new FormData(event.currentTarget);
+    data = {
+      description: data.get('description'),
+    }
+    console.log(data);
+    
+  };
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -113,19 +122,26 @@ export default function VendorProfile() {
                             aria-labelledby="modal-modal-title"
                             aria-describedby="modal-modal-description"
                           >
-                            <Box sx={style}>
+                            <Box sx={style} component="form" noValidate onSubmit={handleSubmit}>
                               <Grid sx={{ height:'-webkit-fill-available' }}>
                                 <Grid xs={12} sx={{ p: 1 }}>
                                   <img src="https://i.pcmag.com/imagery/reviews/065rv6nxdAEcCzvE3Qb8T3v-1.fit_lim.size_840x473.v1658424542.jpg" style={{ width:'100%' , height:'fit-content' ,borderRadius:'5px',border:'1px solid #000' }} alt="" />
+                                  <Input
+                                    sx={{ width:'100%' , height:'fit-content' ,borderRadius:'5px',border:'1px solid #000'  }}
+                                    id="upload"
+                                    class="file-upload__input"
+                                    type="file"
+                                    name="image"
+                                   />
                                 </Grid>
                                 <Grid xs={12} sx={{ p: 1  }}>
-                                    <textarea name="" id="" style={{ width:'-webkit-fill-available' }} rows="8"></textarea>
+                                  <TextareaAutosize name="description" id="" style={{ maxWidth:'-webkit-fill-available' , minWidth:'-webkit-fill-available' , maxHeight:'150px' , minHeight:'150px' , overflowY:'auto' }}></TextareaAutosize>
                                 </Grid>
                                 <Grid xs={12} sx={{ textAlign:'end' }}>
                                   <Button onClick={handleClose} sx={{ pl: 2 , pr: 2 , mr: 1 , backgroundColor:'#1976d2' , color:'#fff' , fontWeight:'900' , fontSize:'12px' , ":hover":{ backgroundColor:'#1976d2'}}}>
                                       Cancel
                                   </Button>
-                                  <Button sx={{ pl: 2 , pr: 2 , mr: 1 , backgroundColor:'#1976d2' , color:'#fff' , fontWeight:'900' , fontSize:'12px' , ":hover":{ backgroundColor:'#1976d2'}}}>
+                                  <Button type='submit' sx={{ pl: 2 , pr: 2 , mr: 1 , backgroundColor:'#1976d2' , color:'#fff' , fontWeight:'900' , fontSize:'12px' , ":hover":{ backgroundColor:'#1976d2'}}}>
                                       Submit
                                   </Button>
                                 </Grid>

@@ -1,38 +1,84 @@
 import { Inter } from "@next/font/google";
 import { Box } from "@mui/system";
-import { Button, Grid, TextField } from "@mui/material";
+import { Button, Grid, Input, TextField } from "@mui/material";
 import Notifications from "@/components/Notifications/Notification";
 import Messages from "@/components/Messages/Message";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import VendorNavbar from "@/components/Navabar/VendorNavbar";
 import AddAPhotoOutlinedIcon from "@mui/icons-material/AddAPhotoOutlined";
 import { AccountCircle } from "@mui/icons-material";
+import { useDispatch, useSelector } from "react-redux";
+import { vendorDetails } from "@/redux/vendor";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function VendorEditProfile() {
-  const router = useRouter();
-
-  useEffect(() => {
-    let token = localStorage.getItem("vendortoken");
-    if (token) {
-      axios
-        .post("http://localhost:4000/vendor/vendorAuth", {
-          headers: { accessVendorToken: token },
-        })
-        .then((response) => {
+    const router = useRouter()
+    const { vendor } = useSelector((state)=>state.vendorInfo)
+    const dispatch = useDispatch()
+    const [ firstName, setFirstName ] = useState(false)
+    const [ firstNameError, setFirstNameError ] = useState('')
+    const [ email, setEmail ] = useState(false)
+    const [ emailError, setEmailError ] = useState('')
+    const [ box, setBox ] = useState(false)
+    const [ totalRequired, setTotalRequired ] = useState('')
+  
+    useEffect(()=>{
+      let token=  localStorage.getItem('vendortoken')
+      if (token) {
+        axios.post('http://localhost:4000/vendor/vendorAuth',{headers:{"accessVendorToken":token}}).then((response)=>{
           if (response.data.auth) {
-            console.log("success");
+            dispatch(vendorDetails(response.data.vendorObj))
           } else {
-            router.push("/vendor/signin");
+            router.push('/vendor/signin')
           }
-        });
-    } else {
-      router.push("/vendor/signin");
-    }
-  },[]);
+        })
+      } else {
+        router.push('/vendor/signin')
+      }
+    },[])
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        let data = new FormData(event.currentTarget);
+        data = {
+          firstName: data.get('firstName'),
+          lastName: data.get('lastName'),
+          locality: data.get('locality'),
+          city: data.get('city'),
+          state: data.get('state'),
+          email: data.get('email'),
+          job: data.get('job'),
+          experiance: data.get('experiance'),
+          image: data.get('image'),
+        }
+        console.log(data);
+        if(data.firstName && data.email && data.locality && data.city && data.state && data.job){
+            let regName =/^[a-zA-Z]+$/;
+            let regEmail =/^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/
+            setBox(false)
+            setTotalRequired('')
+            if(regName.test(data.firstName)){
+              setFirstName(false)
+              setFirstNameError('')
+              if(regEmail.test(data.email)){
+                setEmail(false)
+                setEmailError('')
+              }else{
+                setEmail(true)
+                setEmailError('Please enter valid Email')
+              }
+           }else{
+            setFirstName(true)
+            setFirstNameError('Please enter valid Name')
+           }
+          }else{
+            setBox(true)
+            setTotalRequired('Please enter your Details')
+          }
+      };
 
   return (
     <>
@@ -92,7 +138,8 @@ export default function VendorEditProfile() {
                       m: 2,
                     }}
                   >
-                    <Box
+                    <Box 
+                    component="form" noValidate onSubmit={handleSubmit}
                       sx={{
                         p: 2,
                         backgroundColor: "lightgray",
@@ -109,7 +156,7 @@ export default function VendorEditProfile() {
                           display: "flex",
                         }}
                       >
-                        <img
+                        {vendor.image ? <img src="/null-profile.jpg" style={{ width: "98px", height: "fit-content", borderRadius: "50%", }} alt="" /> : <img
                           src="/null-profile.jpg"
                           style={{
                             width: "98px",
@@ -117,24 +164,27 @@ export default function VendorEditProfile() {
                             borderRadius: "50%",
                           }}
                           alt=""
-                        />
+                        />}
                         <div style={{ marginTop: "auto" }}>
                           <label for="upload" class="file-upload__label">
                             <AddAPhotoOutlinedIcon sx={{ ml: -0.5 }} />
                           </label>
-                          <input
+                          <Input
+                            sx={{ display:'none' }}
                             id="upload"
                             class="file-upload__input"
                             type="file"
-                            name="file-upload"
+                            name="image"
                           />
                         </div>
+                      </Box>
+                      <Box sx={{ display: box ? 'block' : 'none' , backgroundColor:'#ffc5c5' , borderRadius:'3px' , p: 1.7 , mt: 2 , border:'1px solid gray' }}>
+                            <p style={{ color:'red' }}>{totalRequired}</p>
                       </Box>
                       <Box>
                         <Grid container spacing={2} sx={{ mt: 3 }}>
                           <Grid item xs={6}>
                             <TextField
-                              required
                               fullWidth
                               id="firstName"
                               label="First Name"
@@ -142,103 +192,96 @@ export default function VendorEditProfile() {
                               name="firstName"
                               autoComplete="family-name"
                               autoFocus
-                              sx={{ backgroundColor: "#fff" }}
+                              error={firstName}
+                              helperText={firstNameError}
+                              defaultValue={vendor.firstName}
+                              
                             />
                           </Grid>
                           <Grid item xs={6}>
                             <TextField
-                              required
                               fullWidth
                               id="lastName"
                               label="Last Name"
                               name="lastName"
                               size="small"
                               autoComplete="family-name"
-                              autoFocus
-                              sx={{ backgroundColor: "#fff" }}
+                              defaultValue={vendor.lastName}
                             />
                           </Grid>
                           <Grid item xs={6}>
                             <TextField
-                              required
                               fullWidth
                               id="locality"
                               label="Locality"
                               size="small"
                               name="locality"
                               autoComplete="family-name"
-                              autoFocus
-                              sx={{ backgroundColor: "#fff" }}
+                              defaultValue={vendor.locality}
                             />
                           </Grid>
                           <Grid item xs={6}>
                             <TextField
-                              required
                               fullWidth
                               id="city"
                               size="small"
                               label="City"
                               name="city"
                               autoComplete="family-name"
-                              autoFocus
-                              sx={{ backgroundColor: "#fff" }}
+                              defaultValue={vendor.city}
                             />
                           </Grid>
                           <Grid item xs={12}>
                             <TextField
-                              required
                               fullWidth
                               id="state"
                               label="State"
                               size="small"
                               name="state"
                               autoComplete="family-name"
-                              autoFocus
-                              sx={{ backgroundColor: "#fff" }}
+                              defaultValue={vendor.state}
                             />
                           </Grid>
                           <Grid item xs={12}>
                             <TextField
-                              required
                               fullWidth
                               id="email"
                               size="small"
                               label="E-mail"
                               name="email"
                               autoComplete="family-name"
-                              autoFocus
-                              sx={{ backgroundColor: "#fff" }}
+                              error={email}
+                              helperText={emailError}
+                              defaultValue={vendor.email}
                             />
                           </Grid>
                           <Grid item xs={6}>
                             <TextField
-                              required
                               fullWidth
                               id="job"
                               label="Job"
                               size="small"
                               name="job"
                               autoComplete="family-name"
-                              autoFocus
-                              sx={{ backgroundColor: "#fff" }}
+                              defaultValue={vendor.job}
                             />
                           </Grid>
                           <Grid item xs={6}>
                             <TextField
-                              required
                               fullWidth
                               id="experiance"
                               label="Experiance per Year"
                               name="experiance"
                               size="small"
                               autoComplete="family-name"
-                              autoFocus
-                              sx={{ backgroundColor: "#fff" }}
+                              defaultValue={vendor.experiance}
                             />
                           </Grid>
                         </Grid>
-                        <Grid sx={{ textAlign: "end" }}>
+                      </Box>
+                      <Grid sx={{ textAlign: "end" }}>
                           <Button
+                          type="submit"
                             sx={{
                               pl: 4,
                               pr: 4,
@@ -252,7 +295,6 @@ export default function VendorEditProfile() {
                             Save
                           </Button>
                         </Grid>
-                      </Box>
                     </Box>
                   </Box>
                 </Grid>

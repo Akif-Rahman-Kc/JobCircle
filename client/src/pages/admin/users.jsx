@@ -84,27 +84,27 @@ const Users = () => {
                                 <Table sx={{ minWidth: 700 }} aria-label="customized table">
                                     <TableHead>
                                     <TableRow>
-                                        <StyledTableCell>NO</StyledTableCell>
-                                        <StyledTableCell>NAME</StyledTableCell>
-                                        <StyledTableCell align="right">E-MAIL</StyledTableCell>
-                                        <StyledTableCell align="right">PLACE</StyledTableCell>
-                                        <StyledTableCell align="right">PHONE NO</StyledTableCell>
-                                        <StyledTableCell align="right">OPTIONS</StyledTableCell>
+                                        <StyledTableCell align="center">NO</StyledTableCell>
+                                        <StyledTableCell align="center">NAME</StyledTableCell>
+                                        <StyledTableCell align="center">E-MAIL</StyledTableCell>
+                                        <StyledTableCell align="center">PLACE</StyledTableCell>
+                                        <StyledTableCell align="center">PHONE NO</StyledTableCell>
+                                        <StyledTableCell align="center">OPTIONS</StyledTableCell>
                                     </TableRow>
                                     </TableHead>
                                     <TableBody>
                                     {users.map((user) => (
                                         <StyledTableRow key={user._id}>
-                                        <StyledTableCell component="th" scope="row">
+                                        <StyledTableCell align="center" component="th" scope="row">
                                             1
                                         </StyledTableCell>
-                                        <StyledTableCell component="th" scope="row">
+                                        <StyledTableCell align="center" component="th" scope="row">
                                             {user.firstName + ' ' + user.lastName}
                                         </StyledTableCell>
-                                        <StyledTableCell align="right">{user.email}</StyledTableCell>
-                                        <StyledTableCell align="right">{user.locality + ', ' + user.city}</StyledTableCell>
-                                        <StyledTableCell align="right">{user.phoneNo}</StyledTableCell>
-                                        <StyledTableCell align="right">
+                                        <StyledTableCell align="center">{user.email}</StyledTableCell>
+                                        <StyledTableCell align="center">{user.locality + ', ' + user.city}</StyledTableCell>
+                                        <StyledTableCell align="center">{user.phoneNo}</StyledTableCell>
+                                        <StyledTableCell align="center">
                                           <Button sx={{ backgroundColor:'#e70202' , borderRadius:'29px' , boxShadow:3 , color:'#fff' , fontSize:'10px' , fontWeight:'800' , ":hover":{ backgroundColor:'red' } }}>
                                             block
                                           </Button>
