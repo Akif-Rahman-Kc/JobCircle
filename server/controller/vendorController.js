@@ -1,5 +1,6 @@
 import { hash, compare } from 'bcrypt'
 import Vendor from '../model/vendorSchema.js'
+import Post from '../model/postSchema.js'
 import jwt from 'jsonwebtoken'
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -59,3 +60,29 @@ export async function vendorAuth(req, res) {
         console.log(error)
     }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function addPost(req, res) {
+    try {
+        await Post.create(req.body)
+
+        res.json()
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function getPosts(req, res) {
+    try {
+        const posts = await Post.find({vendorId:req.query.vendorId}).sort({createdAt:-1})
+
+        res.json(posts)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+// const posts = await Post.find().populate("vendorId")
