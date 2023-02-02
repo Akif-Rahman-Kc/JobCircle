@@ -26,7 +26,18 @@ export const VendorSigninApi = async (formData) => {
 
 export const VendorisAuthApi = async (Token) => {
     try {
-        const {data} = await Api.post('/vendor/userAuth', {headers:{"accessVendorToken":Token}})
+        const {data} = await Api.post('/vendor/vendorAuth', {headers:{"accessVendorToken":Token}})
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const VendorGetPosts = async (vendorId) => {
+    try {
+        const {data} = await Api.get(`/vendor/get_posts?vendorId=${vendorId}`)
         return data;
     } catch (error) {
         console.log(error);

@@ -12,7 +12,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { VendorSigninApi } from "@/Apis/vendorApi";
+import { VendorisAuthApi, VendorSigninApi } from "@/Apis/vendorApi";
 
 
 const theme = createTheme();
@@ -21,18 +21,22 @@ export default function VendorSignIn() {
   const router = useRouter()
 
   useEffect(()=>{
-    let token=  localStorage.getItem('vendortoken')
-    if (token) {
-      axios.post('http://localhost:4000/vendor/vendorAuth',{headers:{"accessVendorToken":token}}).then((response)=>{
-        if (response.data.auth) {
-          router.push('/vendor')
-        } else {
-          console.log("failed");
+    async function invoke(){
+      let token=  localStorage.getItem('vendortoken')
+      if (token) {
+        const response = await VendorisAuthApi(token)
+        if (response) {
+          if (response.auth) {
+            router.push('/vendor')
+          } else {
+            console.log("failed");
+          }
         }
-      })
-    } else {
-      console.log("failed");
+      } else {
+        console.log("failed");
+      }
     }
+    invoke();
   },[])
 
   const [ email, setEmail ] = useState(false)

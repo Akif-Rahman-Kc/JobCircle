@@ -123,3 +123,11 @@ h1 ,h2, h3, h4, h5, h6, a, p {
 .css-md26zr-MuiInputBase-root-MuiOutlinedInput-root{
   background-color: #fff;
 }
+
+.comments::-webkit-scrollbar {
+  display: none;
+}
+
+img {
+  cursor: pointer;
+}

@@ -11,6 +11,7 @@ import AddAPhotoOutlinedIcon from "@mui/icons-material/AddAPhotoOutlined";
 import { AccountCircle } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { vendorDetails } from "@/redux/vendor";
+import { getDownloadURL } from "firebase/storage";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -39,8 +40,7 @@ export default function VendorEditProfile() {
         router.push('/vendor/signin')
       }
     },[])
-
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         let data = new FormData(event.currentTarget);
         data = {
@@ -66,6 +66,33 @@ export default function VendorEditProfile() {
               if(regEmail.test(data.email)){
                 setEmail(false)
                 setEmailError('')
+
+                // const dir = Date.now();
+                // const rand = Math.random();
+                // const image = data.image
+                // const imageRef = ref(storage, `profile/${dir}${rand}/${image?.name}`);
+                // const toBase64 = (image) =>
+                // new Promise((resolve, reject) => {
+                //     const reader = new FileReader();
+                //     reader.readAsDataURL(image);
+                //     reader.onload = () => resolve(reader.result);
+                //     reader.onerror = (error) => reject(error);
+                // }).catch((err) => {
+                //     console.log(err);
+                // });
+                // const imgBase = await toBase64(image);
+                // await uploadString(imageRef, imgBase, "data_url").then(async () => {
+                //     const downloadURL = await getDownloadURL(imageRef);
+                //     data.image = downloadURL
+                //     axios
+                //         .put(`http://localhost:4000/vendor/edit_profile?vendorId=${vendor._id}`, data)
+                //         .then((response) => {
+                //         setImage("");
+                //         });
+                //     });
+                //     setImage(null);
+                //     setOpen(false);
+                
               }else{
                 setEmail(true)
                 setEmailError('Please enter valid Email')

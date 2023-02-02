@@ -31,6 +31,7 @@ import { vendorDetails } from "@/redux/vendor";
 import { AccountCircle } from "@mui/icons-material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { BsFillTrashFill, IconName } from "react-icons/bs";
 import {
   addDoc,
   collection,
@@ -40,6 +41,7 @@ import {
 } from "@firebase/firestore";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { storage } from "@/firebase/config";
+import { VendorGetPosts, VendorisAuthApi } from "@/Apis/vendorApi";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -57,7 +59,7 @@ const style = {
   borderRadius: "10px",
 };
 
-export default function VendorProfile({vendor}) {
+export default function VendorProfile() {
   const router = useRouter();
   const { vendor } = useSelector((state) => state.vendorInfo);
   const dispatch = useDispatch();
@@ -67,30 +69,38 @@ export default function VendorProfile({vendor}) {
   const [refreshPost, setrefreshPost] = useState(false);
 
   useEffect(() => {
-    let token = localStorage.getItem("vendortoken");
-    if (token) {
-      axios
-        .post("http://localhost:4000/vendor/vendorAuth", {
-          headers: { accessVendorToken: token },
-        })
-        .then((response) => {
-          if (response.data.auth) {
-            dispatch(vendorDetails(response.data.vendorObj));
+    async function invoke(){
+      let token = localStorage.getItem("vendortoken");
+      if (token) {
+        axios
+        const response = await VendorisAuthApi(token)
+        if (response) {
+          if (response.auth) {
+            dispatch(vendorDetails(response.vendorObj));
+            const res = await VendorGetPosts(response.vendorObj._id)
+            if (res) {
+              setPosts(res);
+            }
           } else {
             router.push("/vendor/signin");
           }
-        });
-    } else {
-      router.push("/vendor/signin");
+        }
+      } else {
+        router.push("/vendor/signin");
+      }
     }
+    invoke();
   }, []);
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:4000/vendor/get_posts?vendorId=${vendor._id}`)
-      .then((response) => {
-        setPosts(response.data);
-      });
+    async function invokePosts(){
+      axios
+      const response = await VendorGetPosts(vendor._id)
+      if (response) {
+        setPosts(response);
+      }
+    }
+    invokePosts();
   }, [refreshPost]);
 
   const handleSubmit = async (event) => {
@@ -130,6 +140,7 @@ export default function VendorProfile({vendor}) {
 
   const [open, setOpen] = useState(false);
   const [ openComment, setOpenComment] = useState(null)
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setImage("");
@@ -415,7 +426,7 @@ export default function VendorProfile({vendor}) {
 
                     {posts.map((post) => {
                       return (
-                        <Grid xs={12} sx={{ mt: 2 }}>
+                        <Grid xs={12} sx={{ mt: 2 }} key={post._id}>
                           <Box sx={{ display: "flex" }}>
                             <img
                               src="/null-profile.jpg"
@@ -453,19 +464,24 @@ export default function VendorProfile({vendor}) {
                               display: "flex",
                             }}
                           >
-                            <Grid xs={4}>
+                            <Grid xs={3}>
                               <IconButton size="large" sx={{ color: "black" }}>
                                 <ThumbUpOffAltIcon />
                               </IconButton>
                             </Grid>
-                            <Grid xs={4}>
-                              <IconButton size="large" sx={{ color: "black" }}>
+                            <Grid xs={3}>
+                              <IconButton onClick={() => openComment ? setOpenComment(null) : setOpenComment(post._id)} size="large" sx={{ color: "black" }}>
                                 <QuestionAnswerOutlinedIcon />
                               </IconButton>
                             </Grid>
-                            <Grid xs={4}>
+                            <Grid xs={3}>
                               <IconButton size="large" sx={{ color: "black" }}>
                                 <ShareOutlinedIcon />
+                              </IconButton>
+                            </Grid>
+                            <Grid xs={3}>
+                              <IconButton size="large" sx={{ color: "black" }}>
+                                <MoreVertIcon />
                               </IconButton>
                             </Grid>
                           </Box>
@@ -517,8 +533,22 @@ export default function VendorProfile({vendor}) {
                           style={{ backgroundColor: "rgba(211,211,211,0.4)" }}
                         >
                           <Collapse in={openComment == post._id} timeout="auto" unmountOnExit>
-                            <CardContent>
-                              <Box sx={{ display: "flex" }}>
+                          <Box sx={{ display: "flex" , backgroundColor:'rgb(211 211 211)' , p: 1.5 , borderRadius:'10px' , m: 1 }}>
+                                <img
+                                  src="/null-profile.jpg"
+                                  style={{
+                                    marginLeft: "5px",
+                                    width: "33px",
+                                    height: "fit-content",
+                                    borderRadius: "50%",
+                                    border: "1px solid #000",
+                                  }}
+                                  alt=""
+                                />
+                                <Input type='text' placeholder="Add a comment..." sx={{ width:'100%' , pl: 2 }}/>
+                              </Box>
+                            <CardContent className="comments" sx={{ backgroundColor:'rgb(211 211 211)' , p: 1.5 , borderRadius:'10px' , m: 1 , height:'300px', overflowY:'auto' }}>
+                              <Box sx={{ mt: 2 , display: "flex" }}>
                                 <img
                                   src="/null-profile.jpg"
                                   style={{
@@ -539,20 +569,66 @@ export default function VendorProfile({vendor}) {
                                 >
                                   Akif Rahman
                                 </h5>
+                                <h6 style={{
+                                    marginTop: "6px",
+                                    marginLeft: "13px",
+                                    fontWeight: "bold",
+                                  }}>1.09 PM</h6>
+                                <IconButton size="small" sx={{ color:'#f53b3b' , ml:'auto' }}>
+                                  <BsFillTrashFill style={{ width:'14px' }}/>
+                                </IconButton>
                               </Box>
                               <Box
                                 sx={{
-                                  m: 1,
-                                  p: 1,
-                                  border: "1px solid lightgray",
-                                  borderRadius: "4px",
+                                  ml: 5,
+                                  mb: 2,
+                                  mr: 2
+                                }}
+                              >
+                                <h6>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaassssssssssssssssssaaasssssssssssssssssa</h6>
+                              </Box>
+                              <hr />
+                              <Box sx={{ mt: 2 , display: "flex" }}>
+                                <img
+                                  src="/null-profile.jpg"
+                                  style={{
+                                    marginLeft: "5px",
+                                    width: "25px",
+                                    height: "fit-content",
+                                    borderRadius: "50%",
+                                    border: "1px solid #000",
+                                  }}
+                                  alt=""
+                                />
+                                <h5
+                                  style={{
+                                    marginTop: "5px",
+                                    marginLeft: "5px",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Akif Rahman
+                                </h5>
+                                <h6 style={{
+                                    marginTop: "6px",
+                                    marginLeft: "13px",
+                                    fontWeight: "bold",
+                                  }}>1.09 PM</h6>
+                                <IconButton size="small" sx={{ color:'#f53b3b' , ml:'auto' }}>
+                                  <BsFillTrashFill style={{ width:'14px' }}/>
+                                </IconButton>
+                              </Box>
+                              <Box
+                                sx={{
+                                  ml: 5,
+                                  mb: 2,
+                                  mr: 2
                                 }}
                               >
                                 <h6>aaaaaaaaaaa</h6>
                               </Box>
-                            </CardContent>
-                            <CardContent>
-                              <Box sx={{ display: "flex" }}>
+                              <hr />
+                              <Box sx={{ mt: 2 , display: "flex" }}>
                                 <img
                                   src="/null-profile.jpg"
                                   style={{
@@ -573,13 +649,140 @@ export default function VendorProfile({vendor}) {
                                 >
                                   Akif Rahman
                                 </h5>
+                                <h6 style={{
+                                    marginTop: "6px",
+                                    marginLeft: "13px",
+                                    fontWeight: "bold",
+                                  }}>1.09 PM</h6>
+                                <IconButton size="small" sx={{ color:'#f53b3b' , ml:'auto' }}>
+                                  <BsFillTrashFill style={{ width:'14px' }}/>
+                                </IconButton>
                               </Box>
                               <Box
                                 sx={{
-                                  m: 1,
-                                  p: 1,
-                                  border: "1px solid lightgray",
-                                  borderRadius: "4px",
+                                  ml: 5,
+                                  mb: 2,
+                                  mr: 2
+                                }}
+                              >
+                                <h6>aaaaaaaaaaa</h6>
+                              </Box>
+                              <hr />
+                              <Box sx={{ mt: 2 , display: "flex" }}>
+                                <img
+                                  src="/null-profile.jpg"
+                                  style={{
+                                    marginLeft: "5px",
+                                    width: "25px",
+                                    height: "fit-content",
+                                    borderRadius: "50%",
+                                    border: "1px solid #000",
+                                  }}
+                                  alt=""
+                                />
+                                <h5
+                                  style={{
+                                    marginTop: "5px",
+                                    marginLeft: "5px",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Akif Rahman
+                                </h5>
+                                <h6 style={{
+                                    marginTop: "6px",
+                                    marginLeft: "13px",
+                                    fontWeight: "bold",
+                                  }}>1.09 PM</h6>
+                                <IconButton size="small" sx={{ color:'#f53b3b' , ml:'auto' }}>
+                                  <BsFillTrashFill style={{ width:'14px' }}/>
+                                </IconButton>
+                              </Box>
+                              <Box
+                                sx={{
+                                  ml: 5,
+                                  mb: 2,
+                                  mr: 2
+                                }}
+                              >
+                                <h6>aaaaaaaaaaa</h6>
+                              </Box>
+                              <hr />
+                              <Box sx={{ mt: 2 , display: "flex" }}>
+                                <img
+                                  src="/null-profile.jpg"
+                                  style={{
+                                    marginLeft: "5px",
+                                    width: "25px",
+                                    height: "fit-content",
+                                    borderRadius: "50%",
+                                    border: "1px solid #000",
+                                  }}
+                                  alt=""
+                                />
+                                <h5
+                                  style={{
+                                    marginTop: "5px",
+                                    marginLeft: "5px",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Akif Rahman
+                                </h5>
+                                <h6 style={{
+                                    marginTop: "6px",
+                                    marginLeft: "13px",
+                                    fontWeight: "bold",
+                                  }}>1.09 PM</h6>
+                                <IconButton size="small" sx={{ color:'#f53b3b' , ml:'auto' }}>
+                                  <BsFillTrashFill style={{ width:'14px' }}/>
+                                </IconButton>
+                              </Box>
+                              <Box
+                                sx={{
+                                  ml: 5,
+                                  mb: 2,
+                                  mr: 2
+                                }}
+                              >
+                                <h6>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaahkuhnkjnnnnnnnnnnnnnnnnnnnnsikjdncskdlznxcmszxkaaaa</h6>
+                              </Box>
+                              <hr />
+                              <Box sx={{ mt: 2 , display: "flex" }}>
+                                <img
+                                  src="/null-profile.jpg"
+                                  style={{
+                                    marginLeft: "5px",
+                                    width: "25px",
+                                    height: "fit-content",
+                                    borderRadius: "50%",
+                                    border: "1px solid #000",
+                                  }}
+                                  alt=""
+                                />
+                                <h5
+                                  style={{
+                                    marginTop: "5px",
+                                    marginLeft: "5px",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Akif Rahman
+                                </h5>
+                                <h6 style={{
+                                    marginTop: "6px",
+                                    marginLeft: "13px",
+                                    fontWeight: "bold",
+                                  }}>1.09 PM</h6>
+                                <IconButton size="small" sx={{ color:'#f53b3b' , ml:'auto' }}>
+                                  <BsFillTrashFill style={{ width:'14px' }}/>
+                                </IconButton>
+                              </Box>
+                              <Box
+                                sx={{
+                                  ml: 5,
+                                  mb: 2,
+                                  mr: 2
                                 }}
                               >
                                 <h6>aaaaaaaaaaa</h6>
@@ -605,24 +808,3 @@ export default function VendorProfile({vendor}) {
     </>
   );
 }
-
-// export async function getServersideProps(context){
-//   vendor={name:'hju'}
-
-//   axios
-//   .post("http://localhost:4000/vendor/vendorAuth", {
-
-//   })
-//   .then((response) => {
-//       let vendor =response.data.vendorObj
-//       return {
-//         props:{
-//           vendor:vendor
-//         }
-//       }
-    
-//   });
-
-
-
-// }
