@@ -52,6 +52,9 @@ const vendorSchema = new Schema({
         required: true,
         type: String,
         trim: true
+    },
+    image:{
+        type: String,
     }
     
 },{ timestamps: true })

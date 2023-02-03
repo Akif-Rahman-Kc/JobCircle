@@ -32,13 +32,6 @@ import { AccountCircle } from "@mui/icons-material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { BsFillTrashFill, IconName } from "react-icons/bs";
-import {
-  addDoc,
-  collection,
-  doc,
-  serverTimestamp,
-  updateDoc,
-} from "@firebase/firestore";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { storage } from "@/firebase/config";
 import { VendorGetPosts, VendorisAuthApi } from "@/Apis/vendorApi";
@@ -429,7 +422,7 @@ export default function VendorProfile() {
                         <Grid xs={12} sx={{ mt: 2 }} key={post._id}>
                           <Box sx={{ display: "flex" }}>
                             <img
-                              src="/null-profile.jpg"
+                              src={ vendor.image ? vendor.image : "/null-profile.jpg"}
                               style={{
                                 width: "8%",
                                 height: "fit-content",

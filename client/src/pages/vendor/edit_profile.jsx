@@ -1,6 +1,6 @@
 import { Inter } from "@next/font/google";
 import { Box } from "@mui/system";
-import { Button, Grid, Input, TextField } from "@mui/material";
+import { Avatar, Button, Grid, Input, TextField } from "@mui/material";
 import Notifications from "@/components/Notifications/Notification";
 import Messages from "@/components/Messages/Message";
 import { useEffect, useState } from "react";
@@ -8,10 +8,13 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import VendorNavbar from "@/components/Navabar/VendorNavbar";
 import AddAPhotoOutlinedIcon from "@mui/icons-material/AddAPhotoOutlined";
-import { AccountCircle } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { vendorDetails } from "@/redux/vendor";
-import { getDownloadURL } from "firebase/storage";
+import { getDownloadURL, ref, uploadString } from "firebase/storage";
+import { storage } from "@/firebase/config";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ProfilePhotoRemove, VendorProfileEdit } from "@/Apis/vendorApi";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,6 +28,7 @@ export default function VendorEditProfile() {
     const [ emailError, setEmailError ] = useState('')
     const [ box, setBox ] = useState(false)
     const [ totalRequired, setTotalRequired ] = useState('')
+    const [ imageShow, setImageShow  ] = useState('')
   
     useEffect(()=>{
       let token=  localStorage.getItem('vendortoken')
@@ -40,6 +44,7 @@ export default function VendorEditProfile() {
         router.push('/vendor/signin')
       }
     },[])
+    
     const handleSubmit = async (event) => {
         event.preventDefault();
         let data = new FormData(event.currentTarget);
@@ -54,7 +59,6 @@ export default function VendorEditProfile() {
           experiance: data.get('experiance'),
           image: data.get('image'),
         }
-        console.log(data);
         if(data.firstName && data.email && data.locality && data.city && data.state && data.job){
             let regName =/^[a-zA-Z]+$/;
             let regEmail =/^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/
@@ -66,32 +70,58 @@ export default function VendorEditProfile() {
               if(regEmail.test(data.email)){
                 setEmail(false)
                 setEmailError('')
+                if (data.image.name) {
+                  const dir = Date.now();
+                  const rand = Math.random();
+                  const image = data.image
+                  const imageRef = ref(storage, `profile/${dir}${rand}/${image?.name}`);
+                  const toBase64 = (image) =>
+                  new Promise((resolve, reject) => {
+                      const reader = new FileReader();
+                      reader.readAsDataURL(image);
+                      reader.onload = () => resolve(reader.result);
+                      reader.onerror = (error) => reject(error);
+                  }).catch((err) => {
+                      console.log(err);
+                  });
+                  const imgBase = await toBase64(image);
+                  await uploadString(imageRef, imgBase, "data_url").then(async () => {
+                      const downloadURL = await getDownloadURL(imageRef);
+                      data.image = downloadURL
+                  });
+                }else{
+                  data.image = ''
+                } 
 
-                // const dir = Date.now();
-                // const rand = Math.random();
-                // const image = data.image
-                // const imageRef = ref(storage, `profile/${dir}${rand}/${image?.name}`);
-                // const toBase64 = (image) =>
-                // new Promise((resolve, reject) => {
-                //     const reader = new FileReader();
-                //     reader.readAsDataURL(image);
-                //     reader.onload = () => resolve(reader.result);
-                //     reader.onerror = (error) => reject(error);
-                // }).catch((err) => {
-                //     console.log(err);
-                // });
-                // const imgBase = await toBase64(image);
-                // await uploadString(imageRef, imgBase, "data_url").then(async () => {
-                //     const downloadURL = await getDownloadURL(imageRef);
-                //     data.image = downloadURL
-                //     axios
-                //         .put(`http://localhost:4000/vendor/edit_profile?vendorId=${vendor._id}`, data)
-                //         .then((response) => {
-                //         setImage("");
-                //         });
-                //     });
-                //     setImage(null);
-                //     setOpen(false);
+                const response = await VendorProfileEdit(vendor._id , data)
+                if (response) {
+                  if (response.status == "success") {
+                    toast.success("Successfully Edited", {
+                      position: "top-right",
+                      autoClose: 3000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                      theme: "colored",
+                    });
+                    setTimeout(() => {
+                      router.back()
+                    }, 3000);
+                  } else {
+                    toast.error("This email is already registered!", {
+                      position: "top-right",
+                      autoClose: 3000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                      theme: "colored",
+                    });
+                  }
+                }        
                 
               }else{
                 setEmail(true)
@@ -107,10 +137,18 @@ export default function VendorEditProfile() {
           }
       };
 
+      const removeProfilePhoto = async ()=>{
+        const res = await ProfilePhotoRemove(vendor._id)
+          if (res) {
+            router.back()
+          }
+      }
+
   return (
     <>
       <div>
         <VendorNavbar />
+        <ToastContainer />
         <Box>
           <Grid
             container
@@ -182,15 +220,15 @@ export default function VendorEditProfile() {
                           display: "flex",
                         }}
                       >
-                        {vendor.image ? <img src="/null-profile.jpg" style={{ width: "98px", height: "fit-content", borderRadius: "50%", }} alt="" /> : <img
-                          src="/null-profile.jpg"
+                        <img
+                          src={ imageShow ? URL.createObjectURL(imageShow) : vendor.image ? vendor.image : "/null-profile.jpg" }
                           style={{
                             width: "98px",
-                            height: "fit-content",
+                            height: "98px",
                             borderRadius: "50%",
                           }}
                           alt=""
-                        />}
+                        />
                         <div style={{ marginTop: "auto" }}>
                           <label for="upload" class="file-upload__label">
                             <AddAPhotoOutlinedIcon sx={{ ml: -0.5 }} />
@@ -201,9 +239,13 @@ export default function VendorEditProfile() {
                             class="file-upload__input"
                             type="file"
                             name="image"
+                            onChange={(e)=> setImageShow(e.target.files[0])}
                           />
                         </div>
                       </Box>
+                      <Button onClick={()=>removeProfilePhoto()} sx={{ border:'1px solid gray' , backgroundColor:'#fff' , borderRadius:'4px'  , width:'fit-content' , p:0.4 , m:0.5 , boxShadow: '1px 1px 3px -1px' , ml: 2 }}>
+                        <h6>Remove Photo</h6>
+                      </Button>
                       <Box sx={{ display: box ? 'block' : 'none' , backgroundColor:'#ffc5c5' , borderRadius:'3px' , p: 1.7 , mt: 2 , border:'1px solid gray' }}>
                             <p style={{ color:'red' }}>{totalRequired}</p>
                       </Box>
@@ -221,7 +263,6 @@ export default function VendorEditProfile() {
                               error={firstName}
                               helperText={firstNameError}
                               defaultValue={vendor.firstName}
-                              
                             />
                           </Grid>
                           <Grid item xs={6}>

@@ -7,9 +7,9 @@ import jwt from 'jsonwebtoken'
 
 export async function vendorSignUp(req, res) {
     try {
-        const vendorUser = await Vendor.findOne({ email: req.body.email })
+        const existVendor = await Vendor.findOne({ email: req.body.email })
 
-        if (vendorUser) {
+        if (existVendor) {
             res.json({status:"failed"})
         } else {
             let vendorDetails = req.body
@@ -80,6 +80,69 @@ export async function getPosts(req, res) {
         const posts = await Post.find({vendorId:req.query.vendorId}).sort({createdAt:-1})
 
         res.json(posts)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function editProfile(req, res) {
+    try {
+        const vendor =  await Vendor.findById(req.query.vendorId)
+        if (vendor.email === req.body.email) {
+            if (req.body.image) {
+                await Vendor.updateOne({_id:req.query.vendorId},{
+                    image:req.body.image,
+                })
+            }
+            await Vendor.updateOne({_id:req.query.vendorId},{
+                firstName:req.body.firstName,
+                lastName:req.body.lastName,
+                locality:req.body.locality,
+                city:req.body.city,
+                state:req.body.state,
+                job:req.body.job,
+                experiance:req.body.experiance
+            })
+            res.json({status:"success"})
+        } else {
+            const existVendor =  await Vendor.findOne({ email: req.body.email })
+            if (existVendor) {
+                res.json({status:"failed"})
+            } else {
+                if (req.body.image) {
+                    await Vendor.updateOne({_id:req.query.vendorId},{
+                        image:req.body.image,
+                    })
+                }
+                await Vendor.updateOne({_id:req.query.vendorId},{
+                    firstName:req.body.firstName,
+                    lastName:req.body.lastName,
+                    locality:req.body.locality,
+                    city:req.body.city,
+                    state:req.body.state,
+                    email:req.body.email,
+                    job:req.body.job,
+                    experiance:req.body.experiance
+                })
+                res.json({status:"success"})
+            }
+        }
+        
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function removeProfilePhoto(req, res) {
+    try {
+        await Vendor.updateOne({_id:req.query.vendorId},{
+            image:'',
+        })
+        res.json({status:"success"})
     } catch (error) {
         console.log(error)
     }
