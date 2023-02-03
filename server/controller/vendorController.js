@@ -1,5 +1,6 @@
 import { hash, compare } from 'bcrypt'
 import Vendor from '../model/vendorSchema.js'
+import Job from '../model/jobSchema.js'
 import Post from '../model/postSchema.js'
 import jwt from 'jsonwebtoken'
 
@@ -18,6 +19,14 @@ export async function vendorSignUp(req, res) {
             const vendor = await Vendor.findOne({ email: vendorDetails.email })
             const vendorId = vendor._id
             const token = jwt.sign({ vendorId }, process.env.JWT_SECRET_KEY, { expiresIn: 60 * 60 * 24 })
+            //job adding
+            const existJob = await Job.findOne({jobName:vendorDetails.job})
+            if (!existJob) {
+                const job = {
+                    jobName:vendorDetails.job
+                }
+                await Job.create(job)
+            }
             res.json({auth: true, token: token,status:"success"})
         }
     } catch (error) {

@@ -279,6 +279,7 @@ export default function VendorProfile() {
                                       height: "250px",
                                       borderRadius: "5px",
                                       border: "1px solid #000",
+                                      width: '-webkit-fill-available'
                                     }}
                                     alt=""
                                   />

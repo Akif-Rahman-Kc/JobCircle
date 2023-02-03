@@ -249,7 +249,7 @@ export default function VendorNavbar() {
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
           <Link href='/vendor'>
             <IconButton
-              sx={{ borderRadius: "10px", width: "98px" , color:'#111' }}
+              sx={{ borderRadius: "10px", width: "105px" , color:'#111' }}
               size="large"
               aria-label="home page"
               color="inherit"
@@ -266,7 +266,7 @@ export default function VendorNavbar() {
             </Link>
             <Link href='/vendor/workers'>
             <IconButton
-              sx={{ borderRadius: "10px", width: "98px" , color:'#111' }}
+              sx={{ borderRadius: "10px", width: "105px" , color:'#111' }}
               size="large"
               aria-label="show the workers"
               color="inherit"
@@ -283,7 +283,7 @@ export default function VendorNavbar() {
             </Link>
             <Link href='/vendor/messages'>
             <IconButton
-              sx={{ borderRadius: "10px", width: "98px" , color:'#111' }}
+              sx={{ borderRadius: "10px", width: "105px" , color:'#111' }}
               size="large"
               aria-label="show 4 new mails"
               color="inherit"
@@ -300,7 +300,7 @@ export default function VendorNavbar() {
             </Link>
             <Link href='/vendor/notifications'>
             <IconButton
-              sx={{ borderRadius: "10px", width: "98px" , color:'#111' }}
+              sx={{ borderRadius: "10px", width: "105px" , color:'#111' }}
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
@@ -317,7 +317,7 @@ export default function VendorNavbar() {
             </Link>
             <Link href='/vendor/work_list'>
             <IconButton
-              sx={{ borderRadius: "10px", width: "98px" , color:'#111' }}
+              sx={{ borderRadius: "10px", width: "105px" , color:'#111' }}
               size="large"
               aria-label="show the work list"
               color="inherit"
@@ -334,7 +334,7 @@ export default function VendorNavbar() {
             </Link>
             <Link href='/vendor/profile'>
             <IconButton
-              sx={{ borderRadius: "10px", width: "98px" , color:'#111' }}
+              sx={{ borderRadius: "10px", width: "110px" , color:'#111' }}
               size="large"
               edge="end"
               aria-label="account of current user"
