@@ -13,6 +13,7 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { userDetails } from "@/redux/user";
 import EngineeringIcon from "@mui/icons-material/Engineering";
+import { isAuthApi } from "@/Apis/userApi";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,18 +24,23 @@ export default function Workers() {
   const dispatch = useDispatch()
 
   useEffect(()=>{
-    let token=  localStorage.getItem('usertoken')
-    if (token) {
-      axios.post('http://localhost:4000/userAuth',{headers:{"accessToken":token}}).then((response)=>{
-        if (response.data.auth) {
-          dispatch(userDetails(response.data.userObj))
-        } else {
-          router.push('/signin')
+    async function invoke(){
+      let token=  localStorage.getItem('usertoken')
+      if (token) {
+        const response = await isAuthApi(token)
+        if (response) {
+          if (response.auth) {
+            dispatch(userDetails(response.userObj))
+          } else {
+            router.push('/signin')
+          }
         }
-      })
-    } else {
-      router.push('/signin')
+          
+      } else {
+        router.push('/signin')
+      }
     }
+    invoke()
   },[])
 
   return (

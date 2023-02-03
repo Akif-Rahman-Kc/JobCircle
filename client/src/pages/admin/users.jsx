@@ -12,6 +12,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { AdminGetUsers, AdminisAuthApi } from "@/Apis/adminApi";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -49,23 +50,27 @@ const Users = () => {
   const [ users , setUsers ] = useState([])
 
   useEffect(()=>{
-    let token=  localStorage.getItem('admintoken')
-    if (token) {
-      axios.post('http://localhost:4000/admin/adminAuth',{headers:{"accessAdminToken":token}}).then((response)=>{
-        if (response.data.auth) {
-          console.log("success");
-        } else {
-          router.push('/admin/signin')
+    async function invoke(){
+      let token=  localStorage.getItem('admintoken')
+      if (token) {
+        const response = await AdminisAuthApi(token)
+        if (response) {
+          if (response.auth) {
+            console.log("success");
+          } else {
+            router.push('/admin/signin')
+          }
         }
-      })
-    } else {
-      router.push('/admin/signin')
-    }
+      } else {
+        router.push('/admin/signin')
+      }
 
-    axios.get('http://localhost:4000/admin/get_users').then((response)=>{
-      console.log(response.data);
-      setUsers(response.data)
-    })
+      const res = await AdminGetUsers()
+      if (res) {
+        setUsers(res)
+      }
+    }
+    invoke();
   },[])
 
     return ( 

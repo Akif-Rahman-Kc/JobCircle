@@ -34,7 +34,7 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { BsFillTrashFill, IconName } from "react-icons/bs";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { storage } from "@/firebase/config";
-import { VendorGetPosts, VendorisAuthApi } from "@/Apis/vendorApi";
+import { VendorAddPost, VendorGetPosts, VendorisAuthApi } from "@/Apis/vendorApi";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -118,14 +118,13 @@ export default function VendorProfile() {
         description: description,
         image: downloadURL,
       };
-      axios
-        .post("http://localhost:4000/vendor/add_post", data)
-        .then((response) => {
-          setImage("");
-          setOpen(false);
-          setDescription("");
-          setrefreshPost(!refreshPost);
-        });
+      const resp = await VendorAddPost(data)
+      if (resp) {
+        setImage("");
+        setOpen(false);
+        setDescription("");
+        setrefreshPost(!refreshPost)
+      }
     });
     setImage(null);
     setOpen(false);

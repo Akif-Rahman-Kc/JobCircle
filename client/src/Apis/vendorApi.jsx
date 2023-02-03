@@ -35,6 +35,17 @@ export const VendorisAuthApi = async (Token) => {
 
 /////////////////////////////////////////////////////////////////////////////
 
+export const VendorAddPost = async (formData) => {
+    try {
+        const {data} = await Api.post('/vendor/add_post', formData)
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
 export const VendorGetPosts = async (vendorId) => {
     try {
         const {data} = await Api.get(`/vendor/get_posts?vendorId=${vendorId}`)

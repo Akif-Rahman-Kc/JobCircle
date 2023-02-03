@@ -12,7 +12,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { SigninApi } from "@/Apis/userApi";
+import { isAuthApi, SigninApi } from "@/Apis/userApi";
 
 
 const theme = createTheme();
@@ -21,18 +21,22 @@ export default function SignIn() {
   const router = useRouter()
 
   useEffect(()=>{
-    let token=  localStorage.getItem('usertoken')
-    if (token) {
-      axios.post('http://localhost:4000/userAuth',{headers:{"accessToken":token}}).then((response)=>{
-        if (response.data.auth) {
-          router.push('/')
-        } else {
-          console.log("failed");
+    async function invoke(){
+      let token=  localStorage.getItem('usertoken')
+      if (token) {
+        const response = await isAuthApi(token)
+        if (response) {
+          if (response.auth) {
+            router.push('/')
+          } else {
+            console.log("failed");
+          }
         }
-      })
-    } else {
-      console.log("failed");
+      } else {
+        console.log("failed");
+      }
     }
+    invoke()
   },[])
 
   const [ email, setEmail ] = useState(false)

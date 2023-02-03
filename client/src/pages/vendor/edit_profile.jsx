@@ -14,7 +14,7 @@ import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { storage } from "@/firebase/config";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { ProfilePhotoRemove, VendorProfileEdit } from "@/Apis/vendorApi";
+import { ProfilePhotoRemove, VendorisAuthApi, VendorProfileEdit } from "@/Apis/vendorApi";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,18 +31,23 @@ export default function VendorEditProfile() {
     const [ imageShow, setImageShow  ] = useState('')
   
     useEffect(()=>{
-      let token=  localStorage.getItem('vendortoken')
-      if (token) {
-        axios.post('http://localhost:4000/vendor/vendorAuth',{headers:{"accessVendorToken":token}}).then((response)=>{
-          if (response.data.auth) {
-            dispatch(vendorDetails(response.data.vendorObj))
-          } else {
-            router.push('/vendor/signin')
+      async function invoke(){
+        let token = localStorage.getItem("vendortoken");
+        if (token) {
+          axios
+          const response = await VendorisAuthApi(token)
+          if (response) {
+            if (response.auth) {
+              dispatch(vendorDetails(response.vendorObj));
+            } else {
+              router.push("/vendor/signin");
+            }
           }
-        })
-      } else {
-        router.push('/vendor/signin')
+        } else {
+          router.push("/vendor/signin");
+        }
       }
+      invoke();
     },[])
     
     const handleSubmit = async (event) => {

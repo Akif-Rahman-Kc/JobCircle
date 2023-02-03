@@ -5,23 +5,28 @@ import AdminNavbar from '@/components/Navabar/AdminNavbar';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import axios from 'axios';
+import { AdminisAuthApi } from '@/Apis/adminApi';
 
 const AdminHome = () => {
 const router = useRouter()
 
   useEffect(()=>{
-    let token=  localStorage.getItem('admintoken')
-    if (token) {
-      axios.post('http://localhost:4000/admin/adminAuth',{headers:{"accessAdminToken":token}}).then((response)=>{
-        if (response.data.auth) {
-          console.log("success");
-        } else {
-          router.push('/admin/signin')
+    async function invoke(){
+      let token=  localStorage.getItem('admintoken')
+      if (token) {
+        const response = await AdminisAuthApi(token)
+        if (response) {
+          if (response.auth) {
+            console.log("success");
+          } else {
+            router.push('/admin/signin')
+          }
         }
-      })
-    } else {
-      router.push('/admin/signin')
+      } else {
+        router.push('/admin/signin')
+      }
     }
+    invoke();
   },[])
 
     return ( 

@@ -67,7 +67,7 @@ export async function addPost(req, res) {
     try {
         await Post.create(req.body)
 
-        res.json()
+        res.json(true)
     } catch (error) {
         console.log(error)
     }

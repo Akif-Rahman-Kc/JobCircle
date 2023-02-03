@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { vendorDetails } from "@/redux/vendor";
 import VendorNavbar from "@/components/Navabar/VendorNavbar";
 import EngineeringIcon from "@mui/icons-material/Engineering";
+import { VendorisAuthApi } from "@/Apis/vendorApi";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,18 +24,22 @@ export default function VendorWorkers() {
   const dispatch = useDispatch()
 
   useEffect(()=>{
-    let token=  localStorage.getItem('vendortoken')
-    if (token) {
-      axios.post('http://localhost:4000/vendor/vendorAuth',{headers:{"accessVendorToken":token}}).then((response)=>{
-        if (response.data.auth) {
-          dispatch(vendorDetails(response.data.vendorObj))
-        } else {
-          router.push('/vendor/signin')
+    async function invoke(){
+      let token=  localStorage.getItem('vendortoken')
+      if (token) {
+        const response = await VendorisAuthApi(token)
+        if (response) {
+          if (response.auth) {
+            dispatch(vendorDetails(response.vendorObj))
+          } else {
+            router.push('/vendor/signin')
+          }
         }
-      })
-    } else {
-      router.push('/vendor/signin')
+      } else {
+        router.push('/vendor/signin')
+      }
     }
+    invoke();
   },[])
 
   return (
