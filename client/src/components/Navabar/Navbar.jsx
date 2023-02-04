@@ -140,7 +140,7 @@ export default function Navbar() {
         <p>Home</p>
       </MenuItem>
       </Link>
-      <Link href='/workers'>
+      <Link href='/works'>
       <MenuItem sx={{ color:'#111' }}>
         <IconButton size="large" aria-label="show the workers" color="inherit">
           <EngineeringIcon />
@@ -250,7 +250,7 @@ export default function Navbar() {
               </Box>
             </IconButton>
             </Link>
-            <Link href='/workers'>
+            <Link href='/works'>
             <IconButton
               sx={{ borderRadius: "10px", width: "105px" , color:'#111' }}
               size="large"

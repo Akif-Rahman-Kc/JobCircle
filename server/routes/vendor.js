@@ -1,6 +1,7 @@
 import { Router } from 'express';
 const router = Router();
 import { vendorSignUp, vendorSignIn, vendorAuth, addPost, getPosts, editProfile, removeProfilePhoto } from '../controller/vendorController.js';
+import { getJobs } from '../controller/workController.js';
 import { vendorJWT } from '../middleware/auth.js';
 
 // Authentication
@@ -18,5 +19,9 @@ router.get('/get_posts', getPosts)
 
 router.put('/edit_profile', editProfile)
 router.patch('/remove_profile_photo', removeProfilePhoto)
+
+// Works
+
+router.get('/get_jobs', getJobs)
 
 export default router;

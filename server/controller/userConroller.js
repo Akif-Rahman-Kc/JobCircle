@@ -53,7 +53,6 @@ export async function userSignIn(req, res) {
 export async function userAuth(req, res) {
     try {
         let userDetails = await User.findById(req.userId)
-        console.log(userDetails,"aa");
         userDetails.auth = true
 
         res.json({userObj:userDetails,auth:true})
@@ -61,5 +60,3 @@ export async function userAuth(req, res) {
         console.log(error)
     }
 }
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////

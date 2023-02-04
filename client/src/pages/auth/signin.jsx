@@ -22,7 +22,7 @@ export default function SignIn() {
 
   useEffect(()=>{
     async function invoke(){
-      let token=  localStorage.getItem('usertoken')
+      let token =  localStorage.getItem('usertoken')
       if (token) {
         const response = await isAuthApi(token)
         if (response) {
@@ -160,7 +160,7 @@ export default function SignIn() {
                     </Link>
                   </Grid>
                   <Grid sm={7} item>
-                    <Link href="/signup" variant="body2">
+                    <Link href="/auth/signup" variant="body2">
                       {"Don't have an account? Sign Up"}
                     </Link>
                   </Grid>

@@ -13,13 +13,14 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { userDetails } from "@/redux/user";
 import EngineeringIcon from "@mui/icons-material/Engineering";
-import { isAuthApi } from "@/Apis/userApi";
+import { GetJobs, isAuthApi } from "@/Apis/userApi";
+import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Workers() {
+export default function Works() {
   const router = useRouter();
-  const [open, setOpen] = useState(false);
+  const [jobs, setJobs] = useState([]);
   const { user } = useSelector((state)=>state.userInfo)
   const dispatch = useDispatch()
 
@@ -32,12 +33,17 @@ export default function Workers() {
           if (response.auth) {
             dispatch(userDetails(response.userObj))
           } else {
-            router.push('/signin')
+            router.push('/auth/signin')
           }
         }
           
       } else {
-        router.push('/signin')
+        router.push('/auth/signin')
+      }
+
+      const res = await GetJobs()
+      if (res) {
+        setJobs(res)
       }
     }
     invoke()
@@ -102,18 +108,12 @@ export default function Workers() {
                       m: 2,
                     }}
                   >
-                    <Button className="workerList" sx={{ p: 1.5 , m: 1 }}>Driver</Button>
-                    <Button className="workerList" sx={{ p: 1.5 , m: 1 }}>Plumber</Button>
-                    <Button className="workerList" sx={{ p: 1.5 , m: 1 }}>Artist</Button>
-                    <Button className="workerList" sx={{ p: 1.5 , m: 1 }}>Catering</Button>
-                    <Button className="workerList" sx={{ p: 1.5 , m: 1 }}>Bands</Button>
-                    <Button className="workerList" sx={{ p: 1.5 , m: 1 }}>Carpentor</Button>
-                    <Button className="workerList" sx={{ p: 1.5 , m: 1 }}>Mechanical Engineer</Button>
-                    <Button className="workerList" sx={{ p: 1.5 , m: 1 }}>Interior Designer</Button>
-                    <Button className="workerList" sx={{ p: 1.5 , m: 1 }}>Electrical Engineer</Button>
-                    <Button className="workerList" sx={{ p: 1.5 , m: 1 }}>Software Engineer</Button>
-                    <Button className="workerList" sx={{ p: 1.5 , m: 1 }}>Barber</Button>
-                    <Button className="workerList" sx={{ p: 1.5 , m: 1 }}>Photographer</Button>
+                    {jobs.map((job)=>(
+                      <>
+                      <Link href={`/${job.jobName}`}><Button key={job._id} className="workerList" sx={{ p: 1.5 , m: 1 }}>{job.jobName}</Button></Link>
+                      </>
+                    ))}
+                    
                   </Box>
                 </Grid>
               </Grid>

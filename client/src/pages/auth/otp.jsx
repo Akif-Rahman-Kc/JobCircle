@@ -22,7 +22,7 @@ export default function OTP() {
 
   useEffect(() => {
     if (Object.keys(userDetails) == 0) {
-      router.push("/signup");
+      router.push("/auth/signup");
     }
   }, []);
 

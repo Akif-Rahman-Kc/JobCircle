@@ -25,7 +25,7 @@ export default function SignUpDetails() {
 
   useEffect(()=>{
     if (Object.keys(userDetails) == 0) {
-      router.push('/signup')
+      router.push('/auth/signup')
     }
   },[])
 
@@ -65,7 +65,7 @@ export default function SignUpDetails() {
             setUpRecaptcha("+91" + data.phoneNo).then((res)=>{
               setFlag(true)
               setOtpConf(res)
-              router.push('/otp')
+              router.push('/auth/otp')
             })
           } catch (error) {
             toast.warning(`${error.message}`, {

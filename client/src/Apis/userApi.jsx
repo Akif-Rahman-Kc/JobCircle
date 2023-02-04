@@ -32,3 +32,25 @@ export const isAuthApi = async (Token) => {
         console.log(error);
     }
 }
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const GetJobs = async () => {
+    try {
+        const {data} = await Api.get('/get_jobs')
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const GetWorkers = async (jobId) => {
+    try {
+        const {data} = await Api.get(`/get_workers?jobId=${jobId}`)
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}

@@ -65,7 +65,7 @@ export default function SignUp() {
 
               //context
               setUserDetails(data)
-              router.push('/signup_details')
+              router.push('/auth/signup_details')
 
             }else{
               setPassword(true)
@@ -217,7 +217,7 @@ export default function SignUp() {
                         </Button>
                         <Grid container justifyContent="flex-end">
                         <Grid item>
-                            <Link href="/signin" variant="body2">
+                            <Link href="/auth/signin" variant="body2">
                             Already have an account? Sign in
                             </Link>
                         </Grid>

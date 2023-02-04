@@ -49,17 +49,18 @@ export default function AdminSignIn() {
       email: data.get("email"),
       password: data.get("password"),
     }
-    const response = await AdminSigninApi(data)
-      if (response.status === 'failed') {
-        if (response.emailErr) {
+    console.log(data);
+    const res = await AdminSigninApi(data)
+      if (res.status == 'failed') {
+        if (res.emailErr) {
           setEmail(true)
-          setEmailError(response.message)
+          setEmailError(res.message)
         } else {
           setPassword(true)
-          setPasswordError(response.message)
+          setPasswordError(res.message)
         }
       } else {
-        localStorage.setItem('admintoken', response.token)
+        localStorage.setItem('admintoken', res.token)
         router.push('/admin')
       }
   };

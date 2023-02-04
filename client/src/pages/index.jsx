@@ -43,12 +43,12 @@ export default function Home() {
           if (response.auth) {
             dispatch(userDetails(response.userObj))
           } else {
-            router.push('/signin')
+            router.push('/auth/signin')
           }
         }
           
       } else {
-        router.push('/signin')
+        router.push('/auth/signin')
       }
     }
     invoke()

@@ -13,7 +13,6 @@ export async function adminSignIn(req, res) {
         // await Admin.create(req.body)
 
         const admin = await Admin.findOne({ email: req.body.email })
-
         if (admin) {
             const isMatch = await compare(req.body.password, admin.password)
             if (isMatch) {
