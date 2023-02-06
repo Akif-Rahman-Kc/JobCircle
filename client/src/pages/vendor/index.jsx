@@ -1,6 +1,6 @@
 import { Inter } from "@next/font/google";
 import { Box } from "@mui/system";
-import { Avatar, Card, CardContent, CardHeader, Collapse, Grid, IconButton, Input } from "@mui/material";
+import { Avatar, Button, Card, CardContent, CardHeader, Collapse, Grid, IconButton, Input } from "@mui/material";
 import Notifications from "@/components/Notifications/Notification";
 import Messages from "@/components/Messages/Message";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
@@ -19,6 +19,7 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { BsFillTrashFill } from "react-icons/bs";
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import SendIcon from '@mui/icons-material/Send';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,29 +31,29 @@ export default function VendorHome() {
   const { vendor } = useSelector((state) => state.vendorInfo);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    async function invoke() {
-      let token = localStorage.getItem("vendortoken");
-      if (token) {
-        const response = await VendorisAuthApi(token);
-        if (response) {
-          if (response.auth) {
-            dispatch(vendorDetails(response.vendorObj));
-          } else {
-            router.push("/vendor/signin");
-          }
-        }
-      } else {
-        router.push("/vendor/signin");
-      }
+  // useEffect(() => {
+  //   async function invoke() {
+  //     let token = localStorage.getItem("vendortoken");
+  //     if (token) {
+  //       const response = await VendorisAuthApi(token);
+  //       if (response) {
+  //         if (response.auth) {
+  //           dispatch(vendorDetails(response.vendorObj));
+  //         } else {
+  //           router.push("/vendor/signin");
+  //         }
+  //       }
+  //     } else {
+  //       router.push("/vendor/signin");
+  //     }
 
-      const res = await GetAllPosts();
-      if (res) {
-        setPosts(res);
-      }
-    }
-    invoke();
-  }, []);
+  //     const res = await GetAllPosts();
+  //     if (res) {
+  //       setPosts(res);
+  //     }
+  //   }
+  //   invoke();
+  // }, []);
 
   const liked = async (postId)=>{
     const res = await LikedPost(postId, vendor._id)
@@ -191,7 +192,7 @@ export default function VendorHome() {
                       }}
                     >
                       <Grid xs={3}>
-                        <IconButton onClick={()=>liked(post._id)} size="large" sx={{ color: "blue" }}>
+                        <IconButton onClick={()=>liked(post._id)} size="large" sx={{ color: "#1976d2" }}>
                           {
                             post.like ? <ThumbUpAltIcon/> : <ThumbUpOffAltIcon />
                           }
@@ -205,18 +206,18 @@ export default function VendorHome() {
                               : setOpenComment(post._id)
                           }
                           size="large"
-                          sx={{ color: "blue" }}
+                          sx={{ color: "#1976d2" }}
                         >
                           <QuestionAnswerOutlinedIcon />
                         </IconButton>
                       </Grid>
                       <Grid xs={3}>
-                        <IconButton size="large" sx={{ color: "blue" }}>
+                        <IconButton size="large" sx={{ color: "#1976d2" }}>
                           <ShareOutlinedIcon />
                         </IconButton>
                       </Grid>
                       <Grid xs={3}>
-                        <IconButton size="large" sx={{ color: "blue" }}>
+                        <IconButton size="large" sx={{ color: "#1976d2" }}>
                           <MoreVertIcon />
                         </IconButton>
                       </Grid>
@@ -307,6 +308,7 @@ export default function VendorHome() {
                                 placeholder="Add a comment..."
                                 sx={{ width: "100%", pl: 2 }}
                               />
+                              <IconButton sx={{ backgroundColor:'#1976d2' , color:'#fff' , borderRadius:'30px' , width:'32px' , height:'32px' , ":hover":{ backgroundColor:'#1976d2' } }}><SendIcon sx={{ width:'70%' }}/></IconButton>
                             </Box>
                             <CardContent
                               className="comments"
