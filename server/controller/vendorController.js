@@ -96,6 +96,17 @@ export async function getPosts(req, res) {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+export async function getAllPosts(req, res) {
+    try {
+        const posts = await Post.find().populate('vendorId').sort({createdAt:-1})
+        res.json(posts)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 export async function editProfile(req, res) {
     try {
         const vendor =  await Vendor.findById(req.query.vendorId)
@@ -157,4 +168,32 @@ export async function removeProfilePhoto(req, res) {
     }
 }
 
-// const posts = await Post.find().populate("vendorId")
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function likedPost(req, res) {
+    try {
+        const post = await Post.findById(req.query.postId)
+        const exist = post.Liked.find((obj)=> obj.vendorId.toString() === req.query.vendorId.toString())
+        if (exist) {
+            await Post.updateOne({_id:req.query.postId},{
+                $pull:{
+                    Liked:{
+                        vendorId:req.query.vendorId
+                    }
+                }
+            })
+        } else {
+            await Post.updateOne({_id:req.query.postId},{
+                $push:{
+                    Liked:{
+                        vendorId:req.query.vendorId
+                    }
+                }
+            })
+        }
+        
+        res.json({status:"success"})
+    } catch (error) {
+        console.log(error)
+    }
+}

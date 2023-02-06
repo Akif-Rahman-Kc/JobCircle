@@ -25,3 +25,15 @@ export async function getWorkers(req, res) {
         console.log(error)
     }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function getWorker(req, res) {
+    try {
+        const vendor = await Vendor.findById(req.query.vendorId)
+
+        res.json(vendor)
+    } catch (error) {
+        console.log(error)
+    }
+}

@@ -65,7 +65,6 @@ export default function VendorProfile() {
     async function invoke(){
       let token = localStorage.getItem("vendortoken");
       if (token) {
-        axios
         const response = await VendorisAuthApi(token)
         if (response) {
           if (response.auth) {
@@ -87,7 +86,6 @@ export default function VendorProfile() {
 
   useEffect(() => {
     async function invokePosts(){
-      axios
       const response = await VendorGetPosts(vendor._id)
       if (response) {
         setPosts(response);
@@ -276,10 +274,10 @@ export default function VendorProfile() {
                                       image ? URL.createObjectURL(image) : ""
                                     }
                                     style={{
-                                      height: "250px",
+                                      height: "150px",
                                       borderRadius: "5px",
                                       border: "1px solid #000",
-                                      width: '-webkit-fill-available'
+                                      // width: '-webkit-fill-available'
                                     }}
                                     alt=""
                                   />

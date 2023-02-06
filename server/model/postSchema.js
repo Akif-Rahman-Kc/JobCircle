@@ -1,8 +1,9 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Mongoose } from 'mongoose';
 
 const postSchema = new Schema({
     vendorId:{
-        type:String,
+        type:Schema.Types.ObjectId,
+        ref:'vendors',
         required: true,
     },
     description:{
@@ -12,6 +13,7 @@ const postSchema = new Schema({
         type:String,
         required: true,
     },
+    Liked:Array
     
 },{ timestamps: true })
 

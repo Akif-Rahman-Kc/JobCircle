@@ -13,6 +13,7 @@ import Paper from '@mui/material/Paper';
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { AdminGetVendors, AdminisAuthApi } from "@/Apis/adminApi";
+import { useRouter } from "next/router";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -47,6 +48,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   ];
 
 const Users = () => {
+  const router = useRouter()
   const [ vendors , setVendors ] = useState([])
 
   useEffect(()=>{

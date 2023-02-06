@@ -1,7 +1,7 @@
 import { Router } from 'express';
 const router = Router();
 import { userSignUp, userSignIn, userAuth } from '../controller/userConroller.js';
-import { getJobs, getWorkers } from '../controller/workController.js';
+import { getJobs, getWorker, getWorkers } from '../controller/workController.js';
 import { userJWT } from '../middleware/auth.js';
 
 // Authentication
@@ -14,5 +14,6 @@ router.post('/userAuth', userJWT,userAuth)
 
 router.get('/get_jobs', getJobs)
 router.get('/get_workers', getWorkers)
+router.get('/get_worker', getWorker)
 
 export default router;

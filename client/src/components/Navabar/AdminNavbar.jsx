@@ -1,4 +1,3 @@
-import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -7,8 +6,9 @@ import IconButton from "@mui/material/IconButton";
 import { Avatar, Button, Grid } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
-export default function AdminNavbar() {
+export default function AdminNavbar(props) {
   const router = useRouter()
 
   const logout=()=>{
@@ -21,6 +21,7 @@ export default function AdminNavbar() {
       <AppBar sx={{ boxShadow: 3, borderRadius: "20px" }} position="static">
         <Toolbar>
           <IconButton
+            onClick={()=>props.setOPEN(!props.Open)}
             size="large"
             edge="start"
             color="inherit"

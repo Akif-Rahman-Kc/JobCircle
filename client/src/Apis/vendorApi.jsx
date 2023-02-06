@@ -76,3 +76,25 @@ export const ProfilePhotoRemove = async (vendorId) => {
         console.log(error);
     }
 }
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const GetAllPosts = async (vendorId) => {
+    try {
+        const {data} = await Api.get('/vendor/get_all_posts')
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const LikedPost = async (postId, vendorId) => {
+    try {
+        const {data} = await Api.patch(`/vendor/liked_post?postId=${postId}&&vendorId=${vendorId}`)
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}

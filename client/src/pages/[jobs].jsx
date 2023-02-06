@@ -112,7 +112,7 @@ export default function Workers({workers}) {
                           <Grid key={worker._id} xs={12} sx={{ m: 1 , p: 1 , display:'flex' , border:'1px solid lightgray' , borderRadius:'10px' , backgroundColor:'lightgray' , boxShadow: 3 , ":active":{ backgroundColor:'#c1bdbd' } , color:'#000' }}>
                             <TurnedInNotIcon sx={{ m: 1 }}/>
                             <img
-                              src="/null-profile.jpg"
+                              src={worker.image ? worker.image : "/null-profile.jpg"}
                               style={{ m: 0, width: "40px"  , height:"40px" , borderRadius: "50%" }}
                               alt=""
                             />
