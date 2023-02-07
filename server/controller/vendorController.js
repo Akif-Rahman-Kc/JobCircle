@@ -172,26 +172,70 @@ export async function removeProfilePhoto(req, res) {
 
 export async function likedPost(req, res) {
     try {
+        const vendor = await Vendor.findById(req.query.vendorId)
         const post = await Post.findById(req.query.postId)
-        const exist = post.Liked.find((obj)=> obj.vendorId.toString() === req.query.vendorId.toString())
+        const exist = post.Likes.find((obj)=> obj.vendorId.toString() === req.query.vendorId.toString())
         if (exist) {
             await Post.updateOne({_id:req.query.postId},{
                 $pull:{
-                    Liked:{
-                        vendorId:req.query.vendorId
+                    Likes:{
+                        vendorId:req.query.vendorId,
+                        likerName:vendor.firstName + ' ' + vendor.lastName,
+                        likerImage:vendor.image
                     }
                 }
             })
         } else {
             await Post.updateOne({_id:req.query.postId},{
                 $push:{
-                    Liked:{
-                        vendorId:req.query.vendorId
+                    Likes:{
+                        vendorId:req.query.vendorId,
+                        likerName:vendor.firstName + ' ' + vendor.lastName,
+                        likerImage:vendor.image
                     }
                 }
             })
         }
         
+        res.json({status:"success"})
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function addComment(req, res) {
+    try {
+        const vendor = await Vendor.findById(req.body.vendorId)
+        var time = new Date()
+        await Post.updateOne({_id:req.body.postId},{
+            $push:{
+                Comments:{
+                    comment:req.body.comment,
+                    writerName:vendor.firstName + ' ' + vendor.lastName,
+                    writerImage:vendor.image,
+                    time:time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+                }
+            }
+        })
+        res.json({status:"success"})
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function deleteComment(req, res) {
+    try {
+        await Post.updateOne({_id:req.query.postId},{
+            $pull:{
+                Comments:{
+                    _id:req.query.commentId
+                }
+            }
+        })
         res.json({status:"success"})
     } catch (error) {
         console.log(error)

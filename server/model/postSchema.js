@@ -13,7 +13,27 @@ const postSchema = new Schema({
         type:String,
         required: true,
     },
-    Liked:Array
+    Likes:{
+        type:Array
+    },
+    Comments:[{
+        comment:{
+            type:String,
+            required: true,
+        },
+        writerName:{
+            type:String,
+            required: true,
+        },
+        writerImage:{
+            type:String,
+            required: true,
+        },
+        time:{
+            type:String,
+            required: true,
+        },
+    }],
     
 },{ timestamps: true })
 

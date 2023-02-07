@@ -98,3 +98,25 @@ export const LikedPost = async (postId, vendorId) => {
         console.log(error);
     }
 }
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const AddCommnet = async (comment) => {
+    try {
+        const {data} = await Api.patch('/vendor/add_comment', comment)
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const DeleteComment = async (postId, commentId) => {
+    try {
+        const {data} = await Api.patch(`/vendor/delete_comment?postId=${postId}&&commentId=${commentId}`)
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
