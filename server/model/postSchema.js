@@ -17,6 +17,10 @@ const postSchema = new Schema({
         type:Array
     },
     Comments:[{
+        vendorId:{
+            type:String,
+            required: true,
+        },
         comment:{
             type:String,
             required: true,
@@ -33,6 +37,10 @@ const postSchema = new Schema({
             type:String,
             required: true,
         },
+        myComment:{
+            type: Boolean,
+            default:false
+        }
     }],
     
 },{ timestamps: true })

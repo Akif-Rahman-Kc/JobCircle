@@ -84,6 +84,32 @@ export async function addPost(req, res) {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+export async function editPost(req, res) {
+    try {
+        await Post.updateOne({_id:req.body.postId},{
+            description:req.body.description
+        })
+
+        res.json(true)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function deletePost(req, res) {
+    try {
+        await Post.deleteOne({_id:req.query.postId})
+
+        res.json(true)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 export async function getPosts(req, res) {
     try {
         const posts = await Post.find({vendorId:req.query.vendorId}).sort({createdAt:-1})
@@ -212,6 +238,7 @@ export async function addComment(req, res) {
         await Post.updateOne({_id:req.body.postId},{
             $push:{
                 Comments:{
+                    vendorId:req.body.vendorId,
                     comment:req.body.comment,
                     writerName:vendor.firstName + ' ' + vendor.lastName,
                     writerImage:vendor.image,

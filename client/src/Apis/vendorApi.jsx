@@ -120,3 +120,25 @@ export const DeleteComment = async (postId, commentId) => {
         console.log(error);
     }
 }
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const EditPost = async (formData) => {
+    try {
+        const {data} = await Api.patch('/vendor/edit_post', formData)
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const DeletePost = async (postId) => {
+    try {
+        const {data} = await Api.delete(`/vendor/delete_post?postId=${postId}`)
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 const router = Router();
-import { vendorSignUp, vendorSignIn, vendorAuth, addPost, getPosts, editProfile, removeProfilePhoto, getAllPosts, likedPost, addComment, deleteComment } from '../controller/vendorController.js';
+import { vendorSignUp, vendorSignIn, vendorAuth, addPost, getPosts, editProfile, removeProfilePhoto, getAllPosts, likedPost, addComment, deleteComment, editPost, deletePost } from '../controller/vendorController.js';
 import { getJobs } from '../controller/workController.js';
 import { vendorJWT } from '../middleware/auth.js';
 
@@ -11,6 +11,8 @@ router.post('/vendorAuth', vendorJWT,vendorAuth )
 
 // Posts
 router.post('/add_post', addPost)
+router.patch('/edit_post', editPost)
+router.delete('/delete_post', deletePost)
 router.get('/get_posts', getPosts)
 router.get('/get_all_posts', getAllPosts)
 router.patch('/liked_post', likedPost)

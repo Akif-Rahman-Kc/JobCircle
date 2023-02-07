@@ -20,9 +20,8 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { BsFillTrashFill } from "react-icons/bs";
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import SendIcon from '@mui/icons-material/Send';
-import ModeIcon from '@mui/icons-material/Mode';
-import ReportIcon from '@mui/icons-material/Report';
-import DeleteIcon from '@mui/icons-material/Delete';
+import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
+import Swal from "sweetalert2";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,7 +30,7 @@ export default function VendorHome() {
   const [posts, setPosts] = useState([]);
   const [comment, setComment] = useState('');
   const [ openComment, setOpenComment] = useState(null)
-  const [ openMoreBox, setOpenMoreBox] = useState(null)
+  const [refreshComment, setrefreshComment] = useState(false);
   const { vendor } = useSelector((state) => state.vendorInfo);
   const dispatch = useDispatch();
 
@@ -53,15 +52,12 @@ export default function VendorHome() {
 
       const res = await GetAllPosts();
       if (res) {
+        
         setPosts(res);
       }
     }
     invoke();
   }, []);
-
-  const liked = async (postId)=>{
-    const res = await LikedPost(postId, vendor._id)
-  }
 
   useEffect(()=>{
     async function invoke(){
@@ -73,25 +69,54 @@ export default function VendorHome() {
               doc.like = true
             }
           })
+          doc.Comments.map((Obj)=>{
+            console.log(Obj.vendorId);
+            if (Obj.vendorId == vendor._id) {
+              Obj.myComment = true
+            }
+          })
         })
         setPosts(res);
       }
     }
     invoke();
-  })
+  },[refreshComment, vendor])
 
-  const addComment = (postId)=>{
+  const liked = async (postId)=>{
+    const res = await LikedPost(postId, vendor._id)
+    if (res) {
+      setrefreshComment(!refreshComment)
+    }
+  }
+
+  const addComment = async (postId)=>{
     const data = {
       comment,
       postId,
       vendorId:vendor._id
     }
-    const res = AddCommnet(data)
+    const res = await AddCommnet(data)
+    if (res) {
+      setrefreshComment(!refreshComment)
+    }
   }
 
-  const deleteComment = (postId, commentId)=>{
-    console.log(postId , commentId);
-    const res = DeleteComment(postId, commentId)
+  const deleteComment = async (postId, commentId)=>{
+    Swal.fire({
+      title: "Are you sure",
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+      showCancelButton: true,
+      customClass: "swal-wide",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const res = await DeleteComment(postId, commentId)
+        if (res) {
+          setrefreshComment(!refreshComment)
+        }
+      }
+    });
+    
   }
 
   return (
@@ -235,25 +260,9 @@ export default function VendorHome() {
                         </IconButton>
                       </Grid>
                       <Grid xs={3}>
-                        <IconButton onClick={() =>
-                                openMoreBox
-                                  ? setOpenMoreBox(null)
-                                  : setOpenMoreBox(post._id)
-                              } size="large" sx={{ color: "#1976d2" }}>
-                          <MoreVertIcon />
+                        <IconButton size="large" sx={{ color: "#1976d2" }}>
+                          <ReportGmailerrorredIcon />
                         </IconButton>
-                        <Collapse
-                            sx={{ backgroundColor:'#fff' , border:'3px double #111' , position:'absolute' , borderRadius:'7px' , p: 1 , ml: { xs: -2.4 , sm: 0 , md: 2} }}
-                            in={openMoreBox == post._id}
-                            timeout="auto"
-                            unmountOnExit
-                          >
-                            <Button sx={{ fontSize:'12px' , width:'inherit' , color:'#111' , justifyContent: 'flex-start' }}><ModeIcon sx={{width:'16px' , mr: 0.4 }}/>Edit</Button>
-                            <br />
-                            <Button sx={{ fontSize:'12px' , width:'inherit' , color:'#111' , justifyContent: 'flex-start' }}><DeleteIcon sx={{width:'16px' , mr: 0.4 }}/>Delete</Button>
-                            <br />
-                            <Button sx={{ fontSize:'12px' , width:'inherit' , color:'#111' , justifyContent: 'flex-start' }}><ReportIcon sx={{width:'16px' , mr: 0.4 }}/>Report</Button>
-                          </Collapse>
                       </Grid>
                     </Box>
                     <Box
@@ -388,6 +397,7 @@ export default function VendorHome() {
                                       >
                                         {Comment.time}
                                       </h6>
+                                      { Comment.myComment ?
                                       <IconButton
                                        onClick={()=>deleteComment(post._id, Comment._id)}
                                         size="small"
@@ -395,6 +405,7 @@ export default function VendorHome() {
                                       >
                                         <BsFillTrashFill style={{ width: "14px" }} />
                                       </IconButton>
+                                      : '' }
                                     </Box>
                                     <Box
                                       sx={{

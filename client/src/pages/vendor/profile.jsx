@@ -34,7 +34,11 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { BsFillTrashFill, IconName } from "react-icons/bs";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { storage } from "@/firebase/config";
-import { VendorAddPost, VendorGetPosts, VendorisAuthApi } from "@/Apis/vendorApi";
+import { DeletePost, EditPost, VendorAddPost, VendorGetPosts, VendorisAuthApi } from "@/Apis/vendorApi";
+import ModeIcon from '@mui/icons-material/Mode';
+import ReportIcon from '@mui/icons-material/Report';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditPostModal from "@/components/Modal/EditPostModal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -60,6 +64,8 @@ export default function VendorProfile() {
   const [image, setImage] = useState(null);
   const [posts, setPosts] = useState([]);
   const [refreshPost, setrefreshPost] = useState(false);
+  const [ openMoreBox, setOpenMoreBox] = useState(null)
+  const [ modalPost, setModalPost] = useState({})
 
   useEffect(() => {
     async function invoke(){
@@ -128,8 +134,22 @@ export default function VendorProfile() {
     setOpen(false);
   };
 
+  const deletePost = async (postId)=> {
+    const res = await DeletePost(postId)
+    if (res) {
+      setrefreshPost(!refreshPost)
+    }
+  }
+
   const [open, setOpen] = useState(false);
+  const [openEditPostModal, setOpenEditPostModal] = useState(false);
   const [ openComment, setOpenComment] = useState(null)
+
+  const handleEditPostModalOpen = (post) => {
+    setModalPost(post)
+    setOpenEditPostModal(true)
+  }
+  const handleEditPostModalClose = () => setOpenEditPostModal(false)
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -456,24 +476,48 @@ export default function VendorProfile() {
                             }}
                           >
                             <Grid xs={3}>
-                              <IconButton size="large" sx={{ color: "black" }}>
+                              <IconButton size="large" sx={{ color: "#1976d2" }}>
                                 <ThumbUpOffAltIcon />
                               </IconButton>
                             </Grid>
                             <Grid xs={3}>
-                              <IconButton onClick={() => openComment ? setOpenComment(null) : setOpenComment(post._id)} size="large" sx={{ color: "black" }}>
+                              <IconButton onClick={() => openComment ? setOpenComment(null) : setOpenComment(post._id)} size="large" sx={{ color: "#1976d2" }}>
                                 <QuestionAnswerOutlinedIcon />
                               </IconButton>
                             </Grid>
                             <Grid xs={3}>
-                              <IconButton size="large" sx={{ color: "black" }}>
+                              <IconButton size="large" sx={{ color: "#1976d2" }}>
                                 <ShareOutlinedIcon />
                               </IconButton>
                             </Grid>
                             <Grid xs={3}>
-                              <IconButton size="large" sx={{ color: "black" }}>
+                              <IconButton onClick={() =>
+                                openMoreBox
+                                  ? setOpenMoreBox(null)
+                                  : setOpenMoreBox(post._id)
+                              } size="large" sx={{ color: "#1976d2" }}>
                                 <MoreVertIcon />
                               </IconButton>
+                              <Collapse
+                            sx={{ backgroundColor:'#fff' , border:'3px double #111' , position:'absolute' , borderRadius:'7px' , p: 1 , ml: { xs: -2.4 , sm: 0 , md: 2} }}
+                            in={openMoreBox == post._id}
+                            timeout="auto"
+                            unmountOnExit
+                          >
+                            <Button onClick={()=>handleEditPostModalOpen(post)} sx={{ fontSize:'12px' , width:'inherit' , color:'#111' , justifyContent: 'flex-start' }}><ModeIcon sx={{width:'16px' , mr: 0.4 }}/>Edit</Button>
+                            <br />
+                            <Button onClick={()=>deletePost(post._id)} sx={{ fontSize:'12px' , width:'inherit' , color:'#111' , justifyContent: 'flex-start' }}><DeleteIcon sx={{width:'16px' , mr: 0.4 }}/>Delete</Button>
+                            <br />
+                            <Button onClick={()=>reportPost(post._id)} sx={{ fontSize:'12px' , width:'inherit' , color:'#111' , justifyContent: 'flex-start' }}><ReportIcon sx={{width:'16px' , mr: 0.4 }}/>Report</Button>
+                          </Collapse>
+                          <Modal
+                            open={openEditPostModal}
+                            onClose={handleEditPostModalClose}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                          >
+                            <EditPostModal post={modalPost} setRefresh={setrefreshPost} refresh={refreshPost} close={setOpenEditPostModal}/>
+                          </Modal>
                             </Grid>
                           </Box>
                           <Box
