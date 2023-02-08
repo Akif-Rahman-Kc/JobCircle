@@ -25,12 +25,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { userDetails } from "@/redux/user";
 import HomeIcon from "@mui/icons-material/Home";
 import { isAuthApi } from "@/Apis/userApi";
+import Posts from "@/components/Posts/Post";
+import { GetAllPosts } from "@/Apis/vendorApi";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const router = useRouter();
-  const [open, setOpen] = useState(false);
+  const [posts, setPosts] = useState([]);
+  const [refreshComment, setrefreshComment] = useState(false);
   const { user } = useSelector((state)=>state.userInfo)
   const dispatch = useDispatch()
 
@@ -50,9 +53,37 @@ export default function Home() {
       } else {
         router.push('/auth/signin')
       }
+
+      const res = await GetAllPosts();
+      if (res) {
+        
+        setPosts(res);
+      }
     }
     invoke()
   },[])
+
+  useEffect(()=>{
+    async function invoke(){
+      const res = await GetAllPosts();
+      if (res) {
+        res.map((doc)=>{
+          doc.Likes.map((obj)=>{
+            if (obj.likerId == user._id) {
+              doc.like = true
+            }
+          })
+          doc.Comments.map((Obj)=>{
+            if (Obj.writerId == user._id) {
+              Obj.myComment = true
+            }
+          })
+        })
+        setPosts(res);
+      }
+    }
+    invoke();
+  },[refreshComment, user])
 
   return (
     <>
@@ -112,363 +143,11 @@ export default function Home() {
                       m: 2,
                     }}
                   >
-                    <Box sx={{ display: "flex" }}>
-                      <IconButton>
-                        <Avatar />
-                      </IconButton>
-                      <Box sx={{ pt: 1.7, fontFamily: "sans-serif" }}>
-                        <h4>Akif Rahman</h4>
-                        <h6>Driver</h6>
-                      </Box>
-                      <Box
-                        sx={{
-                          ml: "auto",
-                          p: 0.8,
-                          pl: 1.9,
-                          pr: 2,
-                          backgroundColor: "#1976d2",
-                          mt: 2,
-                          mb: 2,
-                          borderRadius: "25px",
-                          color: "#fff",
-                        }}
-                      >
-                        <h6>+Connect</h6>
-                      </Box>
-                    </Box>
-                    <p style={{ marginTop: "15px", fontSize: "13px" }}>
-                      Its New Laptop
-                    </p>
-                    <img
-                      src="https://i.pcmag.com/imagery/reviews/065rv6nxdAEcCzvE3Qb8T3v-1.fit_lim.size_840x473.v1658424542.jpg"
-                      style={{
-                        marginTop: "10px",
-                        width: "100%",
-                        height: "fit-content",
-                        borderRadius: "5px",
-                        border: "1px solid #000",
-                      }}
-                      alt=""
-                    />
-                    <Box
-                      sx={{
-                        borderRadius: "5px",
-                        backgroundColor: "#f5f5f5",
-                        textAlign: "center",
-                        display: "flex",
-                      }}
-                    >
-                      <Grid xs={4}>
-                        <IconButton size="large" sx={{ color: "black" }}>
-                          <ThumbUpOffAltIcon />
-                        </IconButton>
-                      </Grid>
-                      <Grid xs={4}>
-                        <IconButton size="large" sx={{ color: "black" }}>
-                          <QuestionAnswerOutlinedIcon />
-                        </IconButton>
-                      </Grid>
-                      <Grid xs={4}>
-                        <IconButton size="large" sx={{ color: "black" }}>
-                          <ShareOutlinedIcon />
-                        </IconButton>
-                      </Grid>
-                    </Box>
-                    <Box
-                      sx={{ mt: 2, fontFamily: "sans-serif", display: "flex" }}
-                    >
-                      <p>
-                        <b>150</b> Like{" "}
-                      </p>
-                      <img
-                        src="/null-profile.jpg"
-                        style={{
-                          marginLeft: "5px",
-                          width: "18px",
-                          height: "fit-content",
-                          borderRadius: "50%",
-                          border: "1px solid #000",
-                        }}
-                        alt=""
-                      />
-                      <h6 style={{ margin: "4px" }}>Minhaj and Others</h6>
-                    </Box>
-                    <Box
-                      sx={{ mt: 2, mb: 4 , fontFamily: "sans-serif", display: "flex" }}
-                    >
-                      <Card sx={{ mt: -2, boxShadow: "none", width: "100%" }}>
-                        <CardHeader
-                          sx={{ p: 0, width: "fit-content" }}
-                          title="Comments"
-                          action={
-                            <IconButton
-                              onClick={() => setOpen(!open)}
-                              aria-label="expand"
-                              size="small"
-                            >
-                              {open ? (
-                                <KeyboardArrowUpIcon />
-                              ) : (
-                                <KeyboardArrowDownIcon />
-                              )}
-                            </IconButton>
-                          }
-                        ></CardHeader>
-                        <div
-                          style={{ backgroundColor: "rgba(211,211,211,0.4)" }}
-                        >
-                          <Collapse in={open} timeout="auto" unmountOnExit>
-                            <CardContent>
-                              <Box sx={{ display: "flex" }}>
-                                <img
-                                  src="/null-profile.jpg"
-                                  style={{
-                                    marginLeft: "5px",
-                                    width: "25px",
-                                    height: "fit-content",
-                                    borderRadius: "50%",
-                                    border: "1px solid #000",
-                                  }}
-                                  alt=""
-                                />
-                                <h5
-                                  style={{
-                                    marginTop: "5px",
-                                    marginLeft: "5px",
-                                    fontWeight: "bold",
-                                  }}
-                                >
-                                  Akif Rahman
-                                </h5>
-                              </Box>
-                              <Box
-                                sx={{
-                                  m: 1,
-                                  p: 1,
-                                  border: "1px solid lightgray",
-                                  borderRadius: "4px",
-                                }}
-                              >
-                                <h6>aaaaaaaaaaa</h6>
-                              </Box>
-                            </CardContent>
-                            <CardContent>
-                              <Box sx={{ display: "flex" }}>
-                                <img
-                                  src="/null-profile.jpg"
-                                  style={{
-                                    marginLeft: "5px",
-                                    width: "25px",
-                                    height: "fit-content",
-                                    borderRadius: "50%",
-                                    border: "1px solid #000",
-                                  }}
-                                  alt=""
-                                />
-                                <h5
-                                  style={{
-                                    marginTop: "5px",
-                                    marginLeft: "5px",
-                                    fontWeight: "bold",
-                                  }}
-                                >
-                                  Akif Rahman
-                                </h5>
-                              </Box>
-                              <Box
-                                sx={{
-                                  m: 1,
-                                  p: 1,
-                                  border: "1px solid lightgray",
-                                  borderRadius: "4px",
-                                }}
-                              >
-                                <h6>aaaaaaaaaaa</h6>
-                              </Box>
-                            </CardContent>
-                          </Collapse>
-                        </div>
-                      </Card>
-                    </Box>
-                    {/* ///////////////////////////////// */}
-                    <Box sx={{ display: "flex" }}>
-                      <IconButton>
-                        <Avatar />
-                      </IconButton>
-                      <Box sx={{ pt: 1.7, fontFamily: "sans-serif" }}>
-                        <h4>Akif Rahman</h4>
-                        <h6>Driver</h6>
-                      </Box>
-                      <Box
-                        sx={{
-                          ml: "auto",
-                          p: 0.8,
-                          pl: 1.9,
-                          pr: 2,
-                          backgroundColor: "#1976d2",
-                          mt: 2,
-                          mb: 2,
-                          borderRadius: "25px",
-                          color: "#fff",
-                        }}
-                      >
-                        <h6>+Connect</h6>
-                      </Box>
-                    </Box>
-                    <p style={{ marginTop: "15px", fontSize: "13px" }}>
-                      Its New Laptop
-                    </p>
-                    <img
-                      src="https://i.pcmag.com/imagery/reviews/065rv6nxdAEcCzvE3Qb8T3v-1.fit_lim.size_840x473.v1658424542.jpg"
-                      style={{
-                        marginTop: "10px",
-                        width: "100%",
-                        height: "fit-content",
-                        borderRadius: "5px",
-                        border: "1px solid #000",
-                      }}
-                      alt=""
-                    />
-                    <Box
-                      sx={{
-                        borderRadius: "5px",
-                        backgroundColor: "#f5f5f5",
-                        textAlign: "center",
-                        display: "flex",
-                      }}
-                    >
-                      <Grid xs={4}>
-                        <IconButton size="large" sx={{ color: "black" }}>
-                          <ThumbUpOffAltIcon />
-                        </IconButton>
-                      </Grid>
-                      <Grid xs={4}>
-                        <IconButton size="large" sx={{ color: "black" }}>
-                          <QuestionAnswerOutlinedIcon />
-                        </IconButton>
-                      </Grid>
-                      <Grid xs={4}>
-                        <IconButton size="large" sx={{ color: "black" }}>
-                          <ShareOutlinedIcon />
-                        </IconButton>
-                      </Grid>
-                    </Box>
-                    <Box
-                      sx={{ mt: 2, fontFamily: "sans-serif", display: "flex" }}
-                    >
-                      <p>
-                        <b>150</b> Like{" "}
-                      </p>
-                      <img
-                        src="/null-profile.jpg"
-                        style={{
-                          marginLeft: "5px",
-                          width: "18px",
-                          height: "fit-content",
-                          borderRadius: "50%",
-                          border: "1px solid #000",
-                        }}
-                        alt=""
-                      />
-                      <h6 style={{ margin: "4px" }}>Minhaj and Others</h6>
-                    </Box>
-                    <Box
-                      sx={{ mt: 2, fontFamily: "sans-serif", display: "flex" }}
-                    >
-                      <Card sx={{ mt: -2, boxShadow: "none", width: "100%" }}>
-                        <CardHeader
-                          sx={{ p: 0, width: "fit-content" }}
-                          title="Comments"
-                          action={
-                            <IconButton
-                              onClick={() => setOpen(!open)}
-                              aria-label="expand"
-                              size="small"
-                            >
-                              {open ? (
-                                <KeyboardArrowUpIcon />
-                              ) : (
-                                <KeyboardArrowDownIcon />
-                              )}
-                            </IconButton>
-                          }
-                        ></CardHeader>
-                        <div
-                          style={{ backgroundColor: "rgba(211,211,211,0.4)" }}
-                        >
-                          <Collapse in={open} timeout="auto" unmountOnExit>
-                            <CardContent>
-                              <Box sx={{ display: "flex" }}>
-                                <img
-                                  src="/null-profile.jpg"
-                                  style={{
-                                    marginLeft: "5px",
-                                    width: "25px",
-                                    height: "fit-content",
-                                    borderRadius: "50%",
-                                    border: "1px solid #000",
-                                  }}
-                                  alt=""
-                                />
-                                <h5
-                                  style={{
-                                    marginTop: "5px",
-                                    marginLeft: "5px",
-                                    fontWeight: "bold",
-                                  }}
-                                >
-                                  Akif Rahman
-                                </h5>
-                              </Box>
-                              <Box
-                                sx={{
-                                  m: 1,
-                                  p: 1,
-                                  border: "1px solid lightgray",
-                                  borderRadius: "4px",
-                                }}
-                              >
-                                <h6>aaaaaaaaaaa</h6>
-                              </Box>
-                            </CardContent>
-                            <CardContent>
-                              <Box sx={{ display: "flex" }}>
-                                <img
-                                  src="/null-profile.jpg"
-                                  style={{
-                                    marginLeft: "5px",
-                                    width: "25px",
-                                    height: "fit-content",
-                                    borderRadius: "50%",
-                                    border: "1px solid #000",
-                                  }}
-                                  alt=""
-                                />
-                                <h5
-                                  style={{
-                                    marginTop: "5px",
-                                    marginLeft: "5px",
-                                    fontWeight: "bold",
-                                  }}
-                                >
-                                  Akif Rahman
-                                </h5>
-                              </Box>
-                              <Box
-                                sx={{
-                                  m: 1,
-                                  p: 1,
-                                  border: "1px solid lightgray",
-                                  borderRadius: "4px",
-                                }}
-                              >
-                                <h6>aaaaaaaaaaa</h6>
-                              </Box>
-                            </CardContent>
-                          </Collapse>
-                        </div>
-                      </Card>
-                    </Box>
+                    {posts.map((post)=>(
+                    <>
+                      <Posts post = {post} setrefreshComment={setrefreshComment} refreshComment={refreshComment} user={user}/>
+                    </>
+                    ))}
                   </Box>
                 </Grid>
               </Grid>

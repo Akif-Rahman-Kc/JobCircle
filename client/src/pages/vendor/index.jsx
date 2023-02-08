@@ -22,14 +22,13 @@ import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import SendIcon from '@mui/icons-material/Send';
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
 import Swal from "sweetalert2";
+import Posts from "@/components/Posts/Post";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function VendorHome() {
   const router = useRouter();
   const [posts, setPosts] = useState([]);
-  const [comment, setComment] = useState('');
-  const [ openComment, setOpenComment] = useState(null)
   const [refreshComment, setrefreshComment] = useState(false);
   const { vendor } = useSelector((state) => state.vendorInfo);
   const dispatch = useDispatch();
@@ -65,13 +64,12 @@ export default function VendorHome() {
       if (res) {
         res.map((doc)=>{
           doc.Likes.map((obj)=>{
-            if (obj.vendorId == vendor._id) {
+            if (obj.likerId == vendor._id) {
               doc.like = true
             }
           })
           doc.Comments.map((Obj)=>{
-            console.log(Obj.vendorId);
-            if (Obj.vendorId == vendor._id) {
+            if (Obj.writerId == vendor._id) {
               Obj.myComment = true
             }
           })
@@ -81,43 +79,6 @@ export default function VendorHome() {
     }
     invoke();
   },[refreshComment, vendor])
-
-  const liked = async (postId)=>{
-    const res = await LikedPost(postId, vendor._id)
-    if (res) {
-      setrefreshComment(!refreshComment)
-    }
-  }
-
-  const addComment = async (postId)=>{
-    const data = {
-      comment,
-      postId,
-      vendorId:vendor._id
-    }
-    const res = await AddCommnet(data)
-    if (res) {
-      setrefreshComment(!refreshComment)
-    }
-  }
-
-  const deleteComment = async (postId, commentId)=>{
-    Swal.fire({
-      title: "Are you sure",
-      confirmButtonText: "Yes",
-      cancelButtonText: "No",
-      showCancelButton: true,
-      customClass: "swal-wide",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        const res = await DeleteComment(postId, commentId)
-        if (res) {
-          setrefreshComment(!refreshComment)
-        }
-      }
-    });
-    
-  }
 
   return (
     <>
@@ -182,250 +143,7 @@ export default function VendorHome() {
                   >
                   {posts.map((post)=>(
                     <>
-                    <Box sx={{ display: "flex" }}>
-                      <IconButton>
-                        <Avatar src={post.vendorId.image ? post.vendorId.image : ''}/>
-                      </IconButton>
-                      <Box sx={{ pt: 1.7, fontFamily: "sans-serif" }}>
-                        <h4>{post.vendorId.firstName + ' ' + post.vendorId.lastName}</h4>
-                        <h6>{post.vendorId.job}</h6>
-                      </Box>
-                      <Box
-                        sx={{
-                          ml: "auto",
-                          p: 0.8,
-                          pl: 1.9,
-                          pr: 2,
-                          backgroundColor: "#1976d2",
-                          mt: 2,
-                          mb: 2,
-                          borderRadius: "25px",
-                          color: "#fff",
-                        }}
-                      >
-                        <h6>+ Connect</h6>
-                      </Box>
-                    </Box>
-                    <p
-                      style={{
-                        padding: "5px",
-                        marginTop: "15px",
-                        fontSize: "15px",
-                      }}
-                    >
-                      {post.description ? post.description : ""}
-                    </p>
-                    <img
-                      src={post.image ? post.image : ""}
-                      style={{
-                        marginTop: "10px",
-                        width: "100%",
-                        height: "fit-content",
-                        borderRadius: "5px",
-                        border: "1px solid #000",
-                      }}
-                      alt=""
-                    />
-                    <Box
-                      sx={{
-                        borderRadius: "5px",
-                        backgroundColor: "#f5f5f5",
-                        textAlign: "center",
-                        display: "flex",
-                      }}
-                    >
-                      <Grid xs={3}>
-                        <IconButton onClick={()=>liked(post._id)} size="large" sx={{ color: "#1976d2" }}>
-                          {
-                            post.like ? <ThumbUpAltIcon/> : <ThumbUpOffAltIcon />
-                          }
-                        </IconButton>
-                      </Grid>
-                      <Grid xs={3}>
-                        <IconButton
-                          onClick={() =>
-                            openComment
-                              ? setOpenComment(null)
-                              : setOpenComment(post._id)
-                          }
-                          size="large"
-                          sx={{ color: "#1976d2" }}
-                        >
-                          <QuestionAnswerOutlinedIcon />
-                        </IconButton>
-                      </Grid>
-                      <Grid xs={3}>
-                        <IconButton size="large" sx={{ color: "#1976d2" }}>
-                          <ShareOutlinedIcon />
-                        </IconButton>
-                      </Grid>
-                      <Grid xs={3}>
-                        <IconButton size="large" sx={{ color: "#1976d2" }}>
-                          <ReportGmailerrorredIcon />
-                        </IconButton>
-                      </Grid>
-                    </Box>
-                    <Box
-                      sx={{
-                        mt: 2,
-                        fontFamily: "sans-serif",
-                        display: "flex",
-                      }}
-                    >
-                      <p>
-                        <b>{post.Likes.length}</b> Like
-                      </p>
-                      {post.Likes[0] ? <img
-                        src={post.Likes[0].likerImage ? post.Likes[0].likerImage : "/null-profile.jpg"}
-                        style={{
-                          marginLeft: "5px",
-                          width: "18px",
-                          height: "fit-content",
-                          borderRadius: "50%",
-                          border: "1px solid #000",
-                        }}
-                        alt=""
-                      /> : ''}
-                      {post.Likes[0] ? <h6 style={{ margin: "4px" }}>{post.Likes[0].likerName ? post.Likes[0].likerName : '' } and Others</h6> : ''}
-                    </Box>
-                    <Box
-                      sx={{
-                        mt: 2,
-                        mb: 4,
-                        fontFamily: "sans-serif",
-                        display: "flex",
-                      }}
-                    >
-                      <Card sx={{ mt: -2, boxShadow: "none", width: "100%" }}>
-                        <CardHeader
-                          sx={{ p: 0, width: "fit-content" }}
-                          title={`${post.Comments.length} Comments`}
-                          action={
-                            <IconButton
-                              onClick={() =>
-                                openComment
-                                  ? setOpenComment(null)
-                                  : setOpenComment(post._id)
-                              }
-                              aria-label="expand"
-                              size="small"
-                            >
-                              {openComment == post._id ? (
-                                <KeyboardArrowUpIcon />
-                              ) : (
-                                <KeyboardArrowDownIcon />
-                              )}
-                            </IconButton>
-                          }
-                        ></CardHeader>
-                        <div
-                          style={{ backgroundColor: "rgba(211,211,211,0.4)" }}
-                        >
-                          <Collapse
-                            in={openComment == post._id}
-                            timeout="auto"
-                            unmountOnExit
-                          >
-                            <Box
-                              sx={{
-                                display: "flex",
-                                backgroundColor: "rgb(211 211 211)",
-                                p: 1.5,
-                                borderRadius: "10px",
-                                m: 1,
-                              }}
-                            >
-                              <img
-                                src={vendor.image ? vendor.image : "/null-profile.jpg"}
-                                style={{
-                                  marginLeft: "5px",
-                                  width: "33px",
-                                  height: "fit-content",
-                                  borderRadius: "50%",
-                                  border: "1px solid #000",
-                                }}
-                                alt=""
-                              />
-                              <Input
-                                type="text"
-                                placeholder="Add a comment..."
-                                onChange={(e)=>setComment(e.target.value)}
-                                sx={{ width: "100%", pl: 2 }}
-                              />
-                              <IconButton onClick={()=>addComment(post._id)} sx={{ backgroundColor:'#1976d2' , color:'#fff' , borderRadius:'30px' , width:'32px' , height:'32px' , ":hover":{ backgroundColor:'#1976d2' } }}><SendIcon sx={{ width:'70%' }}/></IconButton>
-                            </Box>
-                            <CardContent
-                              className="comments"
-                              sx={{
-                                backgroundColor: "rgb(211 211 211)",
-                                p: 1.5,
-                                borderRadius: "10px",
-                                m: 1,
-                                maxHeight: "300px",
-                                overflowY: "auto",
-                              }}
-                            >
-                              {post.Comments.map((Comment)=>(
-                                <>
-                                    <Box sx={{ mt: 2, display: "flex" }}>
-                                      <img
-                                        src={Comment.writerImage ? Comment.writerImage : "/null-profile.jpg"}
-                                        style={{
-                                          marginLeft: "5px",
-                                          width: "25px",
-                                          height: "fit-content",
-                                          borderRadius: "50%",
-                                          border: "1px solid #000",
-                                        }}
-                                        alt=""
-                                      />
-                                      <h5
-                                        style={{
-                                          marginTop: "5px",
-                                          marginLeft: "5px",
-                                          fontWeight: "bold",
-                                        }}
-                                      >
-                                        {Comment.writerName}
-                                      </h5>
-                                      <h6
-                                        style={{
-                                          marginTop: "6px",
-                                          marginLeft: "13px",
-                                          fontWeight: "bold",
-                                        }}
-                                      >
-                                        {Comment.time}
-                                      </h6>
-                                      { Comment.myComment ?
-                                      <IconButton
-                                       onClick={()=>deleteComment(post._id, Comment._id)}
-                                        size="small"
-                                        sx={{ color: "#f53b3b", ml: "auto" }}
-                                      >
-                                        <BsFillTrashFill style={{ width: "14px" }} />
-                                      </IconButton>
-                                      : '' }
-                                    </Box>
-                                    <Box
-                                      sx={{
-                                        ml: 5,
-                                        mb: 2,
-                                        mr: 2,
-                                      }}
-                                    >
-                                      <h6>
-                                        {Comment.comment}
-                                      </h6>
-                                    </Box>
-                                    <hr />
-                                </>
-                              ))}
-                            </CardContent>
-                          </Collapse>
-                        </div>
-                      </Card>
-                    </Box>
+                      <Posts post = {post} setrefreshComment={setrefreshComment} refreshComment={refreshComment} user={vendor}/>
                     </>
                     ))}
                   </Box>

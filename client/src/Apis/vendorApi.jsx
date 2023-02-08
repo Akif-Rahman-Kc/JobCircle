@@ -90,9 +90,9 @@ export const GetAllPosts = async (vendorId) => {
 
 /////////////////////////////////////////////////////////////////////////////
 
-export const LikedPost = async (postId, vendorId) => {
+export const LikedPost = async (postId, likerId) => {
     try {
-        const {data} = await Api.patch(`/vendor/liked_post?postId=${postId}&&vendorId=${vendorId}`)
+        const {data} = await Api.patch(`/vendor/liked_post?postId=${postId}&&likerId=${likerId}`)
         return data;
     } catch (error) {
         console.log(error);

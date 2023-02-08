@@ -17,7 +17,7 @@ const postSchema = new Schema({
         type:Array
     },
     Comments:[{
-        vendorId:{
+        writerId:{
             type:String,
             required: true,
         },

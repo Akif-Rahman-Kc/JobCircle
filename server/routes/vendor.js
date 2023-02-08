@@ -1,6 +1,7 @@
 import { Router } from 'express';
+import { addComment, addPost, deleteComment, deletePost, editPost, getAllPosts, getPosts, likedPost } from '../controller/postController.js';
 const router = Router();
-import { vendorSignUp, vendorSignIn, vendorAuth, addPost, getPosts, editProfile, removeProfilePhoto, getAllPosts, likedPost, addComment, deleteComment, editPost, deletePost } from '../controller/vendorController.js';
+import { vendorSignUp, vendorSignIn, vendorAuth, editProfile, removeProfilePhoto } from '../controller/vendorController.js';
 import { getJobs } from '../controller/workController.js';
 import { vendorJWT } from '../middleware/auth.js';
 
