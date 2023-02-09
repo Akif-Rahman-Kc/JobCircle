@@ -35,12 +35,16 @@ const LikeModal = (props) => {
           }}
         >   {props.likes.map((like)=>(
             <>
+            {props.user._id == like.likerId ? <Box sx={{ display:'flex' , px: 3 , py: 1 }}>
+                    <img src={like.likerImage ? like.likerImage : "/null-profile.jpg"} style={{ width: "40px"  , height:"40px" , borderRadius: "50%" }} alt=""/>
+                    <Typography sx={{ m: 1 , color:'#000' }}><b>{like.likerName}</b></Typography>
+                </Box> : 
                 <Link href={props.vendor ? `/vendor/worker_profile/${like.likerId}` : `/worker_profile/${like.likerId}`}>
                 <Box sx={{ display:'flex' , px: 3 , py: 1 }}>
                     <img src={like.likerImage ? like.likerImage : "/null-profile.jpg"} style={{ width: "40px"  , height:"40px" , borderRadius: "50%" }} alt=""/>
                     <Typography sx={{ m: 1 , color:'#000' }}><b>{like.likerName}</b></Typography>
                 </Box>
-                </Link>
+                </Link> }
             </>
             ))}
         </Grid>

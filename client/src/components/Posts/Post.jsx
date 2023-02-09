@@ -28,6 +28,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditPostModal from "@/components/Modal/EditPostModal";
 import LikeModal from "@/components/Modal/LikeModal";
 import Link from "next/link";
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
 const Posts = (props) => {
     const [comment, setComment] = useState('');
@@ -62,10 +63,12 @@ const Posts = (props) => {
           postId,
           writerId:props.user._id
         }
-        const res = await AddCommnet(data)
+        if (data.comment) {
+          const res = await AddCommnet(data)
         if (res) {
             props.setrefreshComment(!props.refreshComment)
         }
+      }
       }
     
       const deleteComment = async (postId, commentId)=>{
@@ -97,19 +100,24 @@ const Posts = (props) => {
         <>
             <Box sx={{ display: "flex" }}>
                       <IconButton>
-                      <Link href={props.vendor ? `/vendor/worker_profile/${props.post.vendorId._id}` : `/worker_profile/${props.post.vendorId._id}`}><Avatar src={props.post.vendorId.image ? props.post.vendorId.image : ''}/></Link>
+                        {props.user._id == props.post.vendorId._id ? <Avatar src={props.post.vendorId.image ? props.post.vendorId.image : ''}/> : <Link href={props.vendor ? `/vendor/worker_profile/${props.post.vendorId._id}` : `/worker_profile/${props.post.vendorId._id}`}><Avatar src={props.post.vendorId.image ? props.post.vendorId.image : ''}/></Link> }
                       </IconButton>
+                      {props.user._id == props.post.vendorId._id ? <Box sx={{ pt: 1.7, fontFamily: "sans-serif" }}>
+                        <h4 style={{ color:'#000' }}>{props.post.vendorId.firstName + ' ' + props.post.vendorId.lastName}</h4>
+                        <h6 style={{ color:'#000' }}>{props.post.vendorId.job}</h6>
+                      </Box> : 
                       <Link href={props.vendor ? `/vendor/worker_profile/${props.post.vendorId._id}` : `/worker_profile/${props.post.vendorId._id}`}>
                       <Box sx={{ pt: 1.7, fontFamily: "sans-serif" }}>
                         <h4 style={{ color:'#000' }}>{props.post.vendorId.firstName + ' ' + props.post.vendorId.lastName}</h4>
                         <h6 style={{ color:'#000' }}>{props.post.vendorId.job}</h6>
                       </Box>
                       </Link>
+                      }
                       { props.user._id == props.post.vendorId._id ? '' :
                       <Box
                         sx={{
                           ml: "auto",
-                          p: 0.8,
+                          p: 0.1,
                           pl: 1.9,
                           pr: 2,
                           backgroundColor: "#1976d2",
@@ -117,9 +125,10 @@ const Posts = (props) => {
                           mb: 2,
                           borderRadius: "25px",
                           color: "#fff",
+                          display:'flex'
                         }}
                       >
-                        <h6>+ Connect</h6>
+                        <PersonAddIcon sx={{ width:'15px' , mr: 0.3 }}/><h6 style={{ marginTop:'5px' }}>Connect</h6>
                       </Box>
                        }
                     </Box>
@@ -225,7 +234,7 @@ const Posts = (props) => {
                             aria-labelledby="modal-modal-title"
                             aria-describedby="modal-modal-description"
                           >
-                            <LikeModal likes = {props.post.Likes} vendor={props.vendor}/>
+                            <LikeModal likes = {props.post.Likes} vendor={props.vendor} user = {props.user}/>
                       </Modal>
                       {props.post.Likes[1] ? <img
                         src={props.post.Likes[0].likerImage ? props.post.Likes[0].likerImage : "/null-profile.jpg"}
@@ -320,6 +329,17 @@ const Posts = (props) => {
                               {props.post.Comments.map((Comment)=>(
                                 <>
                                     <Box sx={{ mt: 2, display: "flex" }}>
+                                    {props.user._id == Comment.writerId ?  <img
+                                        src={Comment.writerImage ? Comment.writerImage : "/null-profile.jpg"}
+                                        style={{
+                                          marginLeft: "5px",
+                                          width: "25px",
+                                          height: "fit-content",
+                                          borderRadius: "50%",
+                                          border: "1px solid #000",
+                                        }}
+                                        alt=""
+                                      /> : 
                                     <Link href={props.vendor ? `/vendor/worker_profile/${Comment.writerId}` : `/worker_profile/${Comment.writerId}`}>
                                       <img
                                         src={Comment.writerImage ? Comment.writerImage : "/null-profile.jpg"}
@@ -332,7 +352,18 @@ const Posts = (props) => {
                                         }}
                                         alt=""
                                       />
-                                      </Link>
+                                      </Link> }
+                                      {props.user._id == Comment.writerId ? 
+                                      <h5
+                                        style={{
+                                          marginTop: "5px",
+                                          marginLeft: "5px",
+                                          fontWeight: "bold",
+                                          color:'#000'
+                                        }}
+                                      >
+                                        {Comment.writerName}
+                                      </h5> : 
                                       <Link href={props.vendor ? `/vendor/worker_profile/${Comment.writerId}` : `/worker_profile/${Comment.writerId}`}>
                                       <h5
                                         style={{
@@ -344,7 +375,7 @@ const Posts = (props) => {
                                       >
                                         {Comment.writerName}
                                       </h5>
-                                      </Link>
+                                      </Link> }
                                       <h6
                                         style={{
                                           marginTop: "6px",

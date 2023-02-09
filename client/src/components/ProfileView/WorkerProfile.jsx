@@ -29,6 +29,8 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { BsFillChatDotsFill, IconName } from "react-icons/bs";
 import Posts from "@/components/Posts/Post";
 import { VendorGetPosts } from "@/Apis/vendorApi";
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import BeenhereIcon from '@mui/icons-material/Beenhere';
 
 const style = {
     position: "absolute",
@@ -55,12 +57,13 @@ const WorkerProfile = (props) => {
           const response = await VendorGetPosts(props.worker._id)
           if (response) {
             console.log(response);
-            response.map((doc)=>{
+            response.map(async (doc)=>{
               doc.Likes.map((obj)=>{
                 if (obj.likerId == props.user._id) {
                   doc.like = true
                 }
               })
+              doc.Comments = await doc.Comments.reverse()
             })
             setPosts(response);
           }
@@ -162,8 +165,8 @@ const WorkerProfile = (props) => {
                       <h5>Experiance : <span style={{ color:'blue' }}>{props.worker.experiance} Year</span></h5>
                     </Box> : ''}
                     <Box sx={{ width:'100%' , mt: 1 }}>
-                            <Button sx={{ backgroundColor:'#1976d2' , color:'#fff' , fontSize:'9.5px' , py: 0.2 , px: 4 , pt: 0.5 , ":hover":{ backgroundColor:'#1976d2' } , mb: 0.6 }}>Connect</Button>
-                            <Button onClick={handleOpen} sx={{ float:'right' , backgroundColor:'#1976d2' , color:'#fff' , fontSize:'10px' , py: 0.2 , px: 4 , pt: 0.5 , ":hover":{ backgroundColor:'#1976d2' } }}>Booking</Button>
+                            <Button sx={{ backgroundColor:'#1976d2' , color:'#fff' , fontSize:'9.5px' , py: 0 , px: 4 , pt: 0.2 , ":hover":{ backgroundColor:'#1976d2' } , mb: 0.6 }}><PersonAddIcon sx={{ width:'18px' , mt: -0.3 , mr: 0.2 }}/>Connect</Button>
+                            <Button onClick={handleOpen} sx={{ float:'right' , backgroundColor:'#1976d2' , color:'#fff' , fontSize:'10px' , py: 0 , px: 4 , pt: 0.3 , ":hover":{ backgroundColor:'#1976d2' } }}><BeenhereIcon sx={{ width:'16px' , mt: -0.3 , mr: 0.2 }}/>Booking</Button>
                             <br/>
                             <Box sx={{ width:'113px' , display:'flex' }}>
                               <IconButton sx={{ backgroundColor:'#1976d2' , color:'#fff' , ":hover":{ backgroundColor:'#1976d2' } , width:'50px' , height:'25px' , borderRadius:'15px' }}>

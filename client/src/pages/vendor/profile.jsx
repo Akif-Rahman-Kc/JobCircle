@@ -96,12 +96,13 @@ export default function VendorProfile() {
       const response = await VendorGetPosts(vendor._id)
       if (response) {
         console.log(response);
-        response.map((doc)=>{
+        response.map(async (doc)=>{
           doc.Likes.map((obj)=>{
             if (obj.likerId == vendor._id) {
               doc.like = true
             }
           })
+          doc.Comments = await doc.Comments.reverse()
         })
         setPosts(response);
       }

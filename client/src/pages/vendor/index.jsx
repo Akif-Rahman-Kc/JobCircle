@@ -62,12 +62,13 @@ export default function VendorHome() {
     async function invoke(){
       const res = await GetAllPosts();
       if (res) {
-        res.map((doc)=>{
+        res.map(async (doc)=>{
           doc.Likes.map((obj)=>{
             if (obj.likerId == vendor._id) {
               doc.like = true
             }
           })
+          doc.Comments = await doc.Comments.reverse()
         })
         setPosts(res);
       }

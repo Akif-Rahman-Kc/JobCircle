@@ -29,6 +29,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { BsFillChatDotsFill, IconName } from "react-icons/bs";
 import Posts from "@/components/Posts/Post";
 import { VendorGetPosts } from "@/Apis/vendorApi";
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
 const style = {
     position: "absolute",
@@ -106,7 +107,7 @@ const WorkerProfile = (props) => {
                             {props.worker.firstName + ' ' + props.worker.lastName}
                           </h3>
                           <h6>{props.worker.job}</h6>
-                            <Button sx={{ backgroundColor:'#1976d2' , color:'#fff' , fontSize:'9.5px' , py: 0.2 , px: 4 , pt: 0.5 , ":hover":{ backgroundColor:'#1976d2' } , mb: 0.6 , mt: 2 }}>Connect</Button>
+                          <Button sx={{ backgroundColor:'#1976d2' , color:'#fff' , fontSize:'9.5px' , py: 0 , px: 4 , pt: 0.2 , ":hover":{ backgroundColor:'#1976d2' } , mb: 0.6 }}><PersonAddIcon sx={{ width:'18px' , mt: -0.3 , mr: 0.2 }}/>Connect</Button>
                             <br/>
                             <Box sx={{ width:'113px' , display:'flex' }}>
                               <IconButton sx={{ backgroundColor:'#1976d2' , color:'#fff' , ":hover":{ backgroundColor:'#1976d2' } , width:'50px' , height:'25px' , borderRadius:'15px' }}>
