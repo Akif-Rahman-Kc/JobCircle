@@ -123,7 +123,6 @@ export const getServerSideProps = async (context) => {
     const workerId = context.params.v_profile
     const res =await axios.get(`http://localhost:4000/get_worker?vendorId=${workerId}`)
     if (res.data.vendor) {
-      console.log("aaaaaaaaa");
       return{
         props : { 
           worker:res.data.vendor,
@@ -131,7 +130,6 @@ export const getServerSideProps = async (context) => {
         }
       }
     } else{
-      console.log("llllllllll");
       return{
         props : { 
           worker:res.data.user,
