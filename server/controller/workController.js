@@ -1,4 +1,5 @@
 import Job from '../model/jobSchema.js'
+import User from '../model/userSchema.js'
 import Vendor from '../model/vendorSchema.js'
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,8 +32,12 @@ export async function getWorkers(req, res) {
 export async function getWorker(req, res) {
     try {
         const vendor = await Vendor.findById(req.query.vendorId)
-
-        res.json(vendor)
+        const user = await User.findById(req.query.vendorId)
+        if (vendor) {
+            res.json({vendor:vendor})
+        } else {
+            res.json({user:user})
+        }
     } catch (error) {
         console.log(error)
     }

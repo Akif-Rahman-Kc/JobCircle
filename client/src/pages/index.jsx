@@ -73,11 +73,6 @@ export default function Home() {
               doc.like = true
             }
           })
-          doc.Comments.map((Obj)=>{
-            if (Obj.writerId == user._id) {
-              Obj.myComment = true
-            }
-          })
         })
         setPosts(res);
       }
@@ -145,7 +140,7 @@ export default function Home() {
                   >
                     {posts.map((post)=>(
                     <>
-                      <Posts post = {post} setrefreshComment={setrefreshComment} refreshComment={refreshComment} user={user}/>
+                      <Posts post = {post} setrefreshComment={setrefreshComment} refreshComment={refreshComment} user={user} vendor={false}/>
                     </>
                     ))}
                   </Box>

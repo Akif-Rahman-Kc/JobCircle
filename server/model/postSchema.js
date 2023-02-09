@@ -36,10 +36,6 @@ const postSchema = new Schema({
         time:{
             type:String,
             required: true,
-        },
-        myComment:{
-            type: Boolean,
-            default:false
         }
     }],
     

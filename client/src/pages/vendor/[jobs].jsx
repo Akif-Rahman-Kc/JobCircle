@@ -1,25 +1,33 @@
 import { Inter } from "@next/font/google";
+import Navbar from "@/components/Navabar/Navbar";
 import { Box } from "@mui/system";
 import {
+  Avatar,
   Button,
   Grid,
+  IconButton,
 } from "@mui/material";
 import Notifications from "@/components/Notifications/Notification";
 import Messages from "@/components/Messages/Message";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
+import { userDetails } from "@/redux/user";
+import EngineeringIcon from "@mui/icons-material/Engineering";
+import { GetJobs, GetWorkers, isAuthApi } from "@/Apis/userApi";
+import MailIcon from '@mui/icons-material/Mail';
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
+import axios from "axios";
+import Link from "next/link";
+import { VendorisAuthApi } from "@/Apis/vendorApi";
 import { vendorDetails } from "@/redux/vendor";
 import VendorNavbar from "@/components/Navabar/VendorNavbar";
-import EngineeringIcon from "@mui/icons-material/Engineering";
-import { VendorisAuthApi } from "@/Apis/vendorApi";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function VendorWorkers() {
+export default function VendorWorkers({workers}) {
   const router = useRouter();
-  const [open, setOpen] = useState(false);
   const { vendor } = useSelector((state)=>state.vendorInfo)
   const dispatch = useDispatch()
 
@@ -92,8 +100,6 @@ export default function VendorWorkers() {
                     sx={{
                       p: 2,
                       width: "-webkit-fill-available",
-                      boxShadow: 3,
-                      textAlign:'center',
                       border: "1px solid lightgray",
                       borderRadius: "15px",
                       minHeight: "34.4vw",
@@ -101,18 +107,29 @@ export default function VendorWorkers() {
                       m: 2,
                     }}
                   >
-                    <Button className="workerList" sx={{ p: 1.5 , m: 1 }}>Driver</Button>
-                    <Button className="workerList" sx={{ p: 1.5 , m: 1 }}>Plumber</Button>
-                    <Button className="workerList" sx={{ p: 1.5 , m: 1 }}>Artist</Button>
-                    <Button className="workerList" sx={{ p: 1.5 , m: 1 }}>Catering</Button>
-                    <Button className="workerList" sx={{ p: 1.5 , m: 1 }}>Bands</Button>
-                    <Button className="workerList" sx={{ p: 1.5 , m: 1 }}>Carpentor</Button>
-                    <Button className="workerList" sx={{ p: 1.5 , m: 1 }}>Mechanical Engineer</Button>
-                    <Button className="workerList" sx={{ p: 1.5 , m: 1 }}>Interior Designer</Button>
-                    <Button className="workerList" sx={{ p: 1.5 , m: 1 }}>Electrical Engineer</Button>
-                    <Button className="workerList" sx={{ p: 1.5 , m: 1 }}>Software Engineer</Button>
-                    <Button className="workerList" sx={{ p: 1.5 , m: 1 }}>Barber</Button>
-                    <Button className="workerList" sx={{ p: 1.5 , m: 1 }}>Photographer</Button>
+                    <Grid>
+                      {
+                        workers.map((worker)=>(
+                        
+                          <Link href={`/vendor/worker_profile/${worker._id}`}>
+                            { vendor._id == worker._id ? '' :
+                          <Grid key={worker._id} xs={12} sx={{ m: 1 , p: 1 , display:'flex' , border:'1px solid lightgray' , borderRadius:'10px' , backgroundColor:'lightgray' , boxShadow: 3 , ":active":{ backgroundColor:'#c1bdbd' } , color:'#000' }}>
+                            <TurnedInNotIcon sx={{ m: 1 }}/>
+                            <img
+                              src={worker.image ? worker.image : "/null-profile.jpg"}
+                              style={{ m: 0, width: "40px"  , height:"40px" , borderRadius: "50%" }}
+                              alt=""
+                            />
+                            <Box sx={{ ml:0.5 , mt:0.5 }}>
+                              <h4>{worker.firstName + ' ' + worker.lastName}</h4>
+                              <h5 style={{ fontFamily: 'monospace' }}>{worker.locality + ', ' + worker.city}</h5>
+                            </Box>
+                          </Grid>
+                          }
+                          </Link>
+                        ))
+                      }
+                    </Grid>
                   </Box>
                 </Grid>
               </Grid>
@@ -125,4 +142,24 @@ export default function VendorWorkers() {
       </div>
     </>
   );
+}
+
+
+export const getServerSideProps = async (context) => {
+  try {
+    const jobs = context.params.jobs
+    const res =await axios.get(`http://localhost:4000/get_workers?jobName=${jobs}`)
+    return{
+      props : { 
+        workers:res.data
+      }
+    }
+  } catch (error) {
+    return{
+      props : { 
+          workers:null
+       }
+  }
+  }
+
 }

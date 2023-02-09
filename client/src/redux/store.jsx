@@ -1,4 +1,4 @@
-const { configureStore } = require("@reduxjs/toolkit");
+import { configureStore } from "@reduxjs/toolkit"
 import userSlice from "./user";
 import vendorSlice from "./vendor";
 

@@ -44,7 +44,7 @@ export async function deletePost(req, res) {
 
 export async function getPosts(req, res) {
     try {
-        const posts = await Post.find({vendorId:req.query.vendorId}).sort({createdAt:-1})
+        const posts = await Post.find({vendorId:req.query.vendorId}).populate('vendorId').sort({createdAt:-1})
 
         res.json(posts)
     } catch (error) {
@@ -77,7 +77,7 @@ export async function likedPost(req, res) {
                     Likes:{
                         likerId:req.query.likerId,
                         likerName:vendor ? vendor.firstName + ' ' + vendor.lastName : user.firstName + ' ' + user.lastName,
-                        likerImage:vendor ? vendor.image : user.image
+                        likerImage:vendor ? vendor.image : user.image,
                     }
                 }
             })
@@ -87,7 +87,7 @@ export async function likedPost(req, res) {
                     Likes:{
                         likerId:req.query.likerId,
                         likerName:vendor ? vendor.firstName + ' ' + vendor.lastName : user.firstName + ' ' + user.lastName,
-                        likerImage:vendor ? vendor.image : user.image
+                        likerImage:vendor ? vendor.image : user.image,
                     }
                 }
             })
@@ -113,6 +113,7 @@ export async function addComment(req, res) {
                     comment:req.body.comment,
                     writerName:vendor ? vendor.firstName + ' ' + vendor.lastName : user.firstName + ' ' + user.lastName,
                     writerImage:vendor ? vendor.image : user.image,
+                    writer:vendor ? 'vendor' : "user",
                     time:time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
                 }
             }

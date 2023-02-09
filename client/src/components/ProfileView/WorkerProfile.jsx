@@ -27,113 +27,66 @@ import SmartDisplayIcon from "@mui/icons-material/SmartDisplay";
 import Link from "next/link";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { BsFillChatDotsFill, IconName } from "react-icons/bs";
-
-const inter = Inter({ subsets: ["latin"] });
+import Posts from "@/components/Posts/Post";
+import { VendorGetPosts } from "@/Apis/vendorApi";
 
 const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: { xs: "90%", sm: "70%", md: "40%" },
-  minHeight: { xs: "10%", sm: "10%", md: "10%" },
-  bgcolor: "#fff",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 1,
-  borderRadius: "10px",
-};
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: { xs: "90%", sm: "70%", md: "40%" },
+    minHeight: { xs: "10%", sm: "10%", md: "10%" },
+    bgcolor: "#fff",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 1,
+    borderRadius: "10px",
+  };
 
-export default function WorkerProfile({worker}) {
-  const router = useRouter();
-  const [ flag, setFlag ] = useState(false)
-  const [open, setOpen] = useState(false);
+const WorkerProfile = (props) => {
+    const [ flag, setFlag ] = useState(false)
+    const [open, setOpen] = useState(false);
+    const [posts, setPosts] = useState([]);
+    const [refreshPost, setrefreshPost] = useState(false);
 
-  const { user } = useSelector((state)=>state.userInfo)
-  const dispatch = useDispatch()
-
-  useEffect(()=>{
-    async function invoke(){
-      let token=  localStorage.getItem('usertoken')
-      if (token) {
-        const response = await isAuthApi(token)
-        if (response) {
-          if (response.auth) {
-            dispatch(userDetails(response.userObj))
-          } else {
-            router.push('/auth/signin')
+    useEffect(() => {
+        async function invokePosts(){
+          const response = await VendorGetPosts(props.worker._id)
+          if (response) {
+            console.log(response);
+            response.map((doc)=>{
+              doc.Likes.map((obj)=>{
+                if (obj.likerId == props.user._id) {
+                  doc.like = true
+                }
+              })
+            })
+            setPosts(response);
           }
         }
-          
-      } else {
-        router.push('/auth/signin')
-      }
-    }
-    invoke()
-  },[])
+        invokePosts();
+      }, [refreshPost , props.user]);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    let data = new FormData(event.currentTarget);
-    data = {
-      location: data.get('location'),
-      date: data.get('date'),
-      details: data.get('details'),
-    }
-    console.log(data);
-  };
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        let data = new FormData(event.currentTarget);
+        data = {
+          location: data.get('location'),
+          date: data.get('date'),
+          details: data.get('details'),
+        }
+        console.log(data);
+      };
+    
+      const handleOpen = () => setOpen(true);
+      const handleClose = () => {
+        setOpen(false);
+      };
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  return (
-    <>
-      <div>
-        <Navbar />
-        <Box>
-          <Grid
-            container
-            sx={{ justifyContent: "center", mt: 10, display: "flex" }}
-          >
-            <Grid md={3}>
-              <Notifications />
-            </Grid>
-            <Grid sm={12} md={5}>
-              <Grid sm={12} md={12}>
-                <Grid
-                  md={4.74}
-                  sx={{
-                    width: "-webkit-fill-available",
-                    backgroundColor: "#e9e5df",
-                    borderRadius: "15px",
-                    m: 2,
-                    mt: -4,
-                    pt: 4,
-                    display: "flex",
-                    position: "fixed",
-                    zIndex: 99,
-                  }}
-                >
-                  <Grid
-                    sx={{
-                      p: 2,
-                      width: "-webkit-fill-available",
-                      justifyContent: "center",
-                      boxShadow: 3,
-                      display:'flex',
-                      border: "1px solid lightgray",
-                      borderRadius: "15px",
-                      minHeight: "4.0vw",
-                      backgroundColor: "#fff",
-                    }}
-                  >
-                    <EngineeringIcon/>
-                    <h3 style={{ marginLeft:'7px' , fontSize:'22px' }}>Workers</h3>
-                  </Grid>
-                </Grid>
-                <Grid sx={{ pt: 7 }}>
+    return ( 
+        <>
+            <Grid sx={{ pt: 7 }}>
                   <Box
                     sx={{
                       p: 2,
@@ -149,19 +102,19 @@ export default function WorkerProfile({worker}) {
                       <Grid xs={12} sx={{ display: "flex" }}>
                         <Grid xs={4} sx={{ fontFamily: "sans-serif" }}>
                           <img
-                            src={worker.image ? worker.image : "/null-profile.jpg"}
+                            src={props.worker.image ? props.worker.image : "/null-profile.jpg"}
                             style={{
-                              width: "35%",
+                              width: "67px",
                               height: "fit-content",
                               borderRadius: "50%",
                               border: "1px solid #000",
                             }}
                             alt=""
                           />
-                          <h4 style={{ fontWeight: "900" }}>
-                            {worker.firstName + ' ' + worker.lastName}
+                          <h4 style={{ fontWeight: "900" , lineBreak:'auto' }}>
+                            {props.worker.firstName + ' ' + props.worker.lastName}
                           </h4>
-                          <h6>{worker.job}</h6>
+                          <h6>{props.worker.job}</h6>
                           <a
                           onClick={()=> setFlag(!flag)}
                             style={{
@@ -202,11 +155,11 @@ export default function WorkerProfile({worker}) {
                       </Grid>
                     </Box>
                     { flag ? <Box sx={{ mt: 1 , p: 2 , borderRadius:'5px' , border:'4px double gray' , fontFamily: 'monospace' }}>
-                      <h5>Place : <span style={{ color:'blue' }}>{worker.locality + ', ' + worker.city}</span></h5>
-                      <h5>Phone No : <a href={`tel:${worker.phoneNo}`}><span style={{ color:'blue' }}>{worker.phoneNo}</span></a></h5>
-                      <h5>Email :<a href={worker.email}><span style={{ color:'blue' }}>{worker.email}</span></a></h5>
-                      <h5>Job : <span style={{ color:'blue' }}>{worker.job}</span></h5>
-                      <h5>Experiance : <span style={{ color:'blue' }}>{worker.experiance} Year</span></h5>
+                      <h5>Place : <span style={{ color:'blue' }}>{props.worker.locality + ', ' + props.worker.city}</span></h5>
+                      <h5>Phone No : <a href={`tel:${props.worker.phoneNo}`}><span style={{ color:'blue' }}>{props.worker.phoneNo}</span></a></h5>
+                      <h5>Email :<a href={props.worker.email}><span style={{ color:'blue' }}>{props.worker.email}</span></a></h5>
+                      <h5>Job : <span style={{ color:'blue' }}>{props.worker.job}</span></h5>
+                      <h5>Experiance : <span style={{ color:'blue' }}>{props.worker.experiance} Year</span></h5>
                     </Box> : ''}
                     <Box sx={{ width:'100%' , mt: 1 }}>
                             <Button sx={{ backgroundColor:'#1976d2' , color:'#fff' , fontSize:'9.5px' , py: 0.2 , px: 4 , pt: 0.5 , ":hover":{ backgroundColor:'#1976d2' } , mb: 0.6 }}>Connect</Button>
@@ -216,7 +169,7 @@ export default function WorkerProfile({worker}) {
                               <IconButton sx={{ backgroundColor:'#1976d2' , color:'#fff' , ":hover":{ backgroundColor:'#1976d2' } , width:'50px' , height:'25px' , borderRadius:'15px' }}>
                                 <BsFillChatDotsFill style={{ width:'17px' }}/>
                               </IconButton>
-                              <IconButton href={`tel:${worker.phoneNo}`} sx={{ ml: 'auto' , backgroundColor:'#1976d2' , color:'#fff' , ":hover":{ backgroundColor:'#1976d2' } , width:'50px' , height:'25px' , borderRadius:'15px' }}>
+                              <IconButton href={`tel:${props.worker.phoneNo}`} sx={{ ml: 'auto' , backgroundColor:'#1976d2' , color:'#fff' , ":hover":{ backgroundColor:'#1976d2' } , width:'50px' , height:'25px' , borderRadius:'15px' }}>
                                 <LocalPhoneIcon sx={{ width:'17px' }}/>
                               </IconButton>
                             </Box>
@@ -399,36 +352,15 @@ export default function WorkerProfile({worker}) {
                         </IconButton>
                       </Grid>
                     </Grid>
+                    {posts.map((post)=>(
+                    <>
+                      <Posts post = {post} setrefreshComment={setrefreshPost} refreshComment={refreshPost} user={props.user} vendor={true}/>
+                    </>
+                    ))}
                   </Box>
                 </Grid>
-              </Grid>
-            </Grid>
-            <Grid md={3}>
-              <Messages />
-            </Grid>
-          </Grid>
-        </Box>
-      </div>
-    </>
-  );
+        </>
+     );
 }
-
-
-export const getServerSideProps = async (context) => {
-  try {
-    const workerId = context.params.v_profile
-    const res =await axios.get(`http://localhost:4000/get_worker?vendorId=${workerId}`)
-    return{
-      props : { 
-        worker:res.data
-      }
-    }
-  } catch (error) {
-    return{
-      props : { 
-          worker:null
-       }
-  }
-  }
-
-}
+ 
+export default WorkerProfile;

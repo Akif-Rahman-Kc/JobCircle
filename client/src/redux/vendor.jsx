@@ -1,4 +1,4 @@
-const { createSlice } = require("@reduxjs/toolkit");
+import { createSlice } from "@reduxjs/toolkit"
 
 export const vendorSlice = createSlice({
     name:'Vendor',

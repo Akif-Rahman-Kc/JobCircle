@@ -1,6 +1,6 @@
 import { Inter } from "@next/font/google";
 import { Box } from "@mui/system";
-import { Avatar, Button, Card, CardContent, CardHeader, Collapse, Grid, IconButton, Input } from "@mui/material";
+import { Avatar, Button, Card, CardContent, CardHeader, Collapse, Grid, IconButton, Input, Modal } from "@mui/material";
 import Notifications from "@/components/Notifications/Notification";
 import Messages from "@/components/Messages/Message";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
@@ -13,7 +13,7 @@ import VendorNavbar from "@/components/Navabar/VendorNavbar";
 import { useDispatch, useSelector } from "react-redux";
 import { vendorDetails } from "@/redux/vendor";
 import HomeIcon from "@mui/icons-material/Home";
-import { AddCommnet, DeleteComment, GetAllPosts, LikedPost, VendorisAuthApi } from "@/Apis/vendorApi";
+import { AddCommnet, DeleteComment, DeletePost, GetAllPosts, LikedPost, VendorisAuthApi } from "@/Apis/vendorApi";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -22,10 +22,32 @@ import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import SendIcon from '@mui/icons-material/Send';
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
 import Swal from "sweetalert2";
+import ModeIcon from '@mui/icons-material/Mode';
+import ReportIcon from '@mui/icons-material/Report';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditPostModal from "@/components/Modal/EditPostModal";
+import LikeModal from "@/components/Modal/LikeModal";
+import Link from "next/link";
 
 const Posts = (props) => {
     const [comment, setComment] = useState('');
     const [ openComment, setOpenComment] = useState(null)
+    const [openEditPostModal, setOpenEditPostModal] = useState(false);
+    const [openLikeModal, setOpenLikeModal] = useState(false);
+    const [ openMoreBox, setOpenMoreBox] = useState(null)
+    const [ modalPost, setModalPost] = useState({})
+
+    const handleEditPostModalOpen = (post) => {
+      setModalPost(post)
+      setOpenEditPostModal(true)
+    }
+    const handleEditPostModalClose = () => setOpenEditPostModal(false)
+
+    const handleLikeModalOpen = (post) => {
+      setModalPost(post)
+      setOpenLikeModal(true)
+    }
+    const handleLikeModalClose = () => setOpenLikeModal(false)
 
     const liked = async (postId)=>{
         const res = await LikedPost(postId, props.user._id)
@@ -64,16 +86,25 @@ const Posts = (props) => {
         
       }
 
+      const deletePost = async (postId)=> {
+        const res = await DeletePost(postId)
+        if (res) {
+          props.setrefreshComment(!props.refreshComment)
+        }
+      }
+
     return ( 
         <>
             <Box sx={{ display: "flex" }}>
                       <IconButton>
-                        <Avatar src={props.post.vendorId.image ? props.post.vendorId.image : ''}/>
+                      <Link href={props.vendor ? `/vendor/worker_profile/${props.post.vendorId._id}` : `/worker_profile/${props.post.vendorId._id}`}><Avatar src={props.post.vendorId.image ? props.post.vendorId.image : ''}/></Link>
                       </IconButton>
+                      <Link href={props.vendor ? `/vendor/worker_profile/${props.post.vendorId._id}` : `/worker_profile/${props.post.vendorId._id}`}>
                       <Box sx={{ pt: 1.7, fontFamily: "sans-serif" }}>
-                        <h4>{props.post.vendorId.firstName + ' ' + props.post.vendorId.lastName}</h4>
-                        <h6>{props.post.vendorId.job}</h6>
+                        <h4 style={{ color:'#000' }}>{props.post.vendorId.firstName + ' ' + props.post.vendorId.lastName}</h4>
+                        <h6 style={{ color:'#000' }}>{props.post.vendorId.job}</h6>
                       </Box>
+                      </Link>
                       { props.user._id == props.post.vendorId._id ? '' :
                       <Box
                         sx={{
@@ -146,9 +177,36 @@ const Posts = (props) => {
                         </IconButton>
                       </Grid>
                       <Grid xs={3}>
-                        <IconButton size="large" sx={{ color: "#1976d2" }}>
-                          <ReportGmailerrorredIcon />
+                        { props.user._id == props.post.vendorId._id ? 
+                        <IconButton onClick={() =>
+                          openMoreBox
+                            ? setOpenMoreBox(null)
+                            : setOpenMoreBox(props.post._id)
+                        } size="large" sx={{ color: "#1976d2" }}>
+                          <MoreVertIcon />
                         </IconButton>
+                        
+                       : <IconButton size="large" sx={{ color: "#1976d2" }}>
+                          <ReportGmailerrorredIcon />
+                        </IconButton> }
+                        <Collapse
+                            sx={{ backgroundColor:'#fff' , border:'3px double #111' , position:'absolute' , borderRadius:'7px' , p: 1 , ml: { xs: -2.4 , sm: 0 , md: 2} }}
+                            in={openMoreBox == props.post._id}
+                            timeout="auto"
+                            unmountOnExit
+                          >
+                            <Button onClick={()=>handleEditPostModalOpen(props.post)} sx={{ fontSize:'12px' , width:'inherit' , color:'#111' , justifyContent: 'flex-start' }}><ModeIcon sx={{width:'16px' , mr: 0.4 }}/>Edit</Button>
+                            <br />
+                            <Button onClick={()=>deletePost(props.post._id)} sx={{ fontSize:'12px' , width:'inherit' , color:'#111' , justifyContent: 'flex-start' }}><DeleteIcon sx={{width:'16px' , mr: 0.4 }}/>Delete</Button>
+                          </Collapse>
+                          <Modal
+                            open={openEditPostModal}
+                            onClose={handleEditPostModalClose}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                          >
+                            <EditPostModal post={modalPost} setRefresh={props.setrefreshComment} refresh={props.refreshComment} close={setOpenEditPostModal}/>
+                          </Modal>
                       </Grid>
                     </Box>
                     <Box
@@ -158,9 +216,17 @@ const Posts = (props) => {
                         display: "flex",
                       }}
                     >
-                      <p>
+                      <p onClick={()=>handleLikeModalOpen(props.post)}>
                         <b>{props.post.Likes.length}</b> Like
                       </p>
+                      <Modal
+                            open={openLikeModal}
+                            onClose={handleLikeModalClose}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                          >
+                            <LikeModal likes = {props.post.Likes} vendor={props.vendor}/>
+                      </Modal>
                       {props.post.Likes[1] ? <img
                         src={props.post.Likes[0].likerImage ? props.post.Likes[0].likerImage : "/null-profile.jpg"}
                         style={{
@@ -254,6 +320,7 @@ const Posts = (props) => {
                               {props.post.Comments.map((Comment)=>(
                                 <>
                                     <Box sx={{ mt: 2, display: "flex" }}>
+                                    <Link href={props.vendor ? `/vendor/worker_profile/${Comment.writerId}` : `/worker_profile/${Comment.writerId}`}>
                                       <img
                                         src={Comment.writerImage ? Comment.writerImage : "/null-profile.jpg"}
                                         style={{
@@ -265,15 +332,19 @@ const Posts = (props) => {
                                         }}
                                         alt=""
                                       />
+                                      </Link>
+                                      <Link href={props.vendor ? `/vendor/worker_profile/${Comment.writerId}` : `/worker_profile/${Comment.writerId}`}>
                                       <h5
                                         style={{
                                           marginTop: "5px",
                                           marginLeft: "5px",
                                           fontWeight: "bold",
+                                          color:'#000'
                                         }}
                                       >
                                         {Comment.writerName}
                                       </h5>
+                                      </Link>
                                       <h6
                                         style={{
                                           marginTop: "6px",
@@ -283,7 +354,7 @@ const Posts = (props) => {
                                       >
                                         {Comment.time}
                                       </h6>
-                                      { Comment.myComment ?
+                                      { Comment.writerId == props.user._id ?
                                       <IconButton
                                        onClick={()=>deleteComment(props.post._id, Comment._id)}
                                         size="small"

@@ -39,6 +39,7 @@ import ModeIcon from '@mui/icons-material/Mode';
 import ReportIcon from '@mui/icons-material/Report';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditPostModal from "@/components/Modal/EditPostModal";
+import Posts from "@/components/Posts/Post";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -94,11 +95,19 @@ export default function VendorProfile() {
     async function invokePosts(){
       const response = await VendorGetPosts(vendor._id)
       if (response) {
+        console.log(response);
+        response.map((doc)=>{
+          doc.Likes.map((obj)=>{
+            if (obj.likerId == vendor._id) {
+              doc.like = true
+            }
+          })
+        })
         setPosts(response);
       }
     }
     invokePosts();
-  }, [refreshPost]);
+  }, [refreshPost , vendor]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -225,7 +234,7 @@ export default function VendorProfile() {
                               vendor.image ? vendor.image : "/null-profile.jpg"
                             }
                             style={{
-                              width: "35%",
+                              width: "67px",
                               height: "fit-content",
                               borderRadius: "50%",
                               border: "1px solid #000",
@@ -394,6 +403,7 @@ export default function VendorProfile() {
                       xs={12}
                       sx={{
                         mt: 2,
+                        mb: 2,
                         p: 1,
                         display: "flex",
                         textAlign: "center",
@@ -434,402 +444,11 @@ export default function VendorProfile() {
                         </IconButton>
                       </Grid>
                     </Grid>
-
-                    {posts.map((post) => {
-                      return (
-                        <Grid xs={12} sx={{ mt: 2 }} key={post._id}>
-                          <Box sx={{ display: "flex" }}>
-                            <img
-                              src={ vendor.image ? vendor.image : "/null-profile.jpg"}
-                              style={{
-                                width: "8%",
-                                height: "fit-content",
-                                borderRadius: "50%",
-                                border: "1px solid #000",
-                              }}
-                              alt=""
-                            />
-                            <h5 style={{ fontWeight: "900", margin: "5px" }}>
-                              {vendor.firstName + " " + vendor.lastName}
-                            </h5>
-                          </Box>
-                            <p style={{ padding:'5px' , marginTop: "15px", fontSize: "15px" }}>
-                            {post.description ? post.description : ""}
-                          </p>
-                          <img
-                            src={post.image ? post.image : ""}
-                            style={{
-                              marginTop: "10px",
-                              width: "100%",
-                              height: "fit-content",
-                              borderRadius: "5px",
-                              border: "1px solid #000",
-                            }}
-                            alt=""
-                          />
-                          <Box
-                            sx={{
-                              borderRadius: "5px",
-                              backgroundColor: "#f5f5f5",
-                              textAlign: "center",
-                              display: "flex",
-                            }}
-                          >
-                            <Grid xs={3}>
-                              <IconButton size="large" sx={{ color: "#1976d2" }}>
-                                <ThumbUpOffAltIcon />
-                              </IconButton>
-                            </Grid>
-                            <Grid xs={3}>
-                              <IconButton onClick={() => openComment ? setOpenComment(null) : setOpenComment(post._id)} size="large" sx={{ color: "#1976d2" }}>
-                                <QuestionAnswerOutlinedIcon />
-                              </IconButton>
-                            </Grid>
-                            <Grid xs={3}>
-                              <IconButton size="large" sx={{ color: "#1976d2" }}>
-                                <ShareOutlinedIcon />
-                              </IconButton>
-                            </Grid>
-                            <Grid xs={3}>
-                              <IconButton onClick={() =>
-                                openMoreBox
-                                  ? setOpenMoreBox(null)
-                                  : setOpenMoreBox(post._id)
-                              } size="large" sx={{ color: "#1976d2" }}>
-                                <MoreVertIcon />
-                              </IconButton>
-                              <Collapse
-                            sx={{ backgroundColor:'#fff' , border:'3px double #111' , position:'absolute' , borderRadius:'7px' , p: 1 , ml: { xs: -2.4 , sm: 0 , md: 2} }}
-                            in={openMoreBox == post._id}
-                            timeout="auto"
-                            unmountOnExit
-                          >
-                            <Button onClick={()=>handleEditPostModalOpen(post)} sx={{ fontSize:'12px' , width:'inherit' , color:'#111' , justifyContent: 'flex-start' }}><ModeIcon sx={{width:'16px' , mr: 0.4 }}/>Edit</Button>
-                            <br />
-                            <Button onClick={()=>deletePost(post._id)} sx={{ fontSize:'12px' , width:'inherit' , color:'#111' , justifyContent: 'flex-start' }}><DeleteIcon sx={{width:'16px' , mr: 0.4 }}/>Delete</Button>
-                            <br />
-                            <Button onClick={()=>reportPost(post._id)} sx={{ fontSize:'12px' , width:'inherit' , color:'#111' , justifyContent: 'flex-start' }}><ReportIcon sx={{width:'16px' , mr: 0.4 }}/>Report</Button>
-                          </Collapse>
-                          <Modal
-                            open={openEditPostModal}
-                            onClose={handleEditPostModalClose}
-                            aria-labelledby="modal-modal-title"
-                            aria-describedby="modal-modal-description"
-                          >
-                            <EditPostModal post={modalPost} setRefresh={setrefreshPost} refresh={refreshPost} close={setOpenEditPostModal}/>
-                          </Modal>
-                            </Grid>
-                          </Box>
-                          <Box
-                            sx={{
-                              mt: 2,
-                              fontFamily: "sans-serif",
-                              display: "flex",
-                            }}
-                          >
-                            <p>
-                              <b>150</b> Like{" "}
-                            </p>
-                            <img
-                              src="/null-profile.jpg"
-                              style={{
-                                marginLeft: "5px",
-                                width: "18px",
-                                height: "fit-content",
-                                borderRadius: "50%",
-                                border: "1px solid #000",
-                              }}
-                              alt=""
-                            />
-                            <h6 style={{ margin: "4px" }}>Minhaj and Others</h6>
-                          </Box>
-                          <Box
-                      sx={{ mt: 2, mb: 4 , fontFamily: "sans-serif", display: "flex" }}
-                    >
-                      <Card sx={{ mt: -2, boxShadow: "none", width: "100%" }}>
-                        <CardHeader
-                          sx={{ p: 0, width: "fit-content" }}
-                          title="Comments"
-                          action={
-                            <IconButton
-                              onClick={() => openComment ? setOpenComment(null) : setOpenComment(post._id)}
-                              aria-label="expand"
-                              size="small"
-                            >
-                              {openComment == post._id ? (
-                                <KeyboardArrowUpIcon />
-                              ) : (
-                                <KeyboardArrowDownIcon />
-                              )}
-                            </IconButton>
-                          }
-                        ></CardHeader>
-                        <div
-                          style={{ backgroundColor: "rgba(211,211,211,0.4)" }}
-                        >
-                          <Collapse in={openComment == post._id} timeout="auto" unmountOnExit>
-                          <Box sx={{ display: "flex" , backgroundColor:'rgb(211 211 211)' , p: 1.5 , borderRadius:'10px' , m: 1 }}>
-                                <img
-                                  src="/null-profile.jpg"
-                                  style={{
-                                    marginLeft: "5px",
-                                    width: "33px",
-                                    height: "fit-content",
-                                    borderRadius: "50%",
-                                    border: "1px solid #000",
-                                  }}
-                                  alt=""
-                                />
-                                <Input type='text' placeholder="Add a comment..." sx={{ width:'100%' , pl: 2 }}/>
-                              </Box>
-                            <CardContent className="comments" sx={{ backgroundColor:'rgb(211 211 211)' , p: 1.5 , borderRadius:'10px' , m: 1 , height:'300px', overflowY:'auto' }}>
-                              <Box sx={{ mt: 2 , display: "flex" }}>
-                                <img
-                                  src="/null-profile.jpg"
-                                  style={{
-                                    marginLeft: "5px",
-                                    width: "25px",
-                                    height: "fit-content",
-                                    borderRadius: "50%",
-                                    border: "1px solid #000",
-                                  }}
-                                  alt=""
-                                />
-                                <h5
-                                  style={{
-                                    marginTop: "5px",
-                                    marginLeft: "5px",
-                                    fontWeight: "bold",
-                                  }}
-                                >
-                                  Akif Rahman
-                                </h5>
-                                <h6 style={{
-                                    marginTop: "6px",
-                                    marginLeft: "13px",
-                                    fontWeight: "bold",
-                                  }}>1.09 PM</h6>
-                                <IconButton size="small" sx={{ color:'#f53b3b' , ml:'auto' }}>
-                                  <BsFillTrashFill style={{ width:'14px' }}/>
-                                </IconButton>
-                              </Box>
-                              <Box
-                                sx={{
-                                  ml: 5,
-                                  mb: 2,
-                                  mr: 2
-                                }}
-                              >
-                                <h6>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaassssssssssssssssssaaasssssssssssssssssa</h6>
-                              </Box>
-                              <hr />
-                              <Box sx={{ mt: 2 , display: "flex" }}>
-                                <img
-                                  src="/null-profile.jpg"
-                                  style={{
-                                    marginLeft: "5px",
-                                    width: "25px",
-                                    height: "fit-content",
-                                    borderRadius: "50%",
-                                    border: "1px solid #000",
-                                  }}
-                                  alt=""
-                                />
-                                <h5
-                                  style={{
-                                    marginTop: "5px",
-                                    marginLeft: "5px",
-                                    fontWeight: "bold",
-                                  }}
-                                >
-                                  Akif Rahman
-                                </h5>
-                                <h6 style={{
-                                    marginTop: "6px",
-                                    marginLeft: "13px",
-                                    fontWeight: "bold",
-                                  }}>1.09 PM</h6>
-                                <IconButton size="small" sx={{ color:'#f53b3b' , ml:'auto' }}>
-                                  <BsFillTrashFill style={{ width:'14px' }}/>
-                                </IconButton>
-                              </Box>
-                              <Box
-                                sx={{
-                                  ml: 5,
-                                  mb: 2,
-                                  mr: 2
-                                }}
-                              >
-                                <h6>aaaaaaaaaaa</h6>
-                              </Box>
-                              <hr />
-                              <Box sx={{ mt: 2 , display: "flex" }}>
-                                <img
-                                  src="/null-profile.jpg"
-                                  style={{
-                                    marginLeft: "5px",
-                                    width: "25px",
-                                    height: "fit-content",
-                                    borderRadius: "50%",
-                                    border: "1px solid #000",
-                                  }}
-                                  alt=""
-                                />
-                                <h5
-                                  style={{
-                                    marginTop: "5px",
-                                    marginLeft: "5px",
-                                    fontWeight: "bold",
-                                  }}
-                                >
-                                  Akif Rahman
-                                </h5>
-                                <h6 style={{
-                                    marginTop: "6px",
-                                    marginLeft: "13px",
-                                    fontWeight: "bold",
-                                  }}>1.09 PM</h6>
-                                <IconButton size="small" sx={{ color:'#f53b3b' , ml:'auto' }}>
-                                  <BsFillTrashFill style={{ width:'14px' }}/>
-                                </IconButton>
-                              </Box>
-                              <Box
-                                sx={{
-                                  ml: 5,
-                                  mb: 2,
-                                  mr: 2
-                                }}
-                              >
-                                <h6>aaaaaaaaaaa</h6>
-                              </Box>
-                              <hr />
-                              <Box sx={{ mt: 2 , display: "flex" }}>
-                                <img
-                                  src="/null-profile.jpg"
-                                  style={{
-                                    marginLeft: "5px",
-                                    width: "25px",
-                                    height: "fit-content",
-                                    borderRadius: "50%",
-                                    border: "1px solid #000",
-                                  }}
-                                  alt=""
-                                />
-                                <h5
-                                  style={{
-                                    marginTop: "5px",
-                                    marginLeft: "5px",
-                                    fontWeight: "bold",
-                                  }}
-                                >
-                                  Akif Rahman
-                                </h5>
-                                <h6 style={{
-                                    marginTop: "6px",
-                                    marginLeft: "13px",
-                                    fontWeight: "bold",
-                                  }}>1.09 PM</h6>
-                                <IconButton size="small" sx={{ color:'#f53b3b' , ml:'auto' }}>
-                                  <BsFillTrashFill style={{ width:'14px' }}/>
-                                </IconButton>
-                              </Box>
-                              <Box
-                                sx={{
-                                  ml: 5,
-                                  mb: 2,
-                                  mr: 2
-                                }}
-                              >
-                                <h6>aaaaaaaaaaa</h6>
-                              </Box>
-                              <hr />
-                              <Box sx={{ mt: 2 , display: "flex" }}>
-                                <img
-                                  src="/null-profile.jpg"
-                                  style={{
-                                    marginLeft: "5px",
-                                    width: "25px",
-                                    height: "fit-content",
-                                    borderRadius: "50%",
-                                    border: "1px solid #000",
-                                  }}
-                                  alt=""
-                                />
-                                <h5
-                                  style={{
-                                    marginTop: "5px",
-                                    marginLeft: "5px",
-                                    fontWeight: "bold",
-                                  }}
-                                >
-                                  Akif Rahman
-                                </h5>
-                                <h6 style={{
-                                    marginTop: "6px",
-                                    marginLeft: "13px",
-                                    fontWeight: "bold",
-                                  }}>1.09 PM</h6>
-                                <IconButton size="small" sx={{ color:'#f53b3b' , ml:'auto' }}>
-                                  <BsFillTrashFill style={{ width:'14px' }}/>
-                                </IconButton>
-                              </Box>
-                              <Box
-                                sx={{
-                                  ml: 5,
-                                  mb: 2,
-                                  mr: 2
-                                }}
-                              >
-                                <h6>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaahkuhnkjnnnnnnnnnnnnnnnnnnnnsikjdncskdlznxcmszxkaaaa</h6>
-                              </Box>
-                              <hr />
-                              <Box sx={{ mt: 2 , display: "flex" }}>
-                                <img
-                                  src="/null-profile.jpg"
-                                  style={{
-                                    marginLeft: "5px",
-                                    width: "25px",
-                                    height: "fit-content",
-                                    borderRadius: "50%",
-                                    border: "1px solid #000",
-                                  }}
-                                  alt=""
-                                />
-                                <h5
-                                  style={{
-                                    marginTop: "5px",
-                                    marginLeft: "5px",
-                                    fontWeight: "bold",
-                                  }}
-                                >
-                                  Akif Rahman
-                                </h5>
-                                <h6 style={{
-                                    marginTop: "6px",
-                                    marginLeft: "13px",
-                                    fontWeight: "bold",
-                                  }}>1.09 PM</h6>
-                                <IconButton size="small" sx={{ color:'#f53b3b' , ml:'auto' }}>
-                                  <BsFillTrashFill style={{ width:'14px' }}/>
-                                </IconButton>
-                              </Box>
-                              <Box
-                                sx={{
-                                  ml: 5,
-                                  mb: 2,
-                                  mr: 2
-                                }}
-                              >
-                                <h6>aaaaaaaaaaa</h6>
-                              </Box>
-                            </CardContent>
-                          </Collapse>
-                        </div>
-                      </Card>
-                    </Box>
-                        </Grid>
-                      );
-                    })}
+                    {posts.map((post)=>(
+                    <>
+                      <Posts post = {post} setrefreshComment={setrefreshPost} refreshComment={refreshPost} user={vendor} vendor={true}/>
+                    </>
+                    ))}
                   </Box>
                 </Grid>
               </Grid>

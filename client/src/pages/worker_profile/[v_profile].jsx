@@ -6,6 +6,9 @@ import {
   Button,
   Grid,
   IconButton,
+  Modal,
+  TextareaAutosize,
+  TextField,
 } from "@mui/material";
 import Notifications from "@/components/Notifications/Notification";
 import Messages from "@/components/Messages/Message";
@@ -19,12 +22,19 @@ import MailIcon from '@mui/icons-material/Mail';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
 import axios from "axios";
+import PhotoSizeSelectActualIcon from "@mui/icons-material/PhotoSizeSelectActual";
+import SmartDisplayIcon from "@mui/icons-material/SmartDisplay";
 import Link from "next/link";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { BsFillChatDotsFill, IconName } from "react-icons/bs";
+import WorkerProfile from "@/components/ProfileView/WorkerProfile";
+import UserProfile from "@/components/ProfileView/UserProfile";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Workers({workers}) {
+export default function Worker_Profile({worker, current}) {
   const router = useRouter();
+
   const { user } = useSelector((state)=>state.userInfo)
   const dispatch = useDispatch()
 
@@ -90,43 +100,11 @@ export default function Workers({workers}) {
                     }}
                   >
                     <EngineeringIcon/>
-                    <h3 style={{ marginLeft:'7px' , fontSize:'22px' }}>Workers</h3>
+                    <h3 style={{ marginLeft:'7px' , fontSize:'22px' }}>Worker Profile</h3>
                   </Grid>
                 </Grid>
-                <Grid sx={{ pt: 7 }}>
-                  <Box
-                    sx={{
-                      p: 2,
-                      width: "-webkit-fill-available",
-                      border: "1px solid lightgray",
-                      borderRadius: "15px",
-                      minHeight: "34.4vw",
-                      backgroundColor: "#fff",
-                      m: 2,
-                    }}
-                  >
-                    <Grid>
-                      {
-                        workers.map((worker)=>(
-                          <Link href={`/worker_profile/${worker._id}`}>
-                          <Grid key={worker._id} xs={12} sx={{ m: 1 , p: 1 , display:'flex' , border:'1px solid lightgray' , borderRadius:'10px' , backgroundColor:'lightgray' , boxShadow: 3 , ":active":{ backgroundColor:'#c1bdbd' } , color:'#000' }}>
-                            <TurnedInNotIcon sx={{ m: 1 }}/>
-                            <img
-                              src={worker.image ? worker.image : "/null-profile.jpg"}
-                              style={{ m: 0, width: "40px"  , height:"40px" , borderRadius: "50%" }}
-                              alt=""
-                            />
-                            <Box sx={{ ml:0.5 , mt:0.5 }}>
-                              <h4>{worker.firstName + ' ' + worker.lastName}</h4>
-                              <h5 style={{ fontFamily: 'monospace' }}>{worker.locality + ', ' + worker.city}</h5>
-                            </Box>
-                          </Grid>
-                          </Link>
-                        ))
-                      }
-                    </Grid>
-                  </Box>
-                </Grid>
+                {current == 'vendor' ? <WorkerProfile worker={worker} user={user}/> : <UserProfile worker={worker}/> }
+                
               </Grid>
             </Grid>
             <Grid md={3}>
@@ -142,17 +120,30 @@ export default function Workers({workers}) {
 
 export const getServerSideProps = async (context) => {
   try {
-    const jobs = context.params.jobs
-    const res =await axios.get(`http://localhost:4000/get_workers?jobName=${jobs}`)
-    return{
-      props : { 
-        workers:res.data
+    const workerId = context.params.v_profile
+    const res =await axios.get(`http://localhost:4000/get_worker?vendorId=${workerId}`)
+    if (res.data.vendor) {
+      console.log("aaaaaaaaa");
+      return{
+        props : { 
+          worker:res.data.vendor,
+          current:'vendor'
+        }
+      }
+    } else{
+      console.log("llllllllll");
+      return{
+        props : { 
+          worker:res.data.user,
+          current:'user'
+        }
       }
     }
+    
   } catch (error) {
     return{
       props : { 
-          workers:null
+          worker:null
        }
   }
   }

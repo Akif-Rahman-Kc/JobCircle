@@ -142,7 +142,7 @@ export default function VendorNavbar() {
         <p>Home</p>
       </MenuItem>
       </Link>
-      <Link href='/vendor/workers'>
+      <Link href='/vendor/works'>
       <MenuItem sx={{ color:'#111' }}>
         <IconButton size="large" aria-label="show the workers" color="inherit">
           <EngineeringIcon />
@@ -264,7 +264,7 @@ export default function VendorNavbar() {
               </Box>
             </IconButton>
             </Link>
-            <Link href='/vendor/workers'>
+            <Link href='/vendor/works'>
             <IconButton
               sx={{ borderRadius: "10px", width: "105px" , color:'#111' }}
               size="large"
