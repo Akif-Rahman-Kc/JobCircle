@@ -114,7 +114,7 @@ const Posts = (props) => {
                       </Link>
                       }
                       { props.user._id == props.post.vendorId._id ? '' :
-                      <Box
+                      <Grid
                         sx={{
                           ml: "auto",
                           p: 0.1,
@@ -125,11 +125,12 @@ const Posts = (props) => {
                           mb: 2,
                           borderRadius: "25px",
                           color: "#fff",
-                          display:'flex'
+                          display:'flex',
+                          boxShadow: 3 
                         }}
                       >
-                        <PersonAddIcon sx={{ width:'15px' , mr: 0.3 }}/><h6 style={{ marginTop:'5px' }}>Connect</h6>
-                      </Box>
+                        <PersonAddIcon sx={{ width:'15px' , mr: 0.3 }}/><h6 style={{ marginTop:'6px' }}>Connect</h6>
+                      </Grid>
                        }
                     </Box>
                     <p
@@ -328,6 +329,7 @@ const Posts = (props) => {
                             >
                               {props.post.Comments.map((Comment)=>(
                                 <>
+                                <hr />
                                     <Box sx={{ mt: 2, display: "flex" }}>
                                     {props.user._id == Comment.writerId ?  <img
                                         src={Comment.writerImage ? Comment.writerImage : "/null-profile.jpg"}
@@ -406,7 +408,6 @@ const Posts = (props) => {
                                         {Comment.comment}
                                       </h6>
                                     </Box>
-                                    <hr />
                                 </>
                               ))}
                             </CardContent>
