@@ -71,7 +71,7 @@ export async function vendorAuth(req, res) {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export async function editProfile(req, res) {
+export async function vendorEditProfile(req, res) {
     try {
         const vendor =  await Vendor.findById(req.query.vendorId)
         if (vendor.email === req.body.email) {
@@ -121,7 +121,7 @@ export async function editProfile(req, res) {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export async function removeProfilePhoto(req, res) {
+export async function VendorRemoveProfilePhoto(req, res) {
     try {
         await Vendor.updateOne({_id:req.query.vendorId},{
             image:'',

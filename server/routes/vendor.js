@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { addComment, addPost, deleteComment, deletePost, editPost, getAllPosts, getPosts, likedPost } from '../controller/postController.js';
 const router = Router();
-import { vendorSignUp, vendorSignIn, vendorAuth, editProfile, removeProfilePhoto } from '../controller/vendorController.js';
+import { vendorSignUp, vendorSignIn, vendorAuth, vendorEditProfile, VendorRemoveProfilePhoto } from '../controller/vendorController.js';
 import { getJobs } from '../controller/workController.js';
 import { vendorJWT } from '../middleware/auth.js';
 
@@ -21,8 +21,8 @@ router.patch('/add_comment', addComment)
 router.patch('/delete_comment', deleteComment)
 
 // Profile
-router.put('/edit_profile', editProfile)
-router.patch('/remove_profile_photo', removeProfilePhoto)
+router.put('/edit_profile', vendorEditProfile)
+router.patch('/remove_profile_photo', VendorRemoveProfilePhoto)
 
 // Works
 router.get('/get_jobs', getJobs)

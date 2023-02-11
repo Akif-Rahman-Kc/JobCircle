@@ -1,26 +1,47 @@
 import { Inter } from "@next/font/google";
+import Navbar from "@/components/Navabar/Navbar";
 import { Box } from "@mui/system";
-import { Avatar, Button, Grid, Input, TextField } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Container,
+  Grid,
+  IconButton,
+  Input,
+  TextField,
+} from "@mui/material";
 import Notifications from "@/components/Notifications/Notification";
 import Messages from "@/components/Messages/Message";
+import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlined";
+import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
+import Collapse from "@mui/material/Collapse";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
-import VendorNavbar from "@/components/Navabar/VendorNavbar";
-import AddAPhotoOutlinedIcon from "@mui/icons-material/AddAPhotoOutlined";
 import { useDispatch, useSelector } from "react-redux";
-import { vendorDetails } from "@/redux/vendor";
+import { userDetails } from "@/redux/user";
+import HomeIcon from "@mui/icons-material/Home";
+import { isAuthApi, ProfileEdit, ProfilePhotoRemove } from "@/Apis/userApi";
+import Posts from "@/components/Posts/Post";
+import { GetAllPosts } from "@/Apis/vendorApi";
+import { AccountCircle } from "@mui/icons-material";
+import AddAPhotoOutlinedIcon from "@mui/icons-material/AddAPhotoOutlined";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
-import { storage } from "@/firebase/config";
-import { ToastContainer, toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { ProfilePhotoRemove, VendorisAuthApi, VendorProfileEdit, VendorProfilePhotoRemove } from "@/Apis/vendorApi";
+import { storage } from "@/firebase/config";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function VendorEditProfile() {
-    const router = useRouter()
-    const { vendor } = useSelector((state)=>state.vendorInfo)
+const EditProfile = () => {
+    const router = useRouter();
+    const { user } = useSelector((state)=>state.userInfo)
     const dispatch = useDispatch()
     const [ firstName, setFirstName ] = useState(false)
     const [ firstNameError, setFirstNameError ] = useState('')
@@ -29,27 +50,27 @@ export default function VendorEditProfile() {
     const [ box, setBox ] = useState(false)
     const [ totalRequired, setTotalRequired ] = useState('')
     const [ imageShow, setImageShow  ] = useState('')
-  
+
     useEffect(()=>{
-      async function invoke(){
-        let token = localStorage.getItem("vendortoken");
-        if (token) {
-          axios
-          const response = await VendorisAuthApi(token)
-          if (response) {
-            if (response.auth) {
-              dispatch(vendorDetails(response.vendorObj));
+        async function invoke(){
+        let token=  localStorage.getItem('usertoken')
+            if (token) {
+                const response = await isAuthApi(token)
+                if (response) {
+                if (response.auth) {
+                    dispatch(userDetails(response.userObj))
+                } else {
+                    router.push('/auth/signin')
+                }
+                }
+                
             } else {
-              router.push("/vendor/signin");
+                router.push('/auth/signin')
             }
-          }
-        } else {
-          router.push("/vendor/signin");
         }
-      }
-      invoke();
+        invoke()
     },[])
-    
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         let data = new FormData(event.currentTarget);
@@ -64,7 +85,7 @@ export default function VendorEditProfile() {
           experiance: data.get('experiance'),
           image: data.get('image'),
         }
-        if(data.firstName && data.email && data.locality && data.city && data.state && data.job){
+        if(data.firstName && data.email && data.locality && data.city && data.state){
             let regName =/^[a-zA-Z]+$/;
             let regEmail =/^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/
             setBox(false)
@@ -75,11 +96,12 @@ export default function VendorEditProfile() {
               if(regEmail.test(data.email)){
                 setEmail(false)
                 setEmailError('')
+                console.log(data);
                 if (data.image.name) {
                   const dir = Date.now();
                   const rand = Math.random();
                   const image = data.image
-                  const imageRef = ref(storage, `profile/${dir}${rand}/${image?.name}`);
+                  const imageRef = ref(storage, `userprofile/${dir}${rand}/${image?.name}`);
                   const toBase64 = (image) =>
                   new Promise((resolve, reject) => {
                       const reader = new FileReader();
@@ -98,35 +120,35 @@ export default function VendorEditProfile() {
                   data.image = ''
                 } 
 
-                const response = await VendorProfileEdit(vendor._id , data)
+                const response = await ProfileEdit(user._id , data)
                 if (response) {
-                  if (response.status == "success") {
-                    toast.success("Successfully Edited", {
-                      position: "top-right",
-                      autoClose: 3000,
-                      hideProgressBar: false,
-                      closeOnClick: true,
-                      pauseOnHover: true,
-                      draggable: true,
-                      progress: undefined,
-                      theme: "colored",
-                    });
-                    setTimeout(() => {
-                      router.back()
-                    }, 3000);
-                  } else {
-                    toast.error("This email is already registered!", {
-                      position: "top-right",
-                      autoClose: 3000,
-                      hideProgressBar: false,
-                      closeOnClick: true,
-                      pauseOnHover: true,
-                      draggable: true,
-                      progress: undefined,
-                      theme: "colored",
-                    });
-                  }
-                }        
+                    if (response.status == "success") {
+                      toast.success("Successfully Edited", {
+                        position: "top-right",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "colored",
+                      });
+                      setTimeout(() => {
+                        router.back()
+                      }, 3000);
+                    } else {
+                      toast.error("This email is already registered!", {
+                        position: "top-right",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "colored",
+                      });
+                    }
+                  }             
                 
               }else{
                 setEmail(true)
@@ -143,17 +165,17 @@ export default function VendorEditProfile() {
       };
 
       const removeProfilePhoto = async ()=>{
-        const res = await VendorProfilePhotoRemove(vendor._id)
+        const res = await ProfilePhotoRemove(user._id)
           if (res) {
             router.back()
           }
       }
 
-  return (
-    <>
-      <div>
-        <VendorNavbar />
-        <ToastContainer />
+    return ( 
+        <>
+        <div>
+        <Navbar />
+        <ToastContainer/>
         <Box>
           <Grid
             container
@@ -191,20 +213,22 @@ export default function VendorEditProfile() {
                       backgroundColor: "#fff",
                     }}
                   >
-                    <h3 style={{ marginLeft:'7px' , fontSize:'22px' }}>Edit Profile</h3>
+                    <AccountCircle/>
+                    <h3 style={{ marginLeft:'7px' , fontSize:'22px' }}>Profile</h3>
                   </Grid>
                 </Grid>
                 <Grid sx={{ pt: 7 }}>
                   <Box
                     sx={{
-                      p: 3,
+                      p: 2,
                       width: "-webkit-fill-available",
                       boxShadow: 3,
                       border: "1px solid lightgray",
                       borderRadius: "15px",
-                      minHeight: "34.4vw",
+                      minHeight: "32vw",
                       backgroundColor: "#fff",
                       m: 2,
+                      display:'flex'
                     }}
                   >
                     <Box 
@@ -226,7 +250,7 @@ export default function VendorEditProfile() {
                         }}
                       >
                         <img
-                          src={ imageShow ? URL.createObjectURL(imageShow) : vendor.image ? vendor.image : "/null-profile.jpg" }
+                          src={ imageShow ? URL.createObjectURL(imageShow) : user.image ? user.image : "/null-profile.jpg" }
                           style={{
                             width: "98px",
                             height: "98px",
@@ -267,7 +291,7 @@ export default function VendorEditProfile() {
                               autoFocus
                               error={firstName}
                               helperText={firstNameError}
-                              defaultValue={vendor.firstName}
+                              defaultValue={user.firstName}
                             />
                           </Grid>
                           <Grid item xs={6}>
@@ -278,7 +302,7 @@ export default function VendorEditProfile() {
                               name="lastName"
                               size="small"
                               autoComplete="family-name"
-                              defaultValue={vendor.lastName}
+                              defaultValue={user.lastName}
                             />
                           </Grid>
                           <Grid item xs={6}>
@@ -289,7 +313,7 @@ export default function VendorEditProfile() {
                               size="small"
                               name="locality"
                               autoComplete="family-name"
-                              defaultValue={vendor.locality}
+                              defaultValue={user.locality}
                             />
                           </Grid>
                           <Grid item xs={6}>
@@ -300,7 +324,7 @@ export default function VendorEditProfile() {
                               label="City"
                               name="city"
                               autoComplete="family-name"
-                              defaultValue={vendor.city}
+                              defaultValue={user.city}
                             />
                           </Grid>
                           <Grid item xs={12}>
@@ -311,7 +335,7 @@ export default function VendorEditProfile() {
                               size="small"
                               name="state"
                               autoComplete="family-name"
-                              defaultValue={vendor.state}
+                              defaultValue={user.state}
                             />
                           </Grid>
                           <Grid item xs={12}>
@@ -324,29 +348,7 @@ export default function VendorEditProfile() {
                               autoComplete="family-name"
                               error={email}
                               helperText={emailError}
-                              defaultValue={vendor.email}
-                            />
-                          </Grid>
-                          <Grid item xs={6}>
-                            <TextField
-                              fullWidth
-                              id="job"
-                              label="Job"
-                              size="small"
-                              name="job"
-                              autoComplete="family-name"
-                              defaultValue={vendor.job}
-                            />
-                          </Grid>
-                          <Grid item xs={6}>
-                            <TextField
-                              fullWidth
-                              id="experiance"
-                              label="Experiance per Year"
-                              name="experiance"
-                              size="small"
-                              autoComplete="family-name"
-                              defaultValue={vendor.experiance}
+                              defaultValue={user.email}
                             />
                           </Grid>
                         </Grid>
@@ -378,6 +380,8 @@ export default function VendorEditProfile() {
           </Grid>
         </Box>
       </div>
-    </>
-  );
+        </>
+     );
 }
+ 
+export default EditProfile;

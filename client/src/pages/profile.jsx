@@ -31,6 +31,7 @@ import { GetAllPosts } from "@/Apis/vendorApi";
 import { AccountCircle } from "@mui/icons-material";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
+import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -122,9 +123,7 @@ const Profile = () => {
                     <Grid xs={5} sx={{ paddingTop:'10%' , paddingBottom:'10%' }} p={1} backgroundColor={'lightgray'} borderRadius={3}>
                         <Box textAlign={"center"}>
                         <img
-                            src={
-                               "/null-profile.jpg"
-                            }
+                            src={user.image ? user.image : "/null-profile.jpg"}
                             style={{
                               width: "67px",
                               height: "fit-content",
@@ -155,6 +154,7 @@ const Profile = () => {
                             <h6>Phone No : <a href={`tel:${988898989}`}><span style={{ color:'blue' , lineBreak:'auto' }}>588888888888</span></a></h6>
                             <h6>Email :<a href={8989898998989}><span style={{ color:'blue' , lineBreak:'auto' }}>akif90@gmail.com</span></a></h6>
                         </Box> : ''}
+                        <Link href='/edit_profile'>
                         <Grid
                         xs={12}
                         sx={{
@@ -165,11 +165,13 @@ const Profile = () => {
                           border: "1px solid lightgray",
                           borderRadius: "5px",
                           ":active": { backgroundColor: "#f1f0f0" },
-                          backgroundColor:'#fff'
+                          backgroundColor:'#fff',
+                          color:'#000'
                         }}
                       >
                         <h6>EDIT PROFILE</h6>
                       </Grid>
+                      </Link>
                       <Button sx={{ boxShadow: 3 , backgroundColor:'#1976d2' , color:'#fff' , fontSize:'9.5px' , py: 0.5 , px: 4 , pt: 0.6 , mt: 4 , ":hover":{ backgroundColor:'#1976d2' } , width: '-webkit-fill-available' , borderRadius:'15px' }}><PersonAddIcon sx={{ width:'18px' , mt: -0.3 , mr: 0.2 }}/>Connections</Button>
                       <Button sx={{ boxShadow: 3 , backgroundColor:'#1976d2' , color:'#fff' , fontSize:'9.5px' , py: 0.5 , px: 4 , pt: 0.6 , mt: 1 , ":hover":{ backgroundColor:'#1976d2' } , width: '-webkit-fill-available' , borderRadius:'15px' }}><BookmarksIcon sx={{ width:'16px' , mt: -0.3 , mr: 0.2 }}/>Saved</Button>
                     </Grid>

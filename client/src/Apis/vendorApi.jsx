@@ -68,7 +68,7 @@ export const VendorProfileEdit = async (vendorId , formData) => {
 
 /////////////////////////////////////////////////////////////////////////////
 
-export const ProfilePhotoRemove = async (vendorId) => {
+export const VendorProfilePhotoRemove = async (vendorId) => {
     try {
         const {data} = await Api.patch(`/vendor/remove_profile_photo?vendorId=${vendorId}`)
         return data;

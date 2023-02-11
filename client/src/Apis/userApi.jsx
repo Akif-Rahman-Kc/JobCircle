@@ -54,3 +54,36 @@ export const GetWorkers = async (jobId) => {
         console.log(error);
     }
 }
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const ProfileEdit = async (userId , formData) => {
+    try {
+        const {data} = await Api.put(`/edit_profile?userId=${userId}`, formData)
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const ProfilePhotoRemove = async (userId) => {
+    try {
+        const {data} = await Api.patch(`/remove_profile_photo?userId=${userId}`)
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const SavedVendors = async (vendorId, userId) => {
+    try {
+        const {data} = await Api.patch(`/saved_vendors?vendorId=${vendorId}&&userId=${userId}`)
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}

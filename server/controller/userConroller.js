@@ -60,3 +60,79 @@ export async function userAuth(req, res) {
         console.log(error)
     }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function editProfile(req, res) {
+    try {
+        const user =  await User.findById(req.query.userId)
+        if (user.email === req.body.email) {
+            if (req.body.image) {
+                await User.updateOne({_id:req.query.userId},{
+                    image:req.body.image,
+                })
+            }
+            await User.updateOne({_id:req.query.userId},{
+                firstName:req.body.firstName,
+                lastName:req.body.lastName,
+                locality:req.body.locality,
+                city:req.body.city,
+                state:req.body.state,
+            })
+            res.json({status:"success"})
+        } else {
+            const existUser =  await User.findOne({ email: req.body.email })
+            if (existUser) {
+                res.json({status:"failed"})
+            } else {
+                if (req.body.image) {
+                    await User.updateOne({_id:req.query.userId},{
+                        image:req.body.image,
+                    })
+                }
+                await User.updateOne({_id:req.query.userId},{
+                    firstName:req.body.firstName,
+                    lastName:req.body.lastName,
+                    locality:req.body.locality,
+                    city:req.body.city,
+                    state:req.body.state,
+                    email:req.body.email
+                })
+                res.json({status:"success"})
+            }
+        }
+        
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function removeProfilePhoto(req, res) {
+    try {
+        await User.updateOne({_id:req.query.userId},{
+            image:'',
+        })
+        res.json({status:"success"})
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function savedVendors(req, res) {
+    try {
+        await User.updateOne({_id:req.query.userId},{
+            $push:{
+                Saved:{
+                    vendorId:req.query.vendorId
+                }
+            }
+        })
+        res.json({status:"success"})
+    } catch (error) {
+        console.log(error)
+    }
+}

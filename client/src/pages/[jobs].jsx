@@ -14,10 +14,11 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { userDetails } from "@/redux/user";
 import EngineeringIcon from "@mui/icons-material/Engineering";
-import { GetJobs, GetWorkers, isAuthApi } from "@/Apis/userApi";
+import { GetJobs, GetWorkers, isAuthApi, SavedVendors } from "@/Apis/userApi";
 import MailIcon from '@mui/icons-material/Mail';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
+import TurnedInIcon from '@mui/icons-material/TurnedIn';
 import axios from "axios";
 import Link from "next/link";
 
@@ -36,6 +37,11 @@ export default function Workers({workers}) {
         if (response) {
           if (response.auth) {
             dispatch(userDetails(response.userObj))
+            workers.map((obj)=>{
+              if (response.userObj.Saved.includes(obj._id)) {
+                obj.saved = true
+              }
+            })
           } else {
             router.push('/auth/signin')
           }
@@ -47,6 +53,13 @@ export default function Workers({workers}) {
     }
     invoke()
   },[])
+
+  const savedVendor = async (vendorId )=>{
+    const res = await SavedVendors(vendorId, user._id)
+    if (res) {
+      
+    }
+  }
 
   return (
     <>
@@ -108,20 +121,30 @@ export default function Workers({workers}) {
                     <Grid>
                       {
                         workers.map((worker)=>(
-                          <Link href={`/worker_profile/${worker._id}`}>
-                          <Grid key={worker._id} xs={12} sx={{ m: 1 , p: 1 , display:'flex' , border:'1px solid lightgray' , borderRadius:'10px' , backgroundColor:'lightgray' , boxShadow: 3 , ":active":{ backgroundColor:'#c1bdbd' } , color:'#000' }}>
-                            <TurnedInNotIcon sx={{ m: 1 }}/>
-                            <img
-                              src={worker.image ? worker.image : "/null-profile.jpg"}
-                              style={{ m: 0, width: "40px"  , height:"40px" , borderRadius: "50%" }}
-                              alt=""
-                            />
-                            <Box sx={{ ml:0.5 , mt:0.5 }}>
-                              <h4>{worker.firstName + ' ' + worker.lastName}</h4>
-                              <h5 style={{ fontFamily: 'monospace' }}>{worker.locality + ', ' + worker.city}</h5>
-                            </Box>
+                          <>
+                          <Grid sx={{ display:'flex' }}>
+                            <IconButton onClick={()=>savedVendor(worker._id)} sx={{ p:0 , my: 2 }}>
+                              { worker.saved ? <TurnedInIcon/> : <TurnedInNotIcon sx={{ m: 1 }}/> }
+                            </IconButton>
+                            <Grid sx={{ width:'-webkit-fill-available' }}>
+                            <Link href={`/worker_profile/${worker._id}`} >
+                              <Grid key={worker._id} xs={12} sx={{ m: 1 , p: 1 , display:'flex' , border:'1px solid lightgray' , borderRadius:'10px' , backgroundColor:'lightgray' , boxShadow: 3 , ":active":{ backgroundColor:'#c1bdbd' } , color:'#000' }}>
+                                
+                                <img
+                                  src={worker.image ? worker.image : "/null-profile.jpg"}
+                                  style={{ m: 0, width: "40px"  , height:"40px" , borderRadius: "50%" }}
+                                  alt=""
+                                />
+                                <Box sx={{ ml:0.5 , mt:0.5 }}>
+                                  <h4>{worker.firstName + ' ' + worker.lastName}</h4>
+                                  <h5 style={{ fontFamily: 'monospace' }}>{worker.locality + ', ' + worker.city}</h5>
+                                </Box>
+                              </Grid>
+                              </Link>
+                            </Grid>
                           </Grid>
-                          </Link>
+                          
+                          </>
                         ))
                       }
                     </Grid>
