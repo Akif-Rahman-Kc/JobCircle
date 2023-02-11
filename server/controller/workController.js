@@ -7,7 +7,6 @@ import Vendor from '../model/vendorSchema.js'
 export async function getJobs(req, res) {
     try {
         const jobs = await Job.find()
-        console.log(jobs);
 
         res.json(jobs)
     } catch (error) {

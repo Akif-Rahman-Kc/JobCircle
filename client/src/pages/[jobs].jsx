@@ -28,6 +28,7 @@ export default function Workers({workers}) {
   const router = useRouter();
   const { user } = useSelector((state)=>state.userInfo)
   const dispatch = useDispatch()
+  const [ refresh, setRefresh ] = useState(false)
 
   useEffect(()=>{
     async function invoke(){
@@ -38,8 +39,14 @@ export default function Workers({workers}) {
           if (response.auth) {
             dispatch(userDetails(response.userObj))
             workers.map((obj)=>{
-              if (response.userObj.Saved.includes(obj._id)) {
-                obj.saved = true
+              if (response.userObj.Saved.length == 0) {
+                obj.saved = false
+              }else{
+                response.userObj.Saved.map((doc)=>{
+                  if (doc.vendorId == obj._id) {
+                    obj.saved = true
+                  }
+                })
               }
             })
           } else {
@@ -52,12 +59,12 @@ export default function Workers({workers}) {
       }
     }
     invoke()
-  },[])
+  },[refresh])
 
   const savedVendor = async (vendorId )=>{
     const res = await SavedVendors(vendorId, user._id)
     if (res) {
-      
+      setRefresh(!refresh)
     }
   }
 
@@ -124,7 +131,7 @@ export default function Workers({workers}) {
                           <>
                           <Grid sx={{ display:'flex' }}>
                             <IconButton onClick={()=>savedVendor(worker._id)} sx={{ p:0 , my: 2 }}>
-                              { worker.saved ? <TurnedInIcon/> : <TurnedInNotIcon sx={{ m: 1 }}/> }
+                              { worker.saved ? <TurnedInIcon sx={{ m: 1 }}/> : <TurnedInNotIcon sx={{ m: 1 }}/> }
                             </IconButton>
                             <Grid sx={{ width:'-webkit-fill-available' }}>
                             <Link href={`/worker_profile/${worker._id}`} >

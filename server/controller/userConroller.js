@@ -124,13 +124,25 @@ export async function removeProfilePhoto(req, res) {
 
 export async function savedVendors(req, res) {
     try {
-        await User.updateOne({_id:req.query.userId},{
-            $push:{
-                Saved:{
-                    vendorId:req.query.vendorId
+        const user = await User.findById(req.query.userId)
+        const exist = user.Saved.find((obj)=> obj.vendorId.toString() === req.query.vendorId.toString())
+        if (exist) {
+            await User.updateOne({_id:req.query.userId},{
+                $pull:{
+                    Saved:{
+                        vendorId:req.query.vendorId
+                    }
                 }
-            }
-        })
+            })
+        } else {
+            await User.updateOne({_id:req.query.userId},{
+                $push:{
+                    Saved:{
+                        vendorId:req.query.vendorId
+                    }
+                }
+            })
+        }
         res.json({status:"success"})
     } catch (error) {
         console.log(error)
