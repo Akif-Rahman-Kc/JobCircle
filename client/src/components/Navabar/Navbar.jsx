@@ -78,7 +78,7 @@ export default function Navbar() {
     }).then((result) => {
       if (result.isConfirmed) {
         localStorage.removeItem("usertoken");
-        router.push("/signin");
+        router.push("/auth/signin");
       }
     });
   };

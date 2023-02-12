@@ -142,3 +142,25 @@ export const DeletePost = async (postId) => {
         console.log(error);
     }
 }
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const isVendorBlocked = async (vendorId) => {
+    try {
+        const {data} = await Api.patch(`/vendor/blocked?vendorId=${vendorId}`)
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const isVendorActivated = async (vendorId) => {
+    try {
+        const {data} = await Api.patch(`/vendor/actived?vendorId=${vendorId}`)
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}

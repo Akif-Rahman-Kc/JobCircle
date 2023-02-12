@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { AdminGetVendors, AdminisAuthApi } from "@/Apis/adminApi";
 import { useRouter } from "next/router";
+import { isVendorActivated, isVendorBlocked } from "@/Apis/vendorApi";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -50,6 +51,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 const Users = () => {
   const router = useRouter()
   const [ vendors , setVendors ] = useState([])
+  const [ refresh , setRefresh ] = useState(false)
 
   useEffect(()=>{
     async function invoke(){
@@ -66,14 +68,29 @@ const Users = () => {
       } else {
         router.push('/admin/signin')
       }
+    }
+    invoke();
+  },[])
 
+  useEffect(()=>{
+    async function invoke(){
       const res = await AdminGetVendors()
       if (res) {
         setVendors(res)
       }
     }
     invoke();
-  },[])
+  },[refresh])
+
+  const blocked = async (vendorId) =>{
+    const res = await isVendorBlocked(vendorId)
+    setRefresh(!refresh)
+  }
+
+  const actived = async (vendorId) =>{
+    const res = await isVendorActivated(vendorId)
+    setRefresh(!refresh)
+  }
 
     return ( 
         <>
@@ -112,12 +129,14 @@ const Users = () => {
                                         <StyledTableCell align="center">{vendor.locality + ', ' + vendor.city}</StyledTableCell>
                                         <StyledTableCell align="center">{vendor.phoneNo}</StyledTableCell>
                                         <StyledTableCell align="center">
-                                          <Button sx={{ backgroundColor:'#e70202' , borderRadius:'29px' , boxShadow:3 , color:'#fff' , fontSize:'10px' , fontWeight:'800' , ":hover":{ backgroundColor:'red' } }}>
-                                            block
-                                          </Button>
-                                          <Button sx={{ ml: 1 , backgroundColor:'#039303' , borderRadius:'29px' , boxShadow:3 , color:'#fff' , fontSize:'10px' , fontWeight:'800' , ":hover":{ backgroundColor:'#03a903' } }}>
-                                            active
-                                          </Button>
+                                          {vendor.isBlock ? 
+                                            <Button onClick={()=> actived(vendor._id)} sx={{ ml: 1 , backgroundColor:'#039303' , borderRadius:'29px' , boxShadow:3 , color:'#fff' , fontSize:'10px' , fontWeight:'800' , ":hover":{ backgroundColor:'#03a903' } }}>
+                                              active
+                                            </Button> :
+                                            <Button onClick={()=> blocked(vendor._id)} sx={{ backgroundColor:'#e70202' , borderRadius:'29px' , boxShadow:3 , color:'#fff' , fontSize:'10px' , fontWeight:'800' , ":hover":{ backgroundColor:'red' } }}>
+                                              block
+                                            </Button>
+                                          } 
                                         </StyledTableCell>
                                         </StyledTableRow>
                                     ))}

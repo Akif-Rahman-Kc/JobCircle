@@ -28,6 +28,7 @@ import { isAuthApi } from "@/Apis/userApi";
 import Posts from "@/components/Posts/Post";
 import { GetAllPosts } from "@/Apis/vendorApi";
 import BottomNavbar from "@/components/Navabar/BottomNavbar";
+import Swal from "sweetalert2";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -45,7 +46,20 @@ export default function Home() {
         const response = await isAuthApi(token)
         if (response) {
           if (response.auth) {
-            dispatch(userDetails(response.userObj))
+            if (response.userObj.isBlock) {
+              Swal.fire(
+                'Blocked!',
+                'Your account is blocked! Not allowed this application...',
+                'error'
+              ).then(()=>{
+                localStorage.removeItem("usertoken");
+                router.push("/auth/signin");
+              })
+
+              //////////////////////////////Blocking Vendor Side And User All Side/////////////////////////////////
+            }else{
+              dispatch(userDetails(response.userObj))
+            }
           } else {
             router.push('/auth/signin')
           }

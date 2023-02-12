@@ -134,3 +134,28 @@ export async function VendorRemoveProfilePhoto(req, res) {
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function vendorBlock(req, res) {
+    try {
+        await Vendor.updateOne({_id:req.query.vendorId},{
+            isBlock:true
+        })
+        res.json({status:"success"})
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function vendorActive(req, res) {
+    try {
+        await Vendor.updateOne({_id:req.query.vendorId},{
+            isBlock:false
+        })
+        res.json({status:"success"})
+    } catch (error) {
+        console.log(error)
+    }
+}

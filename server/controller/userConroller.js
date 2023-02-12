@@ -157,7 +157,6 @@ export async function savedVendors(req, res) {
 
 export async function userBlock(req, res) {
     try {
-        console.log(req.query.userId,"aaaaaaa");
         await User.updateOne({_id:req.query.userId},{
             isBlock:true
         })
@@ -171,7 +170,6 @@ export async function userBlock(req, res) {
 
 export async function userActive(req, res) {
     try {
-        console.log(req.query.userId,"bbbbbbbb");
         await User.updateOne({_id:req.query.userId},{
             isBlock:false
         })
