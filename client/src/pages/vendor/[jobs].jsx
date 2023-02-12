@@ -23,6 +23,7 @@ import Link from "next/link";
 import { VendorisAuthApi } from "@/Apis/vendorApi";
 import { vendorDetails } from "@/redux/vendor";
 import VendorNavbar from "@/components/Navabar/VendorNavbar";
+import VendorBottomNavbar from "@/components/Navabar/VendorBottomNavbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -138,6 +139,7 @@ export default function VendorWorkers({workers}) {
             </Grid>
           </Grid>
         </Box>
+        <VendorBottomNavbar/>
       </div>
     </>
   );

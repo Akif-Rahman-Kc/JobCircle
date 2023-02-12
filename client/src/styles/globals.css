@@ -132,6 +132,11 @@ h1 ,h2, h3, h4, h5, h6, a, p {
   cursor: pointer;
 }
 
+.css-1t0s1k3-MuiPaper-root-MuiAppBar-root{
+  background-color: #fff;
+  color: #000;
+}
+
 /* ///////////////////////////////////////// */
 .sidebar {
   position: absolute;

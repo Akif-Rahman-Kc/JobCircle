@@ -29,6 +29,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { BsFillChatDotsFill, IconName } from "react-icons/bs";
 import WorkerProfile from "@/components/ProfileView/WorkerProfile";
 import UserProfile from "@/components/ProfileView/UserProfile";
+import BottomNavbar from "@/components/Navabar/BottomNavbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -112,6 +113,7 @@ export default function Worker_Profile({worker, current}) {
             </Grid>
           </Grid>
         </Box>
+        <BottomNavbar/>
       </div>
     </>
   );

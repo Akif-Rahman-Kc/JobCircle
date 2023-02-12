@@ -15,6 +15,7 @@ import { storage } from "@/firebase/config";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ProfilePhotoRemove, VendorisAuthApi, VendorProfileEdit, VendorProfilePhotoRemove } from "@/Apis/vendorApi";
+import VendorBottomNavbar from "@/components/Navabar/VendorBottomNavbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -377,6 +378,7 @@ export default function VendorEditProfile() {
             </Grid>
           </Grid>
         </Box>
+        <VendorBottomNavbar/>
       </div>
     </>
   );

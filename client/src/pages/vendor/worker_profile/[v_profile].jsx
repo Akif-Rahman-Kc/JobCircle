@@ -31,6 +31,7 @@ import WorkerProfile from "@/components/ProfileView/WorkerProfile";
 import { VendorisAuthApi } from "@/Apis/vendorApi";
 import { vendorDetails } from "@/redux/vendor";
 import UserProfile from "@/components/ProfileView/UserProfile";
+import VendorBottomNavbar from "@/components/Navabar/VendorBottomNavbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -125,6 +126,7 @@ export default function VendorWorker_Profile({worker, current}) {
             </Grid>
           </Grid>
         </Box>
+        <VendorBottomNavbar/>
       </div>
     </>
   );

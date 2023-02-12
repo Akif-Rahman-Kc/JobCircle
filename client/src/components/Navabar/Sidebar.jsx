@@ -13,7 +13,7 @@ const Sidebar = () => {
 
     return ( 
         <>
-            <Grid md={3.3} sx={{ p: 2 , m: 0.5 , minHeight:'96.6vh' , boxShadow: 3 , borderRadius:'15px' , backgroundColor:'#1976d2' , color:'#fff' , display: { xs: 'none', sm: 'none', md: 'block' } }}>
+            <Grid md={3.3} sx={{ width:'35%' , p: 2 , m: 0.5 , minHeight:'96.6vh' , boxShadow: 3 , borderRadius:'15px' , backgroundColor:'#1976d2' , color:'#fff' , display: { xs: 'none', sm: 'none', md: 'block' } }}>
                 <Box sx={{ mt: 3 , textAlign:'center' }}>
                     <img style={{ width:'37%' }} src="/logo.png" alt="Loading..."/>
                 </Box>

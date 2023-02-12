@@ -15,6 +15,7 @@ import { userDetails } from "@/redux/user";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import { GetJobs, isAuthApi } from "@/Apis/userApi";
 import Link from "next/link";
+import BottomNavbar from "@/components/Navabar/BottomNavbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -123,6 +124,7 @@ export default function Works() {
             </Grid>
           </Grid>
         </Box>
+        <BottomNavbar/>
       </div>
     </>
   );

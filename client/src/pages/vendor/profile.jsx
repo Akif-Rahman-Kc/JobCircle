@@ -40,6 +40,7 @@ import ReportIcon from '@mui/icons-material/Report';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditPostModal from "@/components/Modal/EditPostModal";
 import Posts from "@/components/Posts/Post";
+import VendorBottomNavbar from "@/components/Navabar/VendorBottomNavbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -459,6 +460,7 @@ export default function VendorProfile() {
             </Grid>
           </Grid>
         </Box>
+        <VendorBottomNavbar/>
       </div>
     </>
   );

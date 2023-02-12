@@ -16,6 +16,7 @@ import EngineeringIcon from "@mui/icons-material/Engineering";
 import { VendorisAuthApi } from "@/Apis/vendorApi";
 import { GetJobs } from "@/Apis/userApi";
 import Link from "next/link";
+import VendorBottomNavbar from "@/components/Navabar/VendorBottomNavbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -123,6 +124,7 @@ export default function VendorWorks() {
             </Grid>
           </Grid>
         </Box>
+        <VendorBottomNavbar />
       </div>
     </>
   );

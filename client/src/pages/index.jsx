@@ -27,6 +27,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import { isAuthApi } from "@/Apis/userApi";
 import Posts from "@/components/Posts/Post";
 import { GetAllPosts } from "@/Apis/vendorApi";
+import BottomNavbar from "@/components/Navabar/BottomNavbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -153,6 +154,7 @@ export default function Home() {
             </Grid>
           </Grid>
         </Box>
+        <BottomNavbar/>
       </div>
     </>
   );

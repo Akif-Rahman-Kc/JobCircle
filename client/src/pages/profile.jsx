@@ -32,6 +32,7 @@ import { AccountCircle } from "@mui/icons-material";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import Link from "next/link";
+import BottomNavbar from "@/components/Navabar/BottomNavbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -326,6 +327,7 @@ const Profile = () => {
             </Grid>
           </Grid>
         </Box>
+        <BottomNavbar/>
       </div>
         </>
      );

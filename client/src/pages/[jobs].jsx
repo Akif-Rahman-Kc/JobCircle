@@ -21,6 +21,7 @@ import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
 import TurnedInIcon from '@mui/icons-material/TurnedIn';
 import axios from "axios";
 import Link from "next/link";
+import BottomNavbar from "@/components/Navabar/BottomNavbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -42,11 +43,16 @@ export default function Workers({workers}) {
               if (response.userObj.Saved.length == 0) {
                 obj.saved = false
               }else{
+                let flag
                 response.userObj.Saved.map((doc)=>{
                   if (doc.vendorId == obj._id) {
+                    flag = 1
                     obj.saved = true
                   }
                 })
+                if (flag != 1) {
+                  obj.saved = false
+                }
               }
             })
           } else {
@@ -164,6 +170,7 @@ export default function Workers({workers}) {
             </Grid>
           </Grid>
         </Box>
+        <BottomNavbar/>
       </div>
     </>
   );

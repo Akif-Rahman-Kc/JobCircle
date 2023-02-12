@@ -33,9 +33,9 @@ const [ open, setOpen ] = useState(false)
     return ( 
         <>
         <Box>
-        <Grid container sx={{ mt: 1 , justifyContent:'center' , display:'flex' }}>
+        <Grid sx={{ mt: 1 , justifyContent:'center' , display:'flex' }}>
             { open && <Sidebar/>}
-            <Grid xs={12} sm={12} md={8.4} sx={{ m: 0.5 , display:'block' }}>
+            <Grid xs={12} sm={12} md={8.4} sx={{ m: 0.5 , display:'block' , width:'-webkit-fill-available'}}>
                 <Box>
                     <AdminNavbar setOPEN = {setOpen} Open = {open}/>
                 </Box>

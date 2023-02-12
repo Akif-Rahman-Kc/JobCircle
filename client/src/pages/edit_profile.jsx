@@ -36,6 +36,7 @@ import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { storage } from "@/firebase/config";
+import BottomNavbar from "@/components/Navabar/BottomNavbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -379,6 +380,7 @@ const EditProfile = () => {
             </Grid>
           </Grid>
         </Box>
+        <BottomNavbar/>
       </div>
         </>
      );

@@ -65,22 +65,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function Navbar() {
   const router = useRouter();
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
   const { user } = useSelector((state) => state.userInfo);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
-  };
-
-  const handleMenuClose = () => {
-    handleMobileMenuClose();
-  };
-
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
-  };
 
   const logout = () => {
     Swal.fire({
@@ -96,110 +82,6 @@ export default function Navbar() {
       }
     });
   };
-
-  const menuId = "primary-search-account-menu";
-  const renderMenu = (
-    <Menu
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      onClose={handleMenuClose}
-    >
-    </Menu>
-  );
-
-  const mobileMenuId = "primary-search-account-menu-mobile";
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <Link href='/'>
-      <MenuItem sx={{ color:'#111' }}>
-        <IconButton size="large" aria-label="show the vendors" color="inherit">
-          <HomeIcon />
-        </IconButton>
-        <p>Home</p>
-      </MenuItem>
-      </Link>
-      <Link href='/works'>
-      <MenuItem sx={{ color:'#111' }}>
-        <IconButton size="large" aria-label="show the workers" color="inherit">
-          <EngineeringIcon />
-        </IconButton>
-        <p>Workers</p>
-      </MenuItem>
-      </Link>
-      <Link href='/messages'>
-      <MenuItem sx={{ color:'#111' }}>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <MailIcon />
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      </Link>
-      <Link href='/notifications'>
-      <MenuItem sx={{ color:'#111' }}>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <NotificationsIcon />
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-      </Link>
-      <Link href='/profile'>
-      <MenuItem sx={{ color:'#111' }}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <img
-            src={user.image ? user.image : "/null-profile.jpg"}
-            style={{ m: 0, width: "24px", borderRadius: "50%" }}
-            alt=""
-          />
-        </IconButton>
-        <p>{user.firstName + ' ' + user.lastName}</p>
-      </MenuItem>
-      </Link>
-      <MenuItem onClick={logout}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <LogoutOutlinedIcon />
-        </IconButton>
-        <p>Logout</p>
-      </MenuItem>
-    </Menu>
-  );
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -307,7 +189,6 @@ export default function Navbar() {
               size="large"
               edge="end"
               aria-label="account of current user"
-              aria-controls={menuId}
               aria-haspopup="true"
               color="inherit"
             >
@@ -325,29 +206,15 @@ export default function Navbar() {
               </Box>
             </IconButton>
             </Link>
-            <IconButton
+          </Box>
+          <IconButton
               onClick={logout}
               sx={{ ":hover": { backgroundColor: "#fff" }, ml: 3 }}
             >
               <LogoutOutlinedIcon />
             </IconButton>
-          </Box>
-          <Box sx={{ display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-          </Box>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
-      {renderMenu}
     </Box>
   );
 }

@@ -23,6 +23,7 @@ import SendIcon from '@mui/icons-material/Send';
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
 import Swal from "sweetalert2";
 import Posts from "@/components/Posts/Post";
+import VendorBottomNavbar from "@/components/Navabar/VendorBottomNavbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -151,6 +152,7 @@ export default function VendorHome() {
             </Grid>
           </Grid>
         </Box>
+        <VendorBottomNavbar/>
       </div>
     </>
   );
