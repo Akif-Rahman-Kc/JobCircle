@@ -87,3 +87,25 @@ export const SavedVendors = async (vendorId, userId) => {
         console.log(error);
     }
 }
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const isBlocked = async (userId) => {
+    try {
+        const {data} = await Api.patch(`/blocked?userId=${userId}`)
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const isActivated = async (userId) => {
+    try {
+        const {data} = await Api.patch(`/actived?userId=${userId}`)
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}

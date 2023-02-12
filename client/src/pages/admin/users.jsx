@@ -11,8 +11,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { AdminGetUsers, AdminisAuthApi } from "@/Apis/adminApi";
+import { isActivated, isBlocked } from "@/Apis/userApi";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -33,21 +33,10 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
       border: 0,
     },
   }));
-  
-  function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-  }
-  
-  const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-  ];
 
 const Users = () => {
   const [ users , setUsers ] = useState([])
+  const [ refresh , setRefresh ] = useState(false)
 
   useEffect(()=>{
     async function invoke(){
@@ -72,6 +61,26 @@ const Users = () => {
     }
     invoke();
   },[])
+
+  useEffect(()=>{
+    async function invoke(){
+      const res = await AdminGetUsers()
+      if (res) {
+        setUsers(res)
+      }
+    }
+    invoke();
+  },[refresh])
+
+  const blocked = async (userId) =>{
+    const res = await isBlocked(userId)
+    setRefresh(!refresh)
+  }
+
+  const actived = async (userId) =>{
+    const res = await isActivated(userId)
+    setRefresh(!refresh)
+  }
 
     return ( 
         <>
@@ -110,12 +119,14 @@ const Users = () => {
                                         <StyledTableCell align="center">{user.locality + ', ' + user.city}</StyledTableCell>
                                         <StyledTableCell align="center">{user.phoneNo}</StyledTableCell>
                                         <StyledTableCell align="center">
-                                          <Button sx={{ backgroundColor:'#e70202' , borderRadius:'29px' , boxShadow:3 , color:'#fff' , fontSize:'10px' , fontWeight:'800' , ":hover":{ backgroundColor:'red' } }}>
-                                            block
-                                          </Button>
-                                          <Button sx={{ ml: 1 , backgroundColor:'#039303' , borderRadius:'29px' , boxShadow:3 , color:'#fff' , fontSize:'10px' , fontWeight:'800' , ":hover":{ backgroundColor:'#03a903' } }}>
-                                            active
-                                          </Button>
+                                          {user.isBlock ? 
+                                            <Button onClick={()=> actived(user._id)} sx={{ ml: 1 , backgroundColor:'#039303' , borderRadius:'29px' , boxShadow:3 , color:'#fff' , fontSize:'10px' , fontWeight:'800' , ":hover":{ backgroundColor:'#03a903' } }}>
+                                              active
+                                            </Button> :
+                                            <Button onClick={()=> blocked(user._id)} sx={{ backgroundColor:'#e70202' , borderRadius:'29px' , boxShadow:3 , color:'#fff' , fontSize:'10px' , fontWeight:'800' , ":hover":{ backgroundColor:'red' } }}>
+                                              block
+                                            </Button>
+                                          } 
                                         </StyledTableCell>
                                         </StyledTableRow>
                                     ))}

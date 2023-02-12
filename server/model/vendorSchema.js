@@ -55,7 +55,11 @@ const vendorSchema = new Schema({
     },
     image:{
         type: String,
-    }
+    },
+    isBlock:{
+        type: Boolean,
+        default:false
+    },
     
 },{ timestamps: true })
 

@@ -46,6 +46,10 @@ const userSchema = new Schema({
     image:{
         type: String,
     },
+    isBlock:{
+        type: Boolean,
+        default:false
+    },
     Saved:[{
         vendorId:{
             type:Schema.Types.ObjectId,
