@@ -53,9 +53,13 @@ export async function userSignIn(req, res) {
 export async function userAuth(req, res) {
     try {
         let userDetails = await User.findById(req.userId)
-        userDetails.auth = true
+        if (userDetails) {
+            res.json({userObj:userDetails,auth:true})
+        } else {
+            res.json({auth:false})
+        }
 
-        res.json({userObj:userDetails,auth:true})
+        
     } catch (error) {
         console.log(error)
     }

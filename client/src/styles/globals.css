@@ -137,6 +137,10 @@ h1 ,h2, h3, h4, h5, h6, a, p {
   color: #000;
 }
 
+.css-1p5o3fl-MuiModal-root-MuiDrawer-root .MuiDrawer-paper{
+  background-color: #e9e5df;
+}
+
 /* ///////////////////////////////////////// */
 .sidebar {
   position: absolute;

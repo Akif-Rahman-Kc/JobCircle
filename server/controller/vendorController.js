@@ -61,9 +61,11 @@ export async function vendorSignIn(req, res) {
 export async function vendorAuth(req, res) {
     try {
         let vendorDetails = await Vendor.findById(req.vendorId)
-        vendorDetails.auth = true
-
-        res.json({vendorObj:vendorDetails,auth:true})
+        if (vendorDetails) {
+            res.json({vendorObj:vendorDetails,auth:true})
+        } else {
+            res.json({auth:false})
+        }
     } catch (error) {
         console.log(error)
     }
