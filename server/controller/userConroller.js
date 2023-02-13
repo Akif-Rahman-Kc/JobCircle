@@ -1,5 +1,6 @@
 import { hash, compare } from 'bcrypt'
 import User from '../model/userSchema.js'
+import Vendor from '../model/vendorSchema.js'
 import jwt from 'jsonwebtoken'
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -129,12 +130,16 @@ export async function removeProfilePhoto(req, res) {
 export async function savedVendors(req, res) {
     try {
         const user = await User.findById(req.query.userId)
+        const vendor = await Vendor.findById(req.query.vendorId)
         const exist = user.Saved.find((obj)=> obj.vendorId.toString() === req.query.vendorId.toString())
         if (exist) {
             await User.updateOne({_id:req.query.userId},{
                 $pull:{
                     Saved:{
-                        vendorId:req.query.vendorId
+                        vendorId:req.query.vendorId,
+                        vendorName:vendor.firstName + ' ' + vendor.lastName,
+                        vendorImage:vendor.image,
+                        vendorPlace:vendor.locality + ' ' + vendor.city
                     }
                 }
             })
@@ -142,7 +147,10 @@ export async function savedVendors(req, res) {
             await User.updateOne({_id:req.query.userId},{
                 $push:{
                     Saved:{
-                        vendorId:req.query.vendorId
+                        vendorId:req.query.vendorId,
+                        vendorName:vendor.firstName + ' ' + vendor.lastName,
+                        vendorImage:vendor.image,
+                        vendorPlace:vendor.locality + ' ' + vendor.city
                     }
                 }
             })

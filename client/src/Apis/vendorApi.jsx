@@ -145,6 +145,17 @@ export const DeletePost = async (postId) => {
 
 /////////////////////////////////////////////////////////////////////////////
 
+export const ReportPost = async (message,postId,reporterId) => {
+    try {
+        const {data} = await Api.patch('/vendor/report_post',{message,postId,reporterId})
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
 export const isVendorBlocked = async (vendorId) => {
     try {
         const {data} = await Api.patch(`/vendor/blocked?vendorId=${vendorId}`)

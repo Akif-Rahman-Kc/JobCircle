@@ -52,8 +52,19 @@ const userSchema = new Schema({
     },
     Saved:[{
         vendorId:{
-            type:Schema.Types.ObjectId,
-            ref:'vendors',
+            type:String,
+            required: true,
+        },
+        vendorName:{
+            type:String,
+            required: true,
+        },
+        vendorImage:{
+            type:String,
+            required: true,
+        },
+        vendorPlace:{
+            type:String,
             required: true,
         },
     }]

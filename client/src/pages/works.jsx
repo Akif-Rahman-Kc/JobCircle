@@ -16,6 +16,7 @@ import EngineeringIcon from "@mui/icons-material/Engineering";
 import { GetJobs, isAuthApi } from "@/Apis/userApi";
 import Link from "next/link";
 import BottomNavbar from "@/components/Navabar/BottomNavbar";
+import Swal from "sweetalert2";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,7 +33,18 @@ export default function Works() {
         const response = await isAuthApi(token)
         if (response) {
           if (response.auth) {
-            dispatch(userDetails(response.userObj))
+            if (response.userObj.isBlock) {
+              Swal.fire(
+                'Blocked!',
+                'Your account is blocked! Not allowed this application...',
+                'error'
+              ).then(()=>{
+                localStorage.removeItem("usertoken");
+                router.push("/auth/signin");
+              })
+            }else{
+              dispatch(userDetails(response.userObj))
+            }
           } else {
             router.push('/auth/signin')
           }

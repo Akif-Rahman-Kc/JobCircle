@@ -32,6 +32,7 @@ import { VendorisAuthApi } from "@/Apis/vendorApi";
 import { vendorDetails } from "@/redux/vendor";
 import UserProfile from "@/components/ProfileView/UserProfile";
 import VendorBottomNavbar from "@/components/Navabar/VendorBottomNavbar";
+import Swal from "sweetalert2";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -61,7 +62,18 @@ export default function VendorWorker_Profile({worker, current}) {
           const response = await VendorisAuthApi(token)
           if (response) {
             if (response.auth) {
-              dispatch(vendorDetails(response.vendorObj))
+              if (response.vendorObj.isBlock) {
+                Swal.fire(
+                  'Blocked!',
+                  'Your account is blocked! Not allowed this application...',
+                  'error'
+                ).then(()=>{
+                  localStorage.removeItem('vendortoken')
+                  router.push('/vendor/signin')
+                })
+              }else{
+                dispatch(vendorDetails(response.vendorObj))
+              }
             } else {
               router.push('/vendor/signin')
             }

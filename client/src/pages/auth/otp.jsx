@@ -11,12 +11,16 @@ import { AuthContext } from "@/store/Context";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { SignupApi } from "@/Apis/userApi";
+import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
+import { auth } from '@/firebase/config';
 
 const theme = createTheme();
 
 export default function OTP() {
   const router = useRouter();
-
+  const [minutes, setMinutes] = useState(1);
+  const [seconds, setSeconds] = useState(30);
+  const [captchaDiv, setCaptchaDiv] = useState(false);
   const { userDetails, setUserDetails } = useContext(AuthContext);
   const { otpConf, setOtpConf } = useContext(AuthContext);
 
@@ -25,6 +29,37 @@ export default function OTP() {
       router.push("/auth/signup");
     }
   }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (seconds > 0) {
+        setSeconds(seconds - 1);
+      }
+  
+      if (seconds === 0) {
+        if (minutes === 0) {
+          clearInterval(interval);
+        } else {
+          setSeconds(59);
+          setMinutes(minutes - 1);
+        }
+      }
+    }, 1000);
+  
+    return () => {
+      clearInterval(interval);
+    };
+  }, [seconds]);
+
+  const resendOTP = () => {
+    setCaptchaDiv(false)
+    setUpRecaptcha("+91" + userDetails.phoneNo).then((res)=>{
+      setOtpConf(res)
+      setMinutes(1);
+      setSeconds(30);
+      setCaptchaDiv(true)
+    })
+  };
 
   const [otp, setOtp] = useState(false);
   const [otpErr, setOtpErr] = useState("");
@@ -82,6 +117,16 @@ export default function OTP() {
     }
   };
 
+  function setUpRecaptcha(number) {
+    const recaptchaVerifier = new RecaptchaVerifier(
+      "recaptcha-container",
+      {},
+      auth
+    );
+    recaptchaVerifier.render();
+    return signInWithPhoneNumber(auth, number, recaptchaVerifier)
+  }
+
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -98,6 +143,7 @@ export default function OTP() {
           >
             <Grid
               sx={{
+                boxShadow: 3,
                 backgroundColor: "#fff",
                 border: "1px solid lightgray",
                 p: 2,
@@ -138,10 +184,35 @@ export default function OTP() {
                         error={otp}
                         helperText={otpErr}
                         autoComplete="family-name"
-                        autoFocus
                       />
                     </Grid>
                   </Grid>
+                  {captchaDiv? '' : 
+                  <Grid item xs={12} sx={{ px:2 }}>
+                      <div style={{ marginTop:'5px' }} id='recaptcha-container'/>
+                  </Grid>
+                  }
+                  <div className="countdown-text" style={{ display:'flex' , marginTop:'10px' , justifyContent:'center' }}>
+                    {seconds > 0 || minutes > 0 ? (
+                      <p style={{ fontSize:'12px' }}>
+                        Time Remaining: {minutes < 10 ? `0${minutes}` : minutes}:
+                        {seconds < 10 ? `0${seconds}` : seconds}
+                      </p>
+                    ) : ''}
+
+                    <a
+                      disabled={seconds > 0 || minutes > 0}
+                      style={{
+                        color: seconds > 0 || minutes > 0 ? "#fff" : "rgb(215 62 28)",
+                        backgroundColor:'#fff',
+                        border:0,
+                        fontWeight:'bold'
+                      }}
+                      onClick={resendOTP}
+                    >
+                      Resend OTP
+                    </a>
+                  </div>
                   <Button
                     type="submit"
                     fullWidth
@@ -151,7 +222,6 @@ export default function OTP() {
                       mb: 2,
                       p: 1.4,
                       fontWeight: "900",
-                      marginTop: "90px",
                     }}
                   >
                     Sign Up

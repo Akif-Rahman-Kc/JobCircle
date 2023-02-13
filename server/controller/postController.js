@@ -42,6 +42,34 @@ export async function deletePost(req, res) {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+export async function reportPost(req, res) {
+    try {
+        const vendor = await Vendor.findById(req.body.reporterId)
+        const user = await User.findById(req.body.reporterId)
+        const post = await Post.findById(req.body.postId)
+        const exist = post.Reports.find((obj)=> obj.reporterId.toString() === req.body.reporterId.toString())
+        if (exist) {
+            res.json({status:'failed'})
+        } else {
+            await Post.updateOne({_id:req.body.postId},{
+                $push:{
+                    Reports:{
+                        reporterId:req.body.reporterId,
+                        reportMessage:req.body.message,
+                        reporterName:vendor ? vendor.firstName + ' ' + vendor.lastName : user.firstName + ' ' + user.lastName,
+                        reporterImage:vendor ? vendor.image : user.image, 
+                    }
+                }
+            })
+            res.json({status:'success'})
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 export async function getPosts(req, res) {
     try {
         const posts = await Post.find({vendorId:req.query.vendorId}).populate('vendorId').sort({createdAt:-1})
@@ -76,8 +104,8 @@ export async function likedPost(req, res) {
                 $pull:{
                     Likes:{
                         likerId:req.query.likerId,
-                        likerName:vendor ? vendor.firstName + ' ' + vendor.lastName : user.firstName + ' ' + user.lastName,
-                        likerImage:vendor ? vendor.image : user.image,
+                        // likerName:vendor ? vendor.firstName + ' ' + vendor.lastName : user.firstName + ' ' + user.lastName,
+                        // likerImage:vendor ? vendor.image : user.image,
                     }
                 }
             })

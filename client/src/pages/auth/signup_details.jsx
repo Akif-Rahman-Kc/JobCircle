@@ -136,7 +136,7 @@ export default function SignUpDetails() {
             alignItems: 'center',
           }}
         >
-            <Grid sx={{ backgroundColor:'#fff' , border:'1px solid lightgray', p:2 , borderRadius:'10px'}} container spacing={2}>
+            <Grid sx={{ boxShadow: 3, backgroundColor:'#fff' , border:'1px solid lightgray', p:2 , borderRadius:'10px'}} container spacing={2}>
                 <Grid item sx={{display: { xs: 'none', sm: 'flex' }}} xs={12} sm={6}>
                     <Box>
                         <img style={{margin:'40px',width:'300px',height:'55vh'}} src="/logo.png" alt="Loading..."/>

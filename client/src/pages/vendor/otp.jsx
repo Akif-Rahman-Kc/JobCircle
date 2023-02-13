@@ -11,12 +11,16 @@ import { AuthContext } from "@/store/Context";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { VendorSignupApi } from "@/Apis/vendorApi";
+import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
+import { auth } from '@/firebase/config';
 
 const theme = createTheme();
 
 export default function VendorOTP() {
   const router = useRouter();
-
+  const [minutes, setMinutes] = useState(1);
+  const [seconds, setSeconds] = useState(30);
+  const [captchaDiv, setCaptchaDiv] = useState(false);
   const { vendorDetails, setVendorDetails } = useContext(AuthContext)
   const { vendorOtpConf, setVendorOtpConf } = useContext(AuthContext)
 
@@ -25,6 +29,37 @@ export default function VendorOTP() {
         router.push('/vendor/signup')
     }
   },[])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (seconds > 0) {
+        setSeconds(seconds - 1);
+      }
+  
+      if (seconds === 0) {
+        if (minutes === 0) {
+          clearInterval(interval);
+        } else {
+          setSeconds(59);
+          setMinutes(minutes - 1);
+        }
+      }
+    }, 1000);
+  
+    return () => {
+      clearInterval(interval);
+    };
+  }, [seconds]);
+
+  const resendOTP = () => {
+    setCaptchaDiv(false)
+    setUpRecaptcha("+91" + vendorDetails.phoneNo).then((res)=>{
+      setVendorOtpConf(res)
+      setMinutes(1);
+      setSeconds(30);
+      setCaptchaDiv(true)
+    })
+  };
 
   const [otp, setOtp] = useState(false);
   const [otpErr, setOtpErr] = useState("");
@@ -81,6 +116,16 @@ export default function VendorOTP() {
       }
     }
   };
+
+  function setUpRecaptcha(number) {
+    const recaptchaVerifier = new RecaptchaVerifier(
+      "recaptcha-vendor-container",
+      {},
+      auth
+    );
+    recaptchaVerifier.render();
+    return signInWithPhoneNumber(auth, number, recaptchaVerifier)
+  }
 
   return (
     <>
@@ -142,6 +187,32 @@ export default function VendorOTP() {
                       />
                     </Grid>
                   </Grid>
+                  {captchaDiv? '' : 
+                  <Grid item xs={12} sx={{ px:2 }}>
+                      <div style={{ marginTop:'5px' }} id='recaptcha-vendor-container'/>
+                  </Grid>
+                  }
+                  <div className="countdown-text" style={{ display:'flex' , marginTop:'10px' , justifyContent:'center' }}>
+                    {seconds > 0 || minutes > 0 ? (
+                      <p style={{ fontSize:'12px' }}>
+                        Time Remaining: {minutes < 10 ? `0${minutes}` : minutes}:
+                        {seconds < 10 ? `0${seconds}` : seconds}
+                      </p>
+                    ) : ''}
+
+                    <a
+                      disabled={seconds > 0 || minutes > 0}
+                      style={{
+                        color: seconds > 0 || minutes > 0 ? "#fff" : "rgb(215 62 28)",
+                        backgroundColor:'#fff',
+                        border:0,
+                        fontWeight:'bold'
+                      }}
+                      onClick={resendOTP}
+                    >
+                      Resend OTP
+                    </a>
+                  </div>
                   <Button
                     type="submit"
                     fullWidth

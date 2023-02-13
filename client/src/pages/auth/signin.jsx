@@ -81,6 +81,7 @@ export default function SignIn() {
         >
           <Grid
             sx={{
+              boxShadow: 3,
               backgroundColor: "#fff",
               border: "1px solid lightgray",
               p: 2,

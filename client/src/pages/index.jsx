@@ -55,8 +55,6 @@ export default function Home() {
                 localStorage.removeItem("usertoken");
                 router.push("/auth/signin");
               })
-
-              //////////////////////////////Blocking Vendor Side And User All Side/////////////////////////////////
             }else{
               dispatch(userDetails(response.userObj))
             }

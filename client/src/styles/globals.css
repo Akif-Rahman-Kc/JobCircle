@@ -141,29 +141,24 @@ h1 ,h2, h3, h4, h5, h6, a, p {
   background-color: #e9e5df;
 }
 
-/* ///////////////////////////////////////// */
-.sidebar {
-  position: absolute;
-  width: 33.3333%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  overflow: hidden;
-  border-right: 1px solid rgba(0, 0, 0, 0.25);
-}
-
 .map {
   position: absolute;
-  left: 33.3333%;
-  width: 66.6666%;
+  width: 16.6666%;
+  height: 100px;
   top: 0;
   bottom: 0;
+  cursor: default;
+  border:1px solid gray
 }
 
-.heading {
-  background: #fff;
-  border-bottom: 1px solid #eee;
-  height: 60px;
-  line-height: 60px;
-  padding: 0 10px;
+a.mapboxgl-ctrl-logo.mapboxgl-compact .mapboxgl-ctrl-bottom-right {
+  display: none !important;
+}
+
+.mapboxgl-ctrl-attrib.mapboxgl-compact{
+  display: none !important;
+}
+
+a.mapboxgl-ctrl-logo{
+  display: none !important;
 }

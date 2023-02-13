@@ -37,6 +37,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { storage } from "@/firebase/config";
 import BottomNavbar from "@/components/Navabar/BottomNavbar";
+import Swal from "sweetalert2";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -59,7 +60,18 @@ const EditProfile = () => {
                 const response = await isAuthApi(token)
                 if (response) {
                 if (response.auth) {
+                  if (response.userObj.isBlock) {
+                    Swal.fire(
+                      'Blocked!',
+                      'Your account is blocked! Not allowed this application...',
+                      'error'
+                    ).then(()=>{
+                      localStorage.removeItem("usertoken");
+                      router.push("/auth/signin");
+                    })
+                  }else{
                     dispatch(userDetails(response.userObj))
+                  }
                 } else {
                     router.push('/auth/signin')
                 }

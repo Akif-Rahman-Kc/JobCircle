@@ -16,6 +16,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ProfilePhotoRemove, VendorisAuthApi, VendorProfileEdit, VendorProfilePhotoRemove } from "@/Apis/vendorApi";
 import VendorBottomNavbar from "@/components/Navabar/VendorBottomNavbar";
+import Swal from "sweetalert2";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -39,7 +40,18 @@ export default function VendorEditProfile() {
           const response = await VendorisAuthApi(token)
           if (response) {
             if (response.auth) {
-              dispatch(vendorDetails(response.vendorObj));
+              if (response.vendorObj.isBlock) {
+                Swal.fire(
+                  'Blocked!',
+                  'Your account is blocked! Not allowed this application...',
+                  'error'
+                ).then(()=>{
+                  localStorage.removeItem('vendortoken')
+                  router.push('/vendor/signin')
+                })
+              }else{
+                dispatch(vendorDetails(response.vendorObj))
+              }
             } else {
               router.push("/vendor/signin");
             }

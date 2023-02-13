@@ -41,6 +41,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditPostModal from "@/components/Modal/EditPostModal";
 import Posts from "@/components/Posts/Post";
 import VendorBottomNavbar from "@/components/Navabar/VendorBottomNavbar";
+import Swal from "sweetalert2";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -76,7 +77,18 @@ export default function VendorProfile() {
         const response = await VendorisAuthApi(token)
         if (response) {
           if (response.auth) {
-            dispatch(vendorDetails(response.vendorObj));
+            if (response.vendorObj.isBlock) {
+              Swal.fire(
+                'Blocked!',
+                'Your account is blocked! Not allowed this application...',
+                'error'
+              ).then(()=>{
+                localStorage.removeItem('vendortoken')
+                router.push('/vendor/signin')
+              })
+            }else{
+              dispatch(vendorDetails(response.vendorObj))
+            }
             const res = await VendorGetPosts(response.vendorObj._id)
             if (res) {
               setPosts(res);

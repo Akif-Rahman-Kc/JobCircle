@@ -10,6 +10,7 @@ import {
   Container,
   Grid,
   IconButton,
+  Typography,
 } from "@mui/material";
 import Notifications from "@/components/Notifications/Notification";
 import Messages from "@/components/Messages/Message";
@@ -25,7 +26,7 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { userDetails } from "@/redux/user";
 import HomeIcon from "@mui/icons-material/Home";
-import { isAuthApi } from "@/Apis/userApi";
+import { isAuthApi, SavedVendors } from "@/Apis/userApi";
 import Posts from "@/components/Posts/Post";
 import { GetAllPosts } from "@/Apis/vendorApi";
 import { AccountCircle } from "@mui/icons-material";
@@ -33,11 +34,19 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import Link from "next/link";
 import BottomNavbar from "@/components/Navabar/BottomNavbar";
+import Swal from "sweetalert2";
+import Connections from "@/components/Connections/connection";
+import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
+import TurnedInIcon from '@mui/icons-material/TurnedIn';
+import { useTheme } from "styled-components";
+import ErrorIcon from '@mui/icons-material/Error';
 
 const inter = Inter({ subsets: ["latin"] });
 
 const Profile = () => {
     const [ flag, setFlag ] = useState(false)
+    const [ page, setPage ] = useState(false)
+    const [ refresh, setRefresh ] = useState(false)
     const router = useRouter();
     const { user } = useSelector((state)=>state.userInfo)
     const dispatch = useDispatch()
@@ -49,7 +58,18 @@ const Profile = () => {
                 const response = await isAuthApi(token)
                 if (response) {
                 if (response.auth) {
+                  if (response.userObj.isBlock) {
+                    Swal.fire(
+                      'Blocked!',
+                      'Your account is blocked! Not allowed this application...',
+                      'error'
+                    ).then(()=>{
+                      localStorage.removeItem("usertoken");
+                      router.push("/auth/signin");
+                    })
+                  }else{
                     dispatch(userDetails(response.userObj))
+                  }
                 } else {
                     router.push('/auth/signin')
                 }
@@ -60,7 +80,14 @@ const Profile = () => {
             }
         }
         invoke()
-    },[])
+    },[refresh,user])
+
+    const savedVendor = async (vendorId)=>{
+      const res = await SavedVendors(vendorId, user._id)
+      if (res) {
+        setRefresh(!refresh)
+      }
+    }
 
     return ( 
         <>
@@ -173,150 +200,43 @@ const Profile = () => {
                         <h6>EDIT PROFILE</h6>
                       </Grid>
                       </Link>
-                      <Button sx={{ boxShadow: 3 , backgroundColor:'#1976d2' , color:'#fff' , fontSize:'9.5px' , py: 0.5 , px: 4 , pt: 0.6 , mt: 4 , ":hover":{ backgroundColor:'#1976d2' } , width: '-webkit-fill-available' , borderRadius:'15px' }}><PersonAddIcon sx={{ width:'18px' , mt: -0.3 , mr: 0.2 }}/>Connections</Button>
-                      <Button sx={{ boxShadow: 3 , backgroundColor:'#1976d2' , color:'#fff' , fontSize:'9.5px' , py: 0.5 , px: 4 , pt: 0.6 , mt: 1 , ":hover":{ backgroundColor:'#1976d2' } , width: '-webkit-fill-available' , borderRadius:'15px' }}><BookmarksIcon sx={{ width:'16px' , mt: -0.3 , mr: 0.2 }}/>Saved</Button>
+                      <Button onClick={()=> setPage(false)} sx={{ boxShadow: 3 , backgroundColor:'#1976d2' , color:'#fff' , fontSize:'9.5px' , py: 0.5 , px: 4 , pt: 0.6 , mt: 4 , ":hover":{ backgroundColor:'#1976d2' } , width: '-webkit-fill-available' , borderRadius:'15px' }}><PersonAddIcon sx={{ width:'18px' , mt: -0.3 , mr: 0.2 }}/>Connections</Button>
+                      <Button onClick={()=> setPage(true)} sx={{ boxShadow: 3 , backgroundColor:'#1976d2' , color:'#fff' , fontSize:'9.5px' , py: 0.5 , px: 4 , pt: 0.6 , mt: 1 , ":hover":{ backgroundColor:'#1976d2' } , width: '-webkit-fill-available' , borderRadius:'15px' }}><BookmarksIcon sx={{ width:'16px' , mt: -0.3 , mr: 0.2 }}/>Saved</Button>
                     </Grid>
                     <Grid className="comments" xs={7} p={2} ml={0.7} backgroundColor={'lightgray'} borderRadius={3} height={'486px'} sx={{ overflowY:'auto' }}>
-                        <Box display={'flex'} my={1}>
-                            <img src={"/null-profile.jpg"}
-                                style={{
-                                    width: "30px",
-                                    height: "fit-content",
-                                    borderRadius: "50%",
-                                    border: "1px solid #000",
-                                    marginRight:'3px'
-                                }}
+                    {page ? 
+                     user.Saved.length == 0 ? 
+                     <Box sx={{ color:'gray' , textAlign:'center' , mt:'50%' }}>
+                        <ErrorIcon sx={{ fontSize:'80px' }}/>
+                        <h3>Ther are no Saved Workers</h3>
+                     </Box>
+                      : user.Saved.map((worker)=>(
+                        <>
+                        <Grid sx={{ display:'flex' }}>
+                          <IconButton onClick={()=>savedVendor(worker.vendorId)} sx={{ p:0 , my: 2.2 }}>
+                            <TurnedInIcon sx={{ m: 0.5 , width:'20px' }}/>
+                          </IconButton>
+                          <Grid sx={{ width:'-webkit-fill-available' }}>
+                          <Link href={`/worker_profile/${worker.vendorId}`} >
+                            <Grid key={worker._id} xs={12} sx={{ mt: 2 , ml:0.3 , display:'flex' , color:'#000' }}>
+                              <img
+                                src={worker.vendorImage ? worker.vendorImage : "/null-profile.jpg"}
+                                style={{ m: 0, width: "35px"  , height:"35px" , borderRadius: "50%" }}
                                 alt=""
-                            />
-                            <h5 style={{ marginTop:'8px' , lineBreak:'auto' }}>Akif Rahman KC</h5>
-                        </Box>
+                              />
+                              <Box sx={{ ml:0.5 , mt:0.5 }}>
+                                <h5>{worker.vendorName}</h5>
+                                <h6 style={{ fontFamily: 'monospace' }}>{worker.vendorPlace}</h6>
+                              </Box>
+                            </Grid>
+                            </Link>
+                          </Grid>
+                        </Grid>
                         <hr />
-                        <Box display={'flex'} my={1}>
-                            <img src={"/null-profile.jpg"}
-                                style={{
-                                    width: "30px",
-                                    height: "fit-content",
-                                    borderRadius: "50%",
-                                    border: "1px solid #000",
-                                    marginRight:'3px'
-                                }}
-                                alt=""
-                            />
-                            <h5 style={{ marginTop:'8px' , lineBreak:'auto' }}>Akif Rahman KC</h5>
-                        </Box>
-                        <hr />
-                        <Box display={'flex'} my={1}>
-                            <img src={"/null-profile.jpg"}
-                                style={{
-                                    width: "30px",
-                                    height: "fit-content",
-                                    borderRadius: "50%",
-                                    border: "1px solid #000",
-                                    marginRight:'3px'
-                                }}
-                                alt=""
-                            />
-                            <h5 style={{ marginTop:'8px' , lineBreak:'auto' }}>Akif Rahman KC</h5>
-                        </Box>
-                        <hr />
-                        <Box display={'flex'} my={1}>
-                            <img src={"/null-profile.jpg"}
-                                style={{
-                                    width: "30px",
-                                    height: "fit-content",
-                                    borderRadius: "50%",
-                                    border: "1px solid #000",
-                                    marginRight:'3px'
-                                }}
-                                alt=""
-                            />
-                            <h5 style={{ marginTop:'8px' , lineBreak:'auto' }}>Akif Rahman KC</h5>
-                        </Box>
-                        <hr />
-                        <Box display={'flex'} my={1}>
-                            <img src={"/null-profile.jpg"}
-                                style={{
-                                    width: "30px",
-                                    height: "fit-content",
-                                    borderRadius: "50%",
-                                    border: "1px solid #000",
-                                    marginRight:'3px'
-                                }}
-                                alt=""
-                            />
-                            <h5 style={{ marginTop:'8px' , lineBreak:'auto' }}>Akif Rahman KC</h5>
-                        </Box>
-                        <hr />
-                        <Box display={'flex'} my={1}>
-                            <img src={"/null-profile.jpg"}
-                                style={{
-                                    width: "30px",
-                                    height: "fit-content",
-                                    borderRadius: "50%",
-                                    border: "1px solid #000",
-                                    marginRight:'3px'
-                                }}
-                                alt=""
-                            />
-                            <h5 style={{ marginTop:'8px' , lineBreak:'auto' }}>Akif Rahman KC</h5>
-                        </Box>
-                        <hr />
-                        <Box display={'flex'} my={1}>
-                            <img src={"/null-profile.jpg"}
-                                style={{
-                                    width: "30px",
-                                    height: "fit-content",
-                                    borderRadius: "50%",
-                                    border: "1px solid #000",
-                                    marginRight:'3px'
-                                }}
-                                alt=""
-                            />
-                            <h5 style={{ marginTop:'8px' , lineBreak:'auto' }}>Akif Rahman KC</h5>
-                        </Box>
-                        <hr />
-                        <Box display={'flex'} my={1}>
-                            <img src={"/null-profile.jpg"}
-                                style={{
-                                    width: "30px",
-                                    height: "fit-content",
-                                    borderRadius: "50%",
-                                    border: "1px solid #000",
-                                    marginRight:'3px'
-                                }}
-                                alt=""
-                            />
-                            <h5 style={{ marginTop:'8px' , lineBreak:'auto' }}>Akif Rahman KC</h5>
-                        </Box>
-                        <hr />
-                        <Box display={'flex'} my={1}>
-                            <img src={"/null-profile.jpg"}
-                                style={{
-                                    width: "30px",
-                                    height: "fit-content",
-                                    borderRadius: "50%",
-                                    border: "1px solid #000",
-                                    marginRight:'3px'
-                                }}
-                                alt=""
-                            />
-                            <h5 style={{ marginTop:'8px' , lineBreak:'auto' }}>Akif Rahman KC</h5>
-                        </Box>
-                        <hr />
-                        <Box display={'flex'} my={1}>
-                            <img src={"/null-profile.jpg"}
-                                style={{
-                                    width: "30px",
-                                    height: "fit-content",
-                                    borderRadius: "50%",
-                                    border: "1px solid #000",
-                                    marginRight:'3px'
-                                }}
-                                alt=""
-                            />
-                            <h5 style={{ marginTop:'8px' , lineBreak:'auto' }}>Akif Rahman KC</h5>
-                        </Box>
-                        <hr />
+                        
+                        </>
+                      ))
+                    : <Connections/>}
                     </Grid>
                   </Box>
                 </Grid>

@@ -13,7 +13,7 @@ import VendorNavbar from "@/components/Navabar/VendorNavbar";
 import { useDispatch, useSelector } from "react-redux";
 import { vendorDetails } from "@/redux/vendor";
 import HomeIcon from "@mui/icons-material/Home";
-import { AddCommnet, DeleteComment, DeletePost, GetAllPosts, LikedPost, VendorisAuthApi } from "@/Apis/vendorApi";
+import { AddCommnet, DeleteComment, DeletePost, GetAllPosts, LikedPost, ReportPost, VendorisAuthApi } from "@/Apis/vendorApi";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -29,6 +29,8 @@ import EditPostModal from "@/components/Modal/EditPostModal";
 import LikeModal from "@/components/Modal/LikeModal";
 import Link from "next/link";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Posts = (props) => {
     const [comment, setComment] = useState('');
@@ -36,6 +38,7 @@ const Posts = (props) => {
     const [openEditPostModal, setOpenEditPostModal] = useState(false);
     const [openLikeModal, setOpenLikeModal] = useState(false);
     const [ openMoreBox, setOpenMoreBox] = useState(null)
+    const [ openReportBox, setOpenReportBox] = useState(null)
     const [ modalPost, setModalPost] = useState({})
 
     const handleEditPostModalOpen = (post) => {
@@ -89,6 +92,23 @@ const Posts = (props) => {
         
       }
 
+      const reportPost = async (msg,postId)=>{
+        const res = await ReportPost(msg,postId,props.user._id)
+        setOpenReportBox(null)
+        if (res.status == 'failed') {
+          toast.error('Your already reported this Post!', {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          })
+        }
+      }
+
       const deletePost = async (postId)=> {
         const res = await DeletePost(postId)
         if (res) {
@@ -99,6 +119,7 @@ const Posts = (props) => {
     return ( 
         <>
             <Box sx={{ display: "flex" }}>
+            <ToastContainer/>
                       <IconButton>
                         {props.user._id == props.post.vendorId._id ? <Avatar src={props.post.vendorId.image ? props.post.vendorId.image : ''}/> : <Link href={props.vendor ? `/vendor/worker_profile/${props.post.vendorId._id}` : `/worker_profile/${props.post.vendorId._id}`}><Avatar src={props.post.vendorId.image ? props.post.vendorId.image : ''}/></Link> }
                       </IconButton>
@@ -196,9 +217,31 @@ const Posts = (props) => {
                           <MoreVertIcon />
                         </IconButton>
                         
-                       : <IconButton size="large" sx={{ color: "#1976d2" }}>
+                       : <IconButton onClick={() =>
+                        openReportBox
+                          ? setOpenReportBox(null)
+                          : setOpenReportBox(props.post._id)
+                      } size="large" sx={{ color: "#1976d2" }}> 
                           <ReportGmailerrorredIcon />
                         </IconButton> }
+                        <Collapse
+                            sx={{ backgroundColor:'#fff' , border:'3px double #111' , position:'absolute' , borderRadius:'7px' , p: 1 , ml: { xs: -9.4 , sm: 0 , md: -5} }}
+                            in={openReportBox == props.post._id}
+                            timeout="auto"
+                            unmountOnExit
+                          >
+                            <Button onClick={()=> reportPost('Its spam!',props.post._id)} sx={{ fontSize:'12px' , width:'inherit' , color:'#111' , justifyContent: 'flex-start' , textTransform: 'capitalize' }}>Its spam!</Button>
+                            <br />
+                            <Button onClick={()=> reportPost('Scam or Fraud',props.post._id)} sx={{ fontSize:'12px' , width:'inherit' , color:'#111' , justifyContent: 'flex-start' , textTransform: 'capitalize' }}>Scam or Fraud</Button>
+                            <br />
+                            <Button onClick={()=> reportPost("I just don't like it!",props.post._id)} sx={{ fontSize:'12px' , width:'inherit' , color:'#111' , justifyContent: 'flex-start' , textTransform: 'capitalize' }}>I just don't like it!</Button>
+                            <br />
+                            <Button onClick={()=> reportPost('Its illegal!',props.post._id)} sx={{ fontSize:'12px' , width:'inherit' , color:'#111' , justifyContent: 'flex-start' , textTransform: 'capitalize' }}>Its illegal!</Button>
+                            <br />
+                            <Button onClick={()=> reportPost('False information!',props.post._id)} sx={{ fontSize:'12px' , width:'inherit' , color:'#111' , justifyContent: 'flex-start' , textTransform: 'capitalize' }}>False information!</Button>
+                            <br />
+                            <Button onClick={()=> reportPost('Something else',props.post._id)} sx={{ fontSize:'12px' , width:'inherit' , color:'#111' , justifyContent: 'flex-start' , textTransform: 'capitalize' }}>Something else</Button>
+                          </Collapse>
                         <Collapse
                             sx={{ backgroundColor:'#fff' , border:'3px double #111' , position:'absolute' , borderRadius:'7px' , p: 1 , ml: { xs: -2.4 , sm: 0 , md: 2} }}
                             in={openMoreBox == props.post._id}

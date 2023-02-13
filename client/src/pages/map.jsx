@@ -9,13 +9,13 @@ const map = () => {
     useEffect(()=>{
         const map = new mapboxgl.Map({
             container: 'map',
-            style: 'mapbox://styles/akif-rahman-11/cldufk9ij001701qz23irecvn',
-            center: [75.320,11.960],
-            zoom: 13,
-            scrollZoom: false
+            // style: 'mapbox://styles/akif-rahman-11/cldufk9ij001701qz23irecvn',
+            // center: [75.320,11.960],
+            // zoom: 13,
+            // scrollZoom: false
         });
         
-        map.addControl(new mapboxgl.NavigationControl(),"top-left");
+        // map.addControl(new mapboxgl.NavigationControl(),"top-left");
         map.addControl(
             new MapboxGeocoder({
             accessToken: mapboxgl.accessToken,
@@ -29,13 +29,6 @@ const map = () => {
     
     return ( 
         <>
-            <h1>Map</h1>
-            <div class='sidebar'>
-                <div class='heading'>
-                    <h1>Our locations</h1>
-                </div>
-                <div id='listings' class='listings'></div>
-            </div>
             <div id="map" class="map"></div>
         </>
      );

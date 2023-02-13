@@ -15,6 +15,7 @@ import EngineeringRoundedIcon from '@mui/icons-material/EngineeringRounded';
 import PlaylistAddCheckCircleRoundedIcon from '@mui/icons-material/PlaylistAddCheckCircleRounded';
 import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
 import ManageAccountsRoundedIcon from '@mui/icons-material/ManageAccountsRounded';
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 
 const drawerWidth = '50%';
 
@@ -99,11 +100,16 @@ export default function AdminNavbar(props) {
           <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
             Admin
           </Typography>
-          <Button onClick={logout} sx={{color:'#fff'}}>Logout</Button>
-          <h6>Akif Rahman</h6>
+          <h5>Akif Rahman</h5>
           <IconButton sx={{ ml: 1, p: 0 }}>
             <Avatar alt="Remy Sharp" src="/null-profile.jpg" />
           </IconButton>
+          <IconButton
+              onClick={logout}
+              sx={{ color:'#000' , ":hover": { backgroundColor: "#1976d2" }, ml: 3 }}
+            >
+              <LogoutOutlinedIcon />
+            </IconButton>
         </Toolbar>
       </AppBar>
       <Box component="nav">

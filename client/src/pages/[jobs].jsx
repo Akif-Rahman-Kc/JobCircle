@@ -22,6 +22,7 @@ import TurnedInIcon from '@mui/icons-material/TurnedIn';
 import axios from "axios";
 import Link from "next/link";
 import BottomNavbar from "@/components/Navabar/BottomNavbar";
+import Swal from "sweetalert2";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -38,7 +39,17 @@ export default function Workers({workers}) {
         const response = await isAuthApi(token)
         if (response) {
           if (response.auth) {
-            dispatch(userDetails(response.userObj))
+            if (response.userObj.isBlock) {
+              Swal.fire(
+                'Blocked!',
+                'Your account is blocked! Not allowed this application...',
+                'error'
+              ).then(()=>{
+                localStorage.removeItem("usertoken");
+                router.push("/auth/signin");
+              })
+            }else{
+              dispatch(userDetails(response.userObj))
             workers.map((obj)=>{
               if (response.userObj.Saved.length == 0) {
                 obj.saved = false
@@ -55,6 +66,7 @@ export default function Workers({workers}) {
                 }
               }
             })
+            }
           } else {
             router.push('/auth/signin')
           }
