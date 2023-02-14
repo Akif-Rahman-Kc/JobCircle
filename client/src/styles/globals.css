@@ -141,15 +141,19 @@ h1 ,h2, h3, h4, h5, h6, a, p {
   background-color: #e9e5df;
 }
 
+/* ///////////////////// */
+
 .map {
   position: absolute;
   width: 16.6666%;
-  height: 100px;
+  height: 500px;
   top: 0;
   bottom: 0;
   cursor: default;
   border:1px solid gray
 }
+
+/* ///////////////////// */
 
 a.mapboxgl-ctrl-logo.mapboxgl-compact .mapboxgl-ctrl-bottom-right {
   display: none !important;

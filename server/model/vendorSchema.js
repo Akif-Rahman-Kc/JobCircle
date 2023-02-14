@@ -38,6 +38,11 @@ const vendorSchema = new Schema({
         type: String,
         trim: true
     },
+    jobDays:{
+        required: true,
+        type: String,
+        trim: true
+    },
     locality:{
         required: true,
         type: String,

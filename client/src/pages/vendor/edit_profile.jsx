@@ -75,6 +75,7 @@ export default function VendorEditProfile() {
           email: data.get('email'),
           job: data.get('job'),
           experiance: data.get('experiance'),
+          jobDays: data.get('jobDays'),
           image: data.get('image'),
         }
         if(data.firstName && data.email && data.locality && data.city && data.state && data.job){
@@ -131,7 +132,7 @@ export default function VendorEditProfile() {
                   if (response.status == "success") {
                     toast.success("Successfully Edited", {
                       position: "top-right",
-                      autoClose: 3000,
+                      autoClose: 2000,
                       hideProgressBar: false,
                       closeOnClick: true,
                       pauseOnHover: true,
@@ -141,7 +142,7 @@ export default function VendorEditProfile() {
                     });
                     setTimeout(() => {
                       router.back()
-                    }, 3000);
+                    }, 2000);
                   } else {
                     toast.error("This email is already registered!", {
                       position: "top-right",
@@ -392,6 +393,18 @@ export default function VendorEditProfile() {
                               size="small"
                               autoComplete="family-name"
                               defaultValue={vendor.experiance}
+                            />
+                          </Grid>
+                          <Grid item xs={12}>
+                            <TextField
+                            required
+                            fullWidth
+                            id="jobDays"
+                            label="Available Days"
+                            name="jobDays"
+                            autoComplete="family-name"
+                            size="small"
+                            defaultValue={vendor.jobDays}
                             />
                           </Grid>
                         </Grid>

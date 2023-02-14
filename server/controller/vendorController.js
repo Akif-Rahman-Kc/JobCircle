@@ -89,7 +89,8 @@ export async function vendorEditProfile(req, res) {
                 city:req.body.city,
                 state:req.body.state,
                 job:req.body.job,
-                experiance:req.body.experiance
+                experiance:req.body.experiance,
+                jobDays:req.body.jobDays
             })
             res.json({status:"success"})
         } else {
@@ -110,7 +111,8 @@ export async function vendorEditProfile(req, res) {
                     state:req.body.state,
                     email:req.body.email,
                     job:req.body.job,
-                    experiance:req.body.experiance
+                    experiance:req.body.experiance,
+                    jobDays:req.body.jobDays
                 })
                 res.json({status:"success"})
             }

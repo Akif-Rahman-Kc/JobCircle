@@ -38,6 +38,8 @@ export default function VendorSignUpDetails() {
   const [ jobError, setJobError ] = useState('')
   const [ experiance, setExperiance ] = useState(false)
   const [ experianceError, setExperianceError ] = useState('')
+  const [ jobDay, setJobDay ] = useState(false)
+  const [ jobDayError, setJobDayError ] = useState('')
   const [ phoneNo, setPhoneNo ] = useState(false)
   const [ phoneNoError, setPhoneNoError ] = useState('')
   const [ flag, setFlag ] = useState(false)
@@ -52,6 +54,7 @@ export default function VendorSignUpDetails() {
       locality: data.get('locality'),
       city: data.get('city'),
       state: data.get('state'),
+      jobDays: data.get('jobDays'),
       ...vendorDetails
     }
 
@@ -103,6 +106,10 @@ export default function VendorSignUpDetails() {
       if (data.experiance == '') {
         setExperiance(true)
         setExperianceError('Please enter your Experiance')
+      }
+      if (data.jobDays == '') {
+        setJobDay(true)
+        setJobDayError('Please enter available Days')
       }
       if (data.locality == '') {
         setLocality(true)
@@ -211,6 +218,19 @@ export default function VendorSignUpDetails() {
                             autoComplete="family-name"
                             error={experiance}
                             helperText={experianceError}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                            required
+                            fullWidth
+                            id="jobDays"
+                            label="Available Days"
+                            name="jobDays"
+                            autoComplete="family-name"
+                            error={jobDay}
+                            helperText={jobDayError}
+                            defaultValue={'Monday - Saturday'}
                             />
                         </Grid>
                         <Grid item xs={12}>
