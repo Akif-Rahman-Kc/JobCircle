@@ -1,3 +1,4 @@
+import React, { useRef } from 'react';
 import { Inter } from "@next/font/google";
 import { Box } from "@mui/system";
 import {
@@ -42,6 +43,10 @@ import EditPostModal from "@/components/Modal/EditPostModal";
 import Posts from "@/components/Posts/Post";
 import VendorBottomNavbar from "@/components/Navabar/VendorBottomNavbar";
 import Swal from "sweetalert2";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Carousel from 'react-material-ui-carousel'
+import { MdCloudUpload } from "react-icons/md";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -64,11 +69,13 @@ export default function VendorProfile() {
   const { vendor } = useSelector((state) => state.vendorInfo);
   const dispatch = useDispatch();
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState([]);
+  const [urls, setUrls] = useState([]);
   const [posts, setPosts] = useState([]);
   const [refreshPost, setrefreshPost] = useState(false);
   const [ openMoreBox, setOpenMoreBox] = useState(null)
   const [ modalPost, setModalPost] = useState({})
+  const uploadImg = useRef()
 
   useEffect(() => {
     async function invoke(){
@@ -108,7 +115,6 @@ export default function VendorProfile() {
     async function invokePosts(){
       const response = await VendorGetPosts(vendor._id)
       if (response) {
-        console.log(response);
         response.map(async (doc)=>{
           doc.Likes.map((obj)=>{
             if (obj.likerId == vendor._id) {
@@ -125,36 +131,66 @@ export default function VendorProfile() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    let dir = Date.now();
-    let rand = Math.random();
-    const imageRef = ref(storage, `posts/${dir}${rand}/${image?.name}`);
-    const toBase64 = (image) =>
-      new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(image);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = (error) => reject(error);
-      }).catch((err) => {
-        console.log(err);
+    if (image) {
+        for (let i = 0; i < image.length; i++) {
+          let dir = Date.now();
+          let rand = Math.random();
+          let img = image[i]
+          const imageRef = ref(storage, `posts/${dir}${rand}/${img?.name}`);
+          const toBase64 = (img) =>
+            new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.readAsDataURL(img);
+              reader.onload = () => resolve(reader.result);
+              reader.onerror = (error) => reject(error);
+            }).catch((err) => {
+              console.log(err);
+            });
+          const imgBase = await toBase64(img);
+          await uploadString(imageRef, imgBase, "data_url").then(async () => {
+            const downloadURL = await getDownloadURL(imageRef);
+            urls.push(downloadURL)
+          })
+        }
+        const data = {
+          vendorId: vendor._id,
+          description: description,
+          image: urls,
+        };
+        toast.success("Successfully Uploaded...", {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
       });
-    const imgBase = await toBase64(image);
-    await uploadString(imageRef, imgBase, "data_url").then(async () => {
-      const downloadURL = await getDownloadURL(imageRef);
-      const data = {
-        vendorId: vendor._id,
-        description: description,
-        image: downloadURL,
-      };
       const resp = await VendorAddPost(data)
       if (resp) {
+        urls.splice(0,urls.length)
         setImage("");
         setOpen(false);
         setDescription("");
         setrefreshPost(!refreshPost)
       }
-    });
-    setImage(null);
-    setOpen(false);
+      
+      setImage(null);
+      setOpen(false);
+    } else {
+      toast.error("Please Select a file!", {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+    
   };
 
   const deletePost = async (postId)=> {
@@ -183,6 +219,7 @@ export default function VendorProfile() {
   return (
     <>
       <div>
+        <ToastContainer/>
         <VendorNavbar />
         <Box>
           <Grid
@@ -312,33 +349,64 @@ export default function VendorProfile() {
                                 }}
                               >
                                 <Grid xs={12} sx={{ p: 1 }}>
-                                  <img
-                                    src={
-                                      image ? URL.createObjectURL(image) : ""
-                                    }
-                                    style={{
-                                      height: "150px",
-                                      borderRadius: "5px",
-                                      border: "1px solid #000",
-                                      // width: '-webkit-fill-available'
-                                    }}
-                                    alt=""
-                                  />
-                                  <Input
-                                    sx={{
-                                      width: "100%",
-                                      height: "fit-content",
-                                      borderRadius: "5px",
-                                      border: "1px solid #000",
-                                    }}
-                                    id="upload"
-                                    class="file-upload__input"
-                                    type="file"
-                                    name="image"
-                                    onChange={(e) =>
-                                      setImage(e.target.files[0])
-                                    }
-                                  />
+                          {image ? 
+                          <Carousel>
+                          { image && image.length > 0 &&
+                              image.map((img) =>    
+                              <img
+                                src={
+                                  image ? URL.createObjectURL(img) : ""
+                                }
+                                style={{
+                                  height: "200px",
+                                  borderRadius: "5px",
+                                  border: "1px solid #000",
+                                  // width: '-webkit-fill-available'
+                                }}
+                                alt=""
+                              />
+                              )
+                          }
+                      </Carousel>
+                          : <Box  
+                            onClick={() =>uploadImg.current.click()}
+                            sx={{
+                              height:'200px',
+                              backgroundColor:'rgb(205 205 205 / 47%)',
+                              border:'2px dashed #ababab',
+                              borderRadius:'12px',
+                              textAlign:'center',
+                            }}> <MdCloudUpload style={{fontSize:'3rem',color:'#ababab',marginTop:'77px'}}/>
+                            <input
+                              multiple
+                              id="upload"
+                              class="file-upload__input"
+                              type="file"
+                              hidden
+                              ref={uploadImg}
+                              name="image"
+                              onChange={(e) =>{
+                                let allowedFormats = /(\.jpg|\.jpeg|\.png|\.gif)$/i
+                                let fileType = e.target.files[0].name
+                                if (!allowedFormats.exec(fileType)) {
+                                  toast.error("Invalid file type!", {
+                                    position: "top-right",
+                                    autoClose: 4000,
+                                    hideProgressBar: false,
+                                    closeOnClick: true,
+                                    pauseOnHover: true,
+                                    draggable: true,
+                                    progress: undefined,
+                                    theme: "colored",
+                                  });
+                                } else {
+                                  const ingList = Array.from(e.target.files)
+                                  setImage(ingList)
+                                }
+                              }}
+                            />
+                          </Box> }
+                                  
                                 </Grid>
                                 <Grid xs={12} sx={{ p: 1 }}>
                                   <TextareaAutosize

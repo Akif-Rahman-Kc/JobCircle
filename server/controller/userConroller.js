@@ -137,9 +137,6 @@ export async function savedVendors(req, res) {
                 $pull:{
                     Saved:{
                         vendorId:req.query.vendorId,
-                        vendorName:vendor.firstName + ' ' + vendor.lastName,
-                        vendorImage:vendor.image,
-                        vendorPlace:vendor.locality + ' ' + vendor.city
                     }
                 }
             })

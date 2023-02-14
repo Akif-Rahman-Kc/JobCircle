@@ -10,9 +10,12 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useRouter } from 'next/router';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '@/store/Context';
 import { FcGoogle } from "react-icons/fc";
+// import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+// import { auth } from '@/firebase/config';
+// import { useAuthState } from 'react-firebase-hooks/auth'
 
 const theme = createTheme();
 
@@ -23,8 +26,6 @@ export default function SignUp() {
 
   const [ firstName, setFirstName ] = useState(false)
   const [ firstNameError, setFirstNameError ] = useState('')
-  const [ lastName, setLastName ] = useState(false)
-  const [ lastNameError, setLastNameError ] = useState('')
   const [ email, setEmail ] = useState(false)
   const [ emailError, setEmailError ] = useState('')
   const [ password, setPassword ] = useState(false)
@@ -91,17 +92,19 @@ export default function SignUp() {
   };
 
   // Google Authentication
-
-  // const googleAuth = new GoogleAuthProvider();
   // const [ user, setUser ] = useAuthState(auth)
+  // const googleAuth = new GoogleAuthProvider();
+
+  const googleSignUp = async ()=>{
+    // signInWithPopup(auth , googleAuth).then((res)=>{
+    //   console.log(res._tokenResponse);
+    // })
+    // await auth.signOut();
+  }
 
   // useEffect(()=>{
   //   console.log(user);
   // },[user])
-
-  const googleSignUp = async ()=>{
-    // const result = await signInWithPopup(auth , googleAuth)
-  }
 
   return (
     <>
@@ -164,8 +167,6 @@ export default function SignUp() {
                             label="Last Name"
                             name="lastName"
                             autoComplete="family-name"
-                            error={lastName}
-                            helperText={lastNameError}
                             />
                         </Grid>
                         <Grid item xs={12}>

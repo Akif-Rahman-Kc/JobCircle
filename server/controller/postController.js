@@ -104,8 +104,6 @@ export async function likedPost(req, res) {
                 $pull:{
                     Likes:{
                         likerId:req.query.likerId,
-                        // likerName:vendor ? vendor.firstName + ' ' + vendor.lastName : user.firstName + ' ' + user.lastName,
-                        // likerImage:vendor ? vendor.image : user.image,
                     }
                 }
             })

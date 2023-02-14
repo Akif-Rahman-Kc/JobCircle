@@ -109,26 +109,39 @@ const EditProfile = () => {
               if(regEmail.test(data.email)){
                 setEmail(false)
                 setEmailError('')
-                console.log(data);
                 if (data.image.name) {
-                  const dir = Date.now();
-                  const rand = Math.random();
-                  const image = data.image
-                  const imageRef = ref(storage, `userprofile/${dir}${rand}/${image?.name}`);
-                  const toBase64 = (image) =>
-                  new Promise((resolve, reject) => {
-                      const reader = new FileReader();
-                      reader.readAsDataURL(image);
-                      reader.onload = () => resolve(reader.result);
-                      reader.onerror = (error) => reject(error);
-                  }).catch((err) => {
-                      console.log(err);
-                  });
-                  const imgBase = await toBase64(image);
-                  await uploadString(imageRef, imgBase, "data_url").then(async () => {
-                      const downloadURL = await getDownloadURL(imageRef);
-                      data.image = downloadURL
-                  });
+                  let allowedFormats = /(\.jpg|\.jpeg|\.png|\.gif)$/i
+                  if (!allowedFormats.exec(data.image.name)) {
+                    toast.error("Invalid file type!", {
+                      position: "top-right",
+                      autoClose: 4000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                      theme: "colored",
+                    });
+                  } else {
+                    const dir = Date.now();
+                    const rand = Math.random();
+                    const image = data.image
+                    const imageRef = ref(storage, `userprofile/${dir}${rand}/${image?.name}`);
+                    const toBase64 = (image) =>
+                    new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(image);
+                        reader.onload = () => resolve(reader.result);
+                        reader.onerror = (error) => reject(error);
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+                    const imgBase = await toBase64(image);
+                    await uploadString(imageRef, imgBase, "data_url").then(async () => {
+                        const downloadURL = await getDownloadURL(imageRef);
+                        data.image = downloadURL
+                    });
+                  }
                 }else{
                   data.image = ''
                 } 
@@ -281,7 +294,24 @@ const EditProfile = () => {
                             class="file-upload__input"
                             type="file"
                             name="image"
-                            onChange={(e)=> setImageShow(e.target.files[0])}
+                            onChange={(e)=> {
+                              let allowedFormats = /(\.jpg|\.jpeg|\.png|\.gif)$/i
+                              let fileType = e.target.files[0].name
+                              if (!allowedFormats.exec(fileType)) {
+                                toast.error("Invalid file type!", {
+                                  position: "top-right",
+                                  autoClose: 4000,
+                                  hideProgressBar: false,
+                                  closeOnClick: true,
+                                  pauseOnHover: true,
+                                  draggable: true,
+                                  progress: undefined,
+                                  theme: "colored",
+                                });
+                              } else {
+                                setImageShow(e.target.files[0])
+                              }
+                            }}
                           />
                         </div>
                       </Box>

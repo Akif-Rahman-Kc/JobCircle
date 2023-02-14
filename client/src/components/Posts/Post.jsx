@@ -31,6 +31,7 @@ import Link from "next/link";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Carousel from "react-material-ui-carousel";
 
 const Posts = (props) => {
     const [comment, setComment] = useState('');
@@ -163,17 +164,21 @@ const Posts = (props) => {
                     >
                       {props.post.description ? props.post.description : ""}
                     </p>
-                    <img
-                      src={props.post.image ? props.post.image : ""}
-                      style={{
-                        marginTop: "10px",
-                        width: "100%",
-                        height: "fit-content",
-                        borderRadius: "5px",
-                        border: "1px solid #000",
-                      }}
-                      alt=""
-                    />
+                    <Carousel sx={{ p:1 , m:0 , height:'320px' }}>
+                      {props.post.image.map((img)=>(
+                        <Box sx={{ p:0.5 , m:0 , height:'270px' , border: "3px solid gray" , borderRadius:'10px' , backgroundColor:'#f3f3f3e6' , display:'flex' , justifyContent:'center' , alignItems:'center' }}>
+                          <img
+                            src={img ? img : ""}
+                            style={{
+                              maxWidth: "100%",
+                              maxHeight: "261px",
+                            }}
+                            alt=""
+                          />
+                        </Box>
+                        
+                      ))}
+                    </Carousel>
                     <Box
                       sx={{
                         borderRadius: "5px",
@@ -225,7 +230,7 @@ const Posts = (props) => {
                           <ReportGmailerrorredIcon />
                         </IconButton> }
                         <Collapse
-                            sx={{ backgroundColor:'#fff' , border:'3px double #111' , position:'absolute' , borderRadius:'7px' , p: 1 , ml: { xs: -9.4 , sm: 0 , md: -5} }}
+                            sx={{ backgroundColor:'#fff' , border:'3px double #111' , position:'absolute' , borderRadius:'7px' , p: 1 , ml: { xs: -9.4 , sm: 0 , md: -5} , zIndex:'100' }}
                             in={openReportBox == props.post._id}
                             timeout="auto"
                             unmountOnExit

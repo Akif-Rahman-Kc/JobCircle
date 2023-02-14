@@ -13,7 +13,7 @@ router.post('/vendorAuth', vendorJWT,vendorAuth )
 // Posts
 router.post('/add_post', addPost)
 router.patch('/edit_post', editPost)
-router.delete('/report_post', deletePost)
+router.delete('/delete_post', deletePost)
 router.patch('/report_post', reportPost)
 router.get('/get_posts', getPosts)
 router.get('/get_all_posts', getAllPosts)
