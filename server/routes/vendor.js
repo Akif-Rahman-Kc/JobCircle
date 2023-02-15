@@ -22,8 +22,8 @@ router.patch('/add_comment', addComment)
 router.patch('/delete_comment', deleteComment)
 
 // Profile
-router.put('/edit_profile', vendorEditProfile)
-router.patch('/remove_profile_photo', VendorRemoveProfilePhoto)
+router.put('/edit_profile', vendorJWT,vendorEditProfile)
+router.patch('/remove_profile_photo', vendorJWT,VendorRemoveProfilePhoto)
 
 // Works
 router.get('/get_jobs', vendorJWT,getJobs)

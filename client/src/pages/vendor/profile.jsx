@@ -159,16 +159,7 @@ export default function VendorProfile() {
           description: description,
           image: urls,
         };
-        toast.success("Successfully Uploaded...", {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
+        
       let vendorToken = localStorage.getItem("vendortoken");
       const resp = await VendorAddPost(data, vendorToken)
       if (resp) {
@@ -177,6 +168,16 @@ export default function VendorProfile() {
         setOpen(false);
         setDescription("");
         setrefreshPost(!refreshPost)
+        toast.success("Successfully Uploaded...", {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
       }
       
       setImage(null);

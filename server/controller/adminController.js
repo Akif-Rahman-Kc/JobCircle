@@ -47,7 +47,7 @@ export async function adminAuth(req, res) {
 
 export async function getUsers(req, res) {
     try {
-        const users = await User.find()
+        const users = await User.find().sort({createdAt:-1})
 
         res.json(users)
     } catch (error) {
@@ -59,7 +59,7 @@ export async function getUsers(req, res) {
 
 export async function getVendors(req, res) {
     try {
-        const vendors = await Vendor.find()
+        const vendors = await Vendor.find().sort({createdAt:-1})
 
         res.json(vendors)
     } catch (error) {

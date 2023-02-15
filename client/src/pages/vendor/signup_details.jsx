@@ -66,25 +66,32 @@ export default function VendorSignUpDetails() {
         if(data.phoneNo.length == 10){
           setPhoneNo(false)
           setPhoneNoError('')
+          if (regPhone.test(data.experiance)) {
+            setExperiance(false)
+            setExperianceError('')
 
-          setVendorDetails(data)
-          try {
-            setUpRecaptcha("+91" + data.phoneNo).then((res)=>{
-              setFlag(true)
-              setVendorOtpConf(res)
-              router.push('/vendor/otp')
-            })
-          } catch (error) {
-            toast.warning(`${error.message}`, {
-              position: "top-right",
-              autoClose: 4000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "colored",
-            })
+            setVendorDetails(data)
+            try {
+              setUpRecaptcha("+91" + data.phoneNo).then((res)=>{
+                setFlag(true)
+                setVendorOtpConf(res)
+                router.push('/vendor/otp')
+              })
+            } catch (error) {
+              toast.warning(`${error.message}`, {
+                position: "top-right",
+                autoClose: 4000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+              })
+            }
+          } else {
+            setExperiance(true)
+            setExperianceError('Please enter the No.of Year')
           }
         }else{
           setPhoneNo(true)

@@ -105,10 +105,10 @@ const Users = () => {
                                     </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                    {users.map((user) => (
+                                    {users.map((user, i) => (
                                         <StyledTableRow key={user._id}>
                                         <StyledTableCell align="center" component="th" scope="row">
-                                            1
+                                            {i + 1}
                                         </StyledTableCell>
                                         <StyledTableCell align="center" component="th" scope="row">
                                             {user.firstName + ' ' + user.lastName}

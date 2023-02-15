@@ -29,6 +29,8 @@ export default function VendorEditProfile() {
     const [ email, setEmail ] = useState(false)
     const [ emailError, setEmailError ] = useState('')
     const [ box, setBox ] = useState(false)
+    const [ experiance, setExperiance ] = useState(false)
+    const [ experianceError, setExperianceError ] = useState('')
     const [ totalRequired, setTotalRequired ] = useState('')
     const [ imageShow, setImageShow  ] = useState('')
   
@@ -79,6 +81,7 @@ export default function VendorEditProfile() {
         }
         if(data.firstName && data.email && data.locality && data.city && data.state && data.job){
             let regName =/^[a-zA-Z]+$/;
+            let regPhone =/^[0-9]+$/;
             let regEmail =/^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/
             setBox(false)
             setTotalRequired('')
@@ -88,74 +91,80 @@ export default function VendorEditProfile() {
               if(regEmail.test(data.email)){
                 setEmail(false)
                 setEmailError('')
-                if (data.image.name) {
-                  let allowedFormats = /(\.jpg|\.jpeg|\.png|\.gif)$/i
-                  if (!allowedFormats.exec(data.image.name)) {
-                    toast.error("Invalid file type!", {
-                      position: "top-right",
-                      autoClose: 4000,
-                      hideProgressBar: false,
-                      closeOnClick: true,
-                      pauseOnHover: true,
-                      draggable: true,
-                      progress: undefined,
-                      theme: "colored",
-                    });
-                  } else {
-                    const dir = Date.now();
-                    const rand = Math.random();
-                    const image = data.image
-                    const imageRef = ref(storage, `profile/${dir}${rand}/${image?.name}`);
-                    const toBase64 = (image) =>
-                    new Promise((resolve, reject) => {
-                        const reader = new FileReader();
-                        reader.readAsDataURL(image);
-                        reader.onload = () => resolve(reader.result);
-                        reader.onerror = (error) => reject(error);
-                    }).catch((err) => {
-                        console.log(err);
-                    });
-                    const imgBase = await toBase64(image);
-                    await uploadString(imageRef, imgBase, "data_url").then(async () => {
-                        const downloadURL = await getDownloadURL(imageRef);
-                        data.image = downloadURL
-                    });
+                if (regPhone.test(data.experiance)) {
+                  setExperiance(false)
+                  setExperianceError('')
+                  if (data.image.name) {
+                    let allowedFormats = /(\.jpg|\.jpeg|\.png|\.gif)$/i
+                    if (!allowedFormats.exec(data.image.name)) {
+                      toast.error("Invalid file type!", {
+                        position: "top-right",
+                        autoClose: 4000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "colored",
+                      });
+                    } else {
+                      const dir = Date.now();
+                      const rand = Math.random();
+                      const image = data.image
+                      const imageRef = ref(storage, `profile/${dir}${rand}/${image?.name}`);
+                      const toBase64 = (image) =>
+                      new Promise((resolve, reject) => {
+                          const reader = new FileReader();
+                          reader.readAsDataURL(image);
+                          reader.onload = () => resolve(reader.result);
+                          reader.onerror = (error) => reject(error);
+                      }).catch((err) => {
+                          console.log(err);
+                      });
+                      const imgBase = await toBase64(image);
+                      await uploadString(imageRef, imgBase, "data_url").then(async () => {
+                          const downloadURL = await getDownloadURL(imageRef);
+                          data.image = downloadURL
+                      });
+                    }
+                    
+                  }else{
+                    data.image = ''
                   }
-                  
-                }else{
-                  data.image = ''
-                } 
-                let token = localStorage.getItem("vendortoken");
-                const response = await VendorProfileEdit(vendor._id , data, token)
-                if (response) {
-                  if (response.status == "success") {
-                    toast.success("Successfully Edited", {
-                      position: "top-right",
-                      autoClose: 2000,
-                      hideProgressBar: false,
-                      closeOnClick: true,
-                      pauseOnHover: true,
-                      draggable: true,
-                      progress: undefined,
-                      theme: "colored",
-                    });
-                    setTimeout(() => {
-                      router.back()
-                    }, 2000);
-                  } else {
-                    toast.error("This email is already registered!", {
-                      position: "top-right",
-                      autoClose: 3000,
-                      hideProgressBar: false,
-                      closeOnClick: true,
-                      pauseOnHover: true,
-                      draggable: true,
-                      progress: undefined,
-                      theme: "colored",
-                    });
-                  }
-                }        
-                
+                  let token = localStorage.getItem("vendortoken");
+                  const response = await VendorProfileEdit(vendor._id , data, token)
+                  if (response) {
+                    if (response.status == "success") {
+                      toast.success("Successfully Edited", {
+                        position: "top-right",
+                        autoClose: 2000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "colored",
+                      });
+                      setTimeout(() => {
+                        router.back()
+                      }, 2000);
+                    } else {
+                      toast.error("This email is already registered!", {
+                        position: "top-right",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "colored",
+                      });
+                    }
+                  }        
+                } else {
+                  setExperiance(true)
+                  setExperianceError('Please enter the No.of Year')
+                }
               }else{
                 setEmail(true)
                 setEmailError('Please enter valid Email')
@@ -393,6 +402,8 @@ export default function VendorEditProfile() {
                               size="small"
                               autoComplete="family-name"
                               defaultValue={vendor.experiance}
+                              error={experiance}
+                              helperText={experianceError}
                             />
                           </Grid>
                           <Grid item xs={12}>

@@ -32,6 +32,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Carousel from "react-material-ui-carousel";
+import Moment from 'react-moment'
 
 const Posts = (props) => {
     const [comment, setComment] = useState('');
@@ -125,12 +126,18 @@ const Posts = (props) => {
                         {props.user._id == props.post.vendorId._id ? <Avatar src={props.post.vendorId.image ? props.post.vendorId.image : ''}/> : <Link href={props.vendor ? `/vendor/worker_profile/${props.post.vendorId._id}` : `/worker_profile/${props.post.vendorId._id}`}><Avatar src={props.post.vendorId.image ? props.post.vendorId.image : ''}/></Link> }
                       </IconButton>
                       {props.user._id == props.post.vendorId._id ? <Box sx={{ pt: 1.7, fontFamily: "sans-serif" }}>
-                        <h4 style={{ color:'#000' }}>{props.post.vendorId.firstName + ' ' + props.post.vendorId.lastName}</h4>
+                        <Box display={'flex'}>
+                          <h4 style={{ color:'#000' , marginRight:'10px' }}>{props.post.vendorId.firstName + ' ' + props.post.vendorId.lastName}</h4>
+                          <Moment style={{ fontSize:'10px'  , color:'gray' , marginTop:'4.5px' }} fromNow>{props.post?.updatedAt}</Moment>
+                        </Box>
                         <h6 style={{ color:'#000' }}>{props.post.vendorId.job}</h6>
                       </Box> : 
                       <Link href={props.vendor ? `/vendor/worker_profile/${props.post.vendorId._id}` : `/worker_profile/${props.post.vendorId._id}`}>
                       <Box sx={{ pt: 1.7, fontFamily: "sans-serif" }}>
-                        <h4 style={{ color:'#000' }}>{props.post.vendorId.firstName + ' ' + props.post.vendorId.lastName}</h4>
+                        <Box display={'flex'}>
+                          <h4 style={{ color:'#000' , marginRight:'10px' }}>{props.post.vendorId.firstName + ' ' + props.post.vendorId.lastName}</h4>
+                          <Moment style={{ fontSize:'10px'  , color:'gray' , marginTop:'4.5px' }} fromNow>{props.post?.updatedAt}</Moment>
+                        </Box>
                         <h6 style={{ color:'#000' }}>{props.post.vendorId.job}</h6>
                       </Box>
                       </Link>

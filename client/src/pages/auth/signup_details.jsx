@@ -146,7 +146,7 @@ export default function SignUpDetails() {
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            {/* <TextField
+                            <TextField
                             required
                             fullWidth
                             id="locality"
@@ -156,8 +156,8 @@ export default function SignUpDetails() {
                             helperText={localityError}
                             autoComplete="family-name"
                             autoFocus
-                            /> */}
-                            <FormControl sx={{ width:'100%' }}>
+                            />
+                            {/* <FormControl sx={{ width:'100%' }}>
                             <InputLabel id="locality">Locality *</InputLabel>
                             <Select
                               labelId="locality"
@@ -175,7 +175,7 @@ export default function SignUpDetails() {
                               <MenuItem value={20}>Valapattanam</MenuItem>
                               <MenuItem value={30}>Madakkara</MenuItem>
                             </Select>
-                            </FormControl>
+                            </FormControl> */}
                         </Grid>
                         <Grid item xs={12}>
                             <TextField

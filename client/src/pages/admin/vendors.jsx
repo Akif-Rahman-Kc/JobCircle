@@ -120,10 +120,10 @@ const Users = () => {
                                     </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                    {vendors.map((vendor) => (
+                                    {vendors.map((vendor, i) => (
                                         <StyledTableRow key={vendor._id}>
                                         <StyledTableCell align="center" component="th" scope="row">
-                                            1
+                                            {i + 1}
                                         </StyledTableCell>
                                         <StyledTableCell align="center" component="th" scope="row">
                                             {vendor.firstName + ' ' + vendor.lastName}

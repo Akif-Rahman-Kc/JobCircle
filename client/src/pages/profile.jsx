@@ -80,7 +80,7 @@ const Profile = () => {
             }
         }
         invoke()
-    },[refresh,user])
+    },[refresh])
 
     const savedVendor = async (vendorId)=>{
       let userToken=  localStorage.getItem('usertoken')
