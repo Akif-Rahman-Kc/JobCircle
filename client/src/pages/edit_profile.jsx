@@ -144,9 +144,9 @@ const EditProfile = () => {
                   }
                 }else{
                   data.image = ''
-                } 
-
-                const response = await ProfileEdit(user._id , data)
+                }
+                let token=  localStorage.getItem('usertoken')
+                const response = await ProfileEdit(user._id , data, token)
                 if (response) {
                     if (response.status == "success") {
                       toast.success("Successfully Edited", {
@@ -191,7 +191,8 @@ const EditProfile = () => {
       };
 
       const removeProfilePhoto = async ()=>{
-        const res = await ProfilePhotoRemove(user._id)
+        let token=  localStorage.getItem('usertoken')
+        const res = await ProfilePhotoRemove(user._id, token)
           if (res) {
             router.back()
           }

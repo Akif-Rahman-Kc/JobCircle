@@ -36,7 +36,6 @@ export default function VendorEditProfile() {
       async function invoke(){
         let token = localStorage.getItem("vendortoken");
         if (token) {
-          axios
           const response = await VendorisAuthApi(token)
           if (response) {
             if (response.auth) {
@@ -126,8 +125,8 @@ export default function VendorEditProfile() {
                 }else{
                   data.image = ''
                 } 
-
-                const response = await VendorProfileEdit(vendor._id , data)
+                let token = localStorage.getItem("vendortoken");
+                const response = await VendorProfileEdit(vendor._id , data, token)
                 if (response) {
                   if (response.status == "success") {
                     toast.success("Successfully Edited", {
@@ -172,7 +171,8 @@ export default function VendorEditProfile() {
       };
 
       const removeProfilePhoto = async ()=>{
-        const res = await VendorProfilePhotoRemove(vendor._id)
+        let token = localStorage.getItem("vendortoken");
+        const res = await VendorProfilePhotoRemove(vendor._id, token)
           if (res) {
             router.back()
           }

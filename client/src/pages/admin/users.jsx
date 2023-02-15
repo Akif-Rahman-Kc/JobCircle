@@ -12,7 +12,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useEffect, useState } from "react";
 import { AdminGetUsers, AdminisAuthApi } from "@/Apis/adminApi";
-import { isActivated, isBlocked } from "@/Apis/userApi";
+import { isActivated, isBlocked } from "@/Apis/adminApi";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -53,18 +53,14 @@ const Users = () => {
       } else {
         router.push('/admin/signin')
       }
-
-      const res = await AdminGetUsers()
-      if (res) {
-        setUsers(res)
-      }
     }
     invoke();
   },[])
 
   useEffect(()=>{
     async function invoke(){
-      const res = await AdminGetUsers()
+      let token=  localStorage.getItem('admintoken')
+      const res = await AdminGetUsers(token)
       if (res) {
         setUsers(res)
       }
@@ -73,12 +69,14 @@ const Users = () => {
   },[refresh])
 
   const blocked = async (userId) =>{
-    const res = await isBlocked(userId)
+    let token=  localStorage.getItem('admintoken')
+    const res = await isBlocked(userId, token)
     setRefresh(!refresh)
   }
 
   const actived = async (userId) =>{
-    const res = await isActivated(userId)
+    let token=  localStorage.getItem('admintoken')
+    const res = await isActivated(userId, token)
     setRefresh(!refresh)
   }
 

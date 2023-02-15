@@ -1,10 +1,10 @@
-import { Api } from "@/constants/Constant"
+import { VendorApi } from "@/constants/Constant"
 
 /////////////////////////////////////////////////////////////////////////////
 
 export const VendorSignupApi = async (formData) => {
     try {
-        const {data} = await Api.post('/vendor/signup', formData)
+        const {data} = await VendorApi.post('/signup', formData)
         return data;
     } catch (error) {
         console.log(error);
@@ -15,7 +15,7 @@ export const VendorSignupApi = async (formData) => {
 
 export const VendorSigninApi = async (formData) => {
     try {
-        const {data} = await Api.post('/vendor/signin', formData)
+        const {data} = await VendorApi.post('/signin', formData)
         return data;
     } catch (error) {
         console.log(error);
@@ -26,7 +26,7 @@ export const VendorSigninApi = async (formData) => {
 
 export const VendorisAuthApi = async (Token) => {
     try {
-        const {data} = await Api.post('/vendor/vendorAuth', {headers:{"accessVendorToken":Token}})
+        const {data} = await VendorApi.post('/vendorAuth',{}, {headers:{"vendortoken":Token}})
         return data;
     } catch (error) {
         console.log(error);
@@ -35,9 +35,9 @@ export const VendorisAuthApi = async (Token) => {
 
 /////////////////////////////////////////////////////////////////////////////
 
-export const VendorAddPost = async (formData) => {
+export const VendorAddPost = async (formData, Token) => {
     try {
-        const {data} = await Api.post('/vendor/add_post', formData)
+        const {data} = await VendorApi.post('/add_post', formData , {headers:{"vendortoken":Token}})
         return data;
     } catch (error) {
         console.log(error);
@@ -46,9 +46,9 @@ export const VendorAddPost = async (formData) => {
 
 /////////////////////////////////////////////////////////////////////////////
 
-export const VendorGetPosts = async (vendorId) => {
+export const VendorGetPosts = async (vendorId, Token) => {
     try {
-        const {data} = await Api.get(`/vendor/get_posts?vendorId=${vendorId}`)
+        const {data} = await VendorApi.get(`/get_posts?vendorId=${vendorId}`, {headers:{"vendortoken":Token}})
         return data;
     } catch (error) {
         console.log(error);
@@ -57,9 +57,9 @@ export const VendorGetPosts = async (vendorId) => {
 
 /////////////////////////////////////////////////////////////////////////////
 
-export const VendorProfileEdit = async (vendorId , formData) => {
+export const VendorProfileEdit = async (vendorId , formData, Token) => {
     try {
-        const {data} = await Api.put(`/vendor/edit_profile?vendorId=${vendorId}`, formData)
+        const {data} = await VendorApi.put(`/edit_profile?vendorId=${vendorId}`, formData , {headers:{"vendortoken":Token}})
         return data;
     } catch (error) {
         console.log(error);
@@ -68,9 +68,9 @@ export const VendorProfileEdit = async (vendorId , formData) => {
 
 /////////////////////////////////////////////////////////////////////////////
 
-export const VendorProfilePhotoRemove = async (vendorId) => {
+export const VendorProfilePhotoRemove = async (vendorId, Token) => {
     try {
-        const {data} = await Api.patch(`/vendor/remove_profile_photo?vendorId=${vendorId}`)
+        const {data} = await VendorApi.patch(`/remove_profile_photo?vendorId=${vendorId}` , {} , {headers:{"vendortoken":Token}})
         return data;
     } catch (error) {
         console.log(error);
@@ -79,9 +79,20 @@ export const VendorProfilePhotoRemove = async (vendorId) => {
 
 /////////////////////////////////////////////////////////////////////////////
 
-export const GetAllPosts = async (vendorId) => {
+export const GetAllPosts = async (Token) => {
     try {
-        const {data} = await Api.get('/vendor/get_all_posts')
+        const {data} = await VendorApi.get('/get_all_posts', {headers:{"vendortoken":Token}})
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const VendorGetJobs = async (Token) => {
+    try {
+        const {data} = await VendorApi.get('/get_jobs', {headers:{"vendortoken":Token}})
         return data;
     } catch (error) {
         console.log(error);
@@ -92,7 +103,7 @@ export const GetAllPosts = async (vendorId) => {
 
 export const LikedPost = async (postId, likerId) => {
     try {
-        const {data} = await Api.patch(`/vendor/liked_post?postId=${postId}&&likerId=${likerId}`)
+        const {data} = await VendorApi.patch(`/liked_post?postId=${postId}&&likerId=${likerId}`)
         return data;
     } catch (error) {
         console.log(error);
@@ -103,7 +114,7 @@ export const LikedPost = async (postId, likerId) => {
 
 export const AddCommnet = async (comment) => {
     try {
-        const {data} = await Api.patch('/vendor/add_comment', comment)
+        const {data} = await VendorApi.patch('/add_comment', comment)
         return data;
     } catch (error) {
         console.log(error);
@@ -114,7 +125,7 @@ export const AddCommnet = async (comment) => {
 
 export const DeleteComment = async (postId, commentId) => {
     try {
-        const {data} = await Api.patch(`/vendor/delete_comment?postId=${postId}&&commentId=${commentId}`)
+        const {data} = await VendorApi.patch(`/delete_comment?postId=${postId}&&commentId=${commentId}`)
         return data;
     } catch (error) {
         console.log(error);
@@ -125,7 +136,7 @@ export const DeleteComment = async (postId, commentId) => {
 
 export const EditPost = async (formData) => {
     try {
-        const {data} = await Api.patch('/vendor/edit_post', formData)
+        const {data} = await VendorApi.patch('/edit_post', formData)
         return data;
     } catch (error) {
         console.log(error);
@@ -136,7 +147,7 @@ export const EditPost = async (formData) => {
 
 export const DeletePost = async (postId) => {
     try {
-        const {data} = await Api.delete(`/vendor/delete_post?postId=${postId}`)
+        const {data} = await VendorApi.delete(`/delete_post?postId=${postId}`)
         return data;
     } catch (error) {
         console.log(error);
@@ -147,29 +158,7 @@ export const DeletePost = async (postId) => {
 
 export const ReportPost = async (message,postId,reporterId) => {
     try {
-        const {data} = await Api.patch('/vendor/report_post',{message,postId,reporterId})
-        return data;
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-/////////////////////////////////////////////////////////////////////////////
-
-export const isVendorBlocked = async (vendorId) => {
-    try {
-        const {data} = await Api.patch(`/vendor/blocked?vendorId=${vendorId}`)
-        return data;
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-/////////////////////////////////////////////////////////////////////////////
-
-export const isVendorActivated = async (vendorId) => {
-    try {
-        const {data} = await Api.patch(`/vendor/actived?vendorId=${vendorId}`)
+        const {data} = await VendorApi.patch('/report_post',{message,postId,reporterId})
         return data;
     } catch (error) {
         console.log(error);

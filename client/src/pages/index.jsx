@@ -24,7 +24,7 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { userDetails } from "@/redux/user";
 import HomeIcon from "@mui/icons-material/Home";
-import { isAuthApi } from "@/Apis/userApi";
+import { isAuthApi, UserGetAllPosts } from "@/Apis/userApi";
 import Posts from "@/components/Posts/Post";
 import { GetAllPosts } from "@/Apis/vendorApi";
 import BottomNavbar from "@/components/Navabar/BottomNavbar";
@@ -66,8 +66,8 @@ export default function Home() {
       } else {
         router.push('/auth/signin')
       }
-
-      const res = await GetAllPosts();
+      let userToken=  localStorage.getItem('usertoken')
+      const res = await UserGetAllPosts(userToken);
       if (res) {
         
         setPosts(res);
@@ -78,7 +78,8 @@ export default function Home() {
 
   useEffect(()=>{
     async function invoke(){
-      const res = await GetAllPosts();
+      let userToken=  localStorage.getItem('usertoken')
+      const res = await UserGetAllPosts(userToken);
       if (res) {
         res.map(async (doc)=>{
           doc.Likes.map((obj)=>{

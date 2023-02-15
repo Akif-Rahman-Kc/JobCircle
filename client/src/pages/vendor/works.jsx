@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { vendorDetails } from "@/redux/vendor";
 import VendorNavbar from "@/components/Navabar/VendorNavbar";
 import EngineeringIcon from "@mui/icons-material/Engineering";
-import { VendorisAuthApi } from "@/Apis/vendorApi";
+import { VendorGetJobs, VendorisAuthApi } from "@/Apis/vendorApi";
 import { GetJobs } from "@/Apis/userApi";
 import Link from "next/link";
 import VendorBottomNavbar from "@/components/Navabar/VendorBottomNavbar";
@@ -53,8 +53,8 @@ export default function VendorWorks() {
       } else {
         router.push('/vendor/signin')
       }
-
-      const res = await GetJobs()
+      let vendorToken=  localStorage.getItem('vendortoken')
+      const res = await VendorGetJobs(vendorToken)
       if (res) {
         setJobs(res)
       }

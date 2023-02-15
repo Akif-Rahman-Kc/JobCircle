@@ -96,7 +96,8 @@ export default function VendorProfile() {
             }else{
               dispatch(vendorDetails(response.vendorObj))
             }
-            const res = await VendorGetPosts(response.vendorObj._id)
+            let vendorToken = localStorage.getItem("vendortoken");
+            const res = await VendorGetPosts(response.vendorObj._id, vendorToken)
             if (res) {
               setPosts(res);
             }
@@ -113,7 +114,8 @@ export default function VendorProfile() {
 
   useEffect(() => {
     async function invokePosts(){
-      const response = await VendorGetPosts(vendor._id)
+      let vendorToken = localStorage.getItem("vendortoken");
+      const response = await VendorGetPosts(vendor._id, vendorToken)
       if (response) {
         response.map(async (doc)=>{
           doc.Likes.map((obj)=>{
@@ -167,7 +169,8 @@ export default function VendorProfile() {
         progress: undefined,
         theme: "colored",
       });
-      const resp = await VendorAddPost(data)
+      let vendorToken = localStorage.getItem("vendortoken");
+      const resp = await VendorAddPost(data, vendorToken)
       if (resp) {
         urls.splice(0,urls.length)
         setImage("");
@@ -192,13 +195,6 @@ export default function VendorProfile() {
     }
     
   };
-
-  const deletePost = async (postId)=> {
-    const res = await DeletePost(postId)
-    if (res) {
-      setrefreshPost(!refreshPost)
-    }
-  }
 
   const [open, setOpen] = useState(false);
   const [openEditPostModal, setOpenEditPostModal] = useState(false);

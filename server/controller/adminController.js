@@ -68,3 +68,53 @@ export async function getVendors(req, res) {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function userBlock(req, res) {
+    try {
+        await User.updateOne({_id:req.query.userId},{
+            isBlock:true
+        })
+        res.json({status:"success"})
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function userActive(req, res) {
+    try {
+        await User.updateOne({_id:req.query.userId},{
+            isBlock:false
+        })
+        res.json({status:"success"})
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function vendorBlock(req, res) {
+    try {
+        await Vendor.updateOne({_id:req.query.vendorId},{
+            isBlock:true
+        })
+        res.json({status:"success"})
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function vendorActive(req, res) {
+    try {
+        await Vendor.updateOne({_id:req.query.vendorId},{
+            isBlock:false
+        })
+        res.json({status:"success"})
+    } catch (error) {
+        console.log(error)
+    }
+}

@@ -1,7 +1,7 @@
 import { verify } from 'jsonwebtoken';
 
 export async function userJWT(req, res, next) {
-    const token = req.body.headers.accessToken;
+    const token = req.headers['usertoken'];
     if (!token) {
         console.log("You need token");
     } else {
@@ -20,7 +20,7 @@ export async function userJWT(req, res, next) {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export async function vendorJWT(req, res, next) {
-    const token = req.body.headers.accessVendorToken;
+    const token = req.headers['vendortoken'];
     if (!token) {
         console.log("You need token");
     } else {
@@ -39,7 +39,7 @@ export async function vendorJWT(req, res, next) {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export async function adminJWT(req, res, next) {
-    const token = req.body.headers.accessAdminToken;
+    const token = req.headers['admintoken'];
     if (!token) {
         console.log("You need token");
     } else {

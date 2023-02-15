@@ -80,7 +80,8 @@ export default function Workers({workers}) {
   },[refresh])
 
   const savedVendor = async (vendorId )=>{
-    const res = await SavedVendors(vendorId, user._id)
+    let token=  localStorage.getItem('usertoken')
+    const res = await SavedVendors(vendorId, user._id, token)
     if (res) {
       setRefresh(!refresh)
     }

@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { AdminGetVendors, AdminisAuthApi } from "@/Apis/adminApi";
 import { useRouter } from "next/router";
-import { isVendorActivated, isVendorBlocked } from "@/Apis/vendorApi";
+import { isVendorActivated, isVendorBlocked } from "@/Apis/adminApi";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -74,7 +74,8 @@ const Users = () => {
 
   useEffect(()=>{
     async function invoke(){
-      const res = await AdminGetVendors()
+      let token=  localStorage.getItem('admintoken')
+      const res = await AdminGetVendors(token)
       if (res) {
         setVendors(res)
       }
@@ -83,12 +84,14 @@ const Users = () => {
   },[refresh])
 
   const blocked = async (vendorId) =>{
-    const res = await isVendorBlocked(vendorId)
+    let token=  localStorage.getItem('admintoken')
+    const res = await isVendorBlocked(vendorId, token)
     setRefresh(!refresh)
   }
 
   const actived = async (vendorId) =>{
-    const res = await isVendorActivated(vendorId)
+    let token=  localStorage.getItem('admintoken')
+    const res = await isVendorActivated(vendorId, token)
     setRefresh(!refresh)
   }
 

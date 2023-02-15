@@ -53,8 +53,8 @@ export default function Works() {
       } else {
         router.push('/auth/signin')
       }
-
-      const res = await GetJobs()
+      let userToken=  localStorage.getItem('usertoken')
+      const res = await GetJobs(userToken)
       if (res) {
         setJobs(res)
       }

@@ -1,10 +1,10 @@
-import { Api } from "@/constants/Constant"
+import { UserApi } from "@/constants/Constant"
 
 /////////////////////////////////////////////////////////////////////////////
 
 export const SignupApi = async (formData) => {
     try {
-        const {data} = await Api.post('/signup', formData)
+        const {data} = await UserApi.post('/signup', formData)
         return data;
     } catch (error) {
         console.log(error);
@@ -15,7 +15,7 @@ export const SignupApi = async (formData) => {
 
 export const SigninApi = async (formData) => {
     try {
-        const {data} = await Api.post('/signin', formData)
+        const {data} = await UserApi.post('/signin', formData)
         return data;
     } catch (error) {
         console.log(error);
@@ -26,7 +26,7 @@ export const SigninApi = async (formData) => {
 
 export const isAuthApi = async (Token) => {
     try {
-        const {data} = await Api.post('/userAuth', {headers:{"accessToken":Token}})
+        const {data} = await UserApi.post('/userAuth',{}, {headers:{"usertoken":Token}})
         return data;
     } catch (error) {
         console.log(error);
@@ -35,9 +35,9 @@ export const isAuthApi = async (Token) => {
 
 /////////////////////////////////////////////////////////////////////////////
 
-export const GetJobs = async () => {
+export const GetJobs = async (Token) => {
     try {
-        const {data} = await Api.get('/get_jobs')
+        const {data} = await UserApi.get('/get_jobs', {headers:{"usertoken":Token}})
         return data;
     } catch (error) {
         console.log(error);
@@ -48,7 +48,7 @@ export const GetJobs = async () => {
 
 export const GetWorkers = async (jobId) => {
     try {
-        const {data} = await Api.get(`/get_workers?jobId=${jobId}`)
+        const {data} = await UserApi.get(`/get_workers?jobId=${jobId}`)
         return data;
     } catch (error) {
         console.log(error);
@@ -57,9 +57,9 @@ export const GetWorkers = async (jobId) => {
 
 /////////////////////////////////////////////////////////////////////////////
 
-export const ProfileEdit = async (userId , formData) => {
+export const ProfileEdit = async (userId , formData, Token) => {
     try {
-        const {data} = await Api.put(`/edit_profile?userId=${userId}`, formData)
+        const {data} = await UserApi.put(`/edit_profile?userId=${userId}`, formData , {headers:{"usertoken":Token}})
         return data;
     } catch (error) {
         console.log(error);
@@ -68,9 +68,9 @@ export const ProfileEdit = async (userId , formData) => {
 
 /////////////////////////////////////////////////////////////////////////////
 
-export const ProfilePhotoRemove = async (userId) => {
+export const ProfilePhotoRemove = async (userId, Token) => {
     try {
-        const {data} = await Api.patch(`/remove_profile_photo?userId=${userId}`)
+        const {data} = await UserApi.patch(`/remove_profile_photo?userId=${userId}` , {} , {headers:{"usertoken":Token}})
         return data;
     } catch (error) {
         console.log(error);
@@ -79,9 +79,9 @@ export const ProfilePhotoRemove = async (userId) => {
 
 /////////////////////////////////////////////////////////////////////////////
 
-export const SavedVendors = async (vendorId, userId) => {
+export const SavedVendors = async (vendorId, userId, Token) => {
     try {
-        const {data} = await Api.patch(`/saved_vendors?vendorId=${vendorId}&&userId=${userId}`)
+        const {data} = await UserApi.patch(`/saved_vendors?vendorId=${vendorId}&&userId=${userId}` , {} , {headers:{"usertoken":Token}})
         return data;
     } catch (error) {
         console.log(error);
@@ -90,20 +90,9 @@ export const SavedVendors = async (vendorId, userId) => {
 
 /////////////////////////////////////////////////////////////////////////////
 
-export const isBlocked = async (userId) => {
+export const UserGetAllPosts = async (Token) => {
     try {
-        const {data} = await Api.patch(`/blocked?userId=${userId}`)
-        return data;
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-/////////////////////////////////////////////////////////////////////////////
-
-export const isActivated = async (userId) => {
-    try {
-        const {data} = await Api.patch(`/actived?userId=${userId}`)
+        const {data} = await UserApi.get('/get_all_posts', {headers:{"usertoken":Token}})
         return data;
     } catch (error) {
         console.log(error);

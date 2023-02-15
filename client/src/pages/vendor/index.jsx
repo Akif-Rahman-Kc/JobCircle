@@ -60,8 +60,8 @@ export default function VendorHome() {
       } else {
         router.push("/vendor/signin");
       }
-
-      const res = await GetAllPosts();
+      let vendorToken = localStorage.getItem("vendortoken");
+      const res = await GetAllPosts(vendorToken);
       if (res) {
         
         setPosts(res);
@@ -72,7 +72,8 @@ export default function VendorHome() {
 
   useEffect(()=>{
     async function invoke(){
-      const res = await GetAllPosts();
+      let vendorToken = localStorage.getItem("vendortoken");
+      const res = await GetAllPosts(vendorToken);
       if (res) {
         res.map(async (doc)=>{
           doc.Likes.map((obj)=>{

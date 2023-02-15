@@ -83,7 +83,8 @@ const Profile = () => {
     },[refresh,user])
 
     const savedVendor = async (vendorId)=>{
-      const res = await SavedVendors(vendorId, user._id)
+      let userToken=  localStorage.getItem('usertoken')
+      const res = await SavedVendors(vendorId, user._id, userToken)
       if (res) {
         setRefresh(!refresh)
       }
