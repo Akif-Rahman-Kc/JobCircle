@@ -163,6 +163,7 @@ const WorkerProfile = (props) => {
                       <h5>Email :<a href={props.worker.email}><span style={{ color:'blue' }}>{props.worker.email}</span></a></h5>
                       <h5>Job : <span style={{ color:'blue' }}>{props.worker.job}</span></h5>
                       <h5>Experiance : <span style={{ color:'blue' }}>{props.worker.experiance} Year</span></h5>
+                      <h5>Working Days : <span style={{ color:'blue' }}>{props.worker.jobDays} Year</span></h5>
                     </Box> : ''}
                     <Box sx={{ width:'100%' , mt: 1 }}>
                             <Button sx={{ boxShadow: 3 , backgroundColor:'#1976d2' , color:'#fff' , fontSize:'9.5px' , py: 0 , px: 4 , pt: 0.2 , ":hover":{ backgroundColor:'#1976d2' } , mb: 0.6 }}><PersonAddIcon sx={{ width:'18px' , mt: -0.3 , mr: 0.2 }}/>Connect</Button>
@@ -199,8 +200,9 @@ const WorkerProfile = (props) => {
                                 <h1 style={{ padding:'5px' }}>Booking Form</h1>
                                 <Grid sx={{ display: "flex" }}>
                                 <Grid xs={6} sx={{ p: 2 , border:1 , borderRadius: 2 , maxHeight:'297px' }}>
-                                <h4 style={{ padding:'10px' , lineBreak:'auto' , border:'1px solid black' , borderRadius:'4px' }}>Confirmed Date</h4>
-                                  <Box className='comments' sx={{ border:1 , borderRadius: 1 , maxHeight:'220px' , overflowY:'auto' }}>
+                                <h4 style={{ padding:'8px' , lineBreak:'auto' , border:'1px solid black' , borderRadius:'4px' }}>Confirmed Date</h4>
+                                <h5 style={{ fontSize:'12px' , margin:'4px' }}>{props.worker.jobDays}</h5>
+                                  <Box className='comments' sx={{ border:1 , borderRadius: 1 , height:{xs: '190px' , sm:'200px' , md: '200px' } , overflowY:'auto' }}>  
                                     <hr />
                                     <h6  style={{ padding:'4px' }}>21/01/2023</h6>
                                     <hr />
