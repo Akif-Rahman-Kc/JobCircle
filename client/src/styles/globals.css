@@ -141,6 +141,90 @@ h1 ,h2, h3, h4, h5, h6, a, p {
   background-color: #e9e5df;
 }
 
+@media only screen and (max-width: 599px) {
+  .search {
+    width:81% ;
+  }
+}
+
+@media only screen and (max-width: 567px) {
+  .search {
+    width:80% ;
+  }
+}
+
+@media only screen and (max-width: 543px) {
+  .search {
+    width:79% ;
+  }
+}
+
+@media only screen and (max-width: 519px) {
+  .search {
+    width:78% ;
+  }
+}
+
+@media only screen and (max-width: 494px) {
+  .search {
+    width:77% ;
+  }
+}
+
+@media only screen and (max-width: 465px) {
+  .search {
+    width:76% ;
+  }
+}
+
+@media only screen and (max-width: 445px) {
+  .search {
+    width:75% ;
+  }
+}
+
+@media only screen and (max-width: 419px) {
+  .search {
+    width:73% ;
+  }
+}
+
+@media only screen and (max-width: 403px) {
+  .search {
+    width:72% ;
+  }
+}
+
+@media only screen and (max-width: 390px) {
+  .search {
+    width:71% ;
+  }
+}
+
+@media only screen and (max-width: 376px) {
+  .search {
+    width:70% ;
+  }
+}
+
+@media only screen and (max-width: 362px) {
+  .search {
+    width:69% ;
+  }
+}
+
+@media only screen and (max-width: 355px) {
+  .search {
+    width:68% ;
+  }
+}
+
+@media only screen and (max-width: 342px) {
+  .search {
+    width:67% ;
+  }
+}
+
 /* ///////////////////// */
 
 .map {
@@ -153,8 +237,6 @@ h1 ,h2, h3, h4, h5, h6, a, p {
   border:1px solid gray
 }
 
-/* ///////////////////// */
-
 a.mapboxgl-ctrl-logo.mapboxgl-compact .mapboxgl-ctrl-bottom-right {
   display: none !important;
 }
@@ -166,3 +248,5 @@ a.mapboxgl-ctrl-logo.mapboxgl-compact .mapboxgl-ctrl-bottom-right {
 a.mapboxgl-ctrl-logo{
   display: none !important;
 }
+
+/* ///////////////////// */

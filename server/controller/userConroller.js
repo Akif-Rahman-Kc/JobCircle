@@ -157,3 +157,21 @@ export async function savedVendors(req, res) {
         console.log(error)
     }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function searchAllPeople(req, res) {
+    try {
+        const word = req.query.vlaue.trim();
+        const users = await User.find({
+            firstName: { $regex: new RegExp(`^${word}.*`, "i") },
+        })
+        const vendors = await Vendor.find({
+            firstName: { $regex: new RegExp(`^${word}.*`, "i") },
+        })
+        let allPeople = [...users,...vendors]
+        res.json({allPeople});
+    } catch (error) {
+        console.log(error)
+    }
+}

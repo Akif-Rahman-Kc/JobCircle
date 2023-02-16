@@ -1,6 +1,6 @@
 import { Router } from 'express';
 const router = Router();
-import { userSignUp, userSignIn, userAuth, editProfile, removeProfilePhoto, savedVendors } from '../controller/userConroller.js';
+import { userSignUp, userSignIn, userAuth, editProfile, removeProfilePhoto, savedVendors, searchAllPeople } from '../controller/userConroller.js';
 import { getJobs, getWorker, getWorkers } from '../controller/workController.js';
 import { getAllPosts } from '../controller/postController.js';
 import { userJWT } from '../middleware/auth.js';
@@ -22,9 +22,11 @@ router.patch('/saved_vendors', userJWT,savedVendors)
 router.get('/get_all_posts', userJWT,getAllPosts)
 
 // Works
-
 router.get('/get_jobs', userJWT,getJobs)
 router.get('/get_workers', getWorkers)
 router.get('/get_worker', getWorker)
+
+//Search
+router.get('/search', searchAllPeople)
 
 export default router;

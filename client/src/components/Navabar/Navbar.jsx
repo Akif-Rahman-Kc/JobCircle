@@ -22,6 +22,8 @@ import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import Swal from "sweetalert2";
+import { SearchAllPeople } from "@/Apis/userApi";
+import { Avatar } from "@mui/material";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -65,6 +67,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function Navbar() {
   const router = useRouter();
+  const [ allPeople, setAllPeople ] = React.useState([])
 
   const { user } = useSelector((state) => state.userInfo);
 
@@ -82,6 +85,15 @@ export default function Navbar() {
       }
     });
   };
+
+  
+  const searchAllUsers = async (value)=>{
+    const response = await SearchAllPeople(value)
+    if (response) {
+      console.log(response.allPeople);
+      setAllPeople(response.allPeople)
+    }
+  }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -109,9 +121,25 @@ export default function Navbar() {
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
+              onChange={(e)=>searchAllUsers(e.target.value)}
               placeholder="Search…"
               inputProps={{ "aria-label": "search" }}
             />
+            <Box className='search comments' zIndex={-500} mt={-1.5} py={2} bgcolor={'#fff'} position={'fixed'} height={'300px'} sx={{ borderLeft:'1px solid lightgray' , borderBottom:'1px solid lightgray' , borderRight:'1px solid lightgray' , width:{ xs:'68vw' , sm:'251px' , md:'234px' } , borderBottomRightRadius:'15px' , borderBottomLeftRadius:'15px' , overflowY:'auto' }}>
+              {allPeople.map((person)=>(
+                <>
+                  <IconButton size='small' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
+                    <Box sx={{width: '-webkit-fill-available' , color:'#111' , display:'flex'}}>
+                      <img src={person.image ? person.image : "/null-profile.jpg"} style={{ width:'30px' , height:'30px' ,borderRadius:'50%',border:'1px solid #000' }} alt="" />
+                      <Box sx={{ display:'flex' , justifyContent:'center' , alignItems:'center' }}>
+                        <h5 style={{ fontSize:'13px'  , marginLeft:'5px' }}>{person.firstName + ' ' + person.lastName}</h5>
+                    </Box>
+                    </Box>
+                  </IconButton>
+                  <hr />
+                </>
+              ))}
+            </Box>
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>

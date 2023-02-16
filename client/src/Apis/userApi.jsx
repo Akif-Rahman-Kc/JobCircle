@@ -98,3 +98,14 @@ export const UserGetAllPosts = async (Token) => {
         console.log(error);
     }
 }
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const SearchAllPeople = async (word) => {
+    try {
+        const {data} = await UserApi.get(`/search?vlaue=${word}`)
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
