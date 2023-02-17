@@ -66,6 +66,7 @@ export async function searchAllPeople(req, res) {
 
 export async function connectWithPeople(req, res) {
     try {
+        console.log(req.query,"///");
         const user = await User.findById(req.query.followingId)
         const vendor = await Vendor.findById(req.query.followingId)
 
