@@ -68,6 +68,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function Navbar() {
   const router = useRouter();
   const [ allPeople, setAllPeople ] = React.useState([])
+  const [ openBox, setOpenBox ] = React.useState(false)
 
   const { user } = useSelector((state) => state.userInfo);
 
@@ -122,24 +123,37 @@ export default function Navbar() {
             </SearchIconWrapper>
             <StyledInputBase
               onChange={(e)=>searchAllUsers(e.target.value)}
+              onKeyUp={()=>{
+                setOpenBox(true)
+              }}
+              onBlur={()=>{
+                setOpenBox(false)
+              }}
               placeholder="Search…"
               inputProps={{ "aria-label": "search" }}
             />
-            <Box className='search comments' zIndex={-500} mt={-1.5} py={2} bgcolor={'#fff'} position={'fixed'} height={'300px'} sx={{ borderLeft:'1px solid lightgray' , borderBottom:'1px solid lightgray' , borderRight:'1px solid lightgray' , width:{ xs:'68vw' , sm:'251px' , md:'234px' } , borderBottomRightRadius:'15px' , borderBottomLeftRadius:'15px' , overflowY:'auto' }}>
+            { openBox ?
+            <a><Box className='search comments' zIndex={-500} mt={-1.5} py={2} bgcolor={'#fff'} position={'fixed'} height={'300px'} sx={{ borderLeft:'1px solid lightgray' , borderBottom:'1px solid lightgray' , borderRight:'1px solid lightgray' , width:{ xs:'68vw' , sm:'251px' , md:'234px' } , borderBottomRightRadius:'15px' , borderBottomLeftRadius:'15px' , overflowY:'auto' }}>
               {allPeople.map((person)=>(
                 <>
-                  <IconButton size='small' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
+                  <Link href={`/worker_profile/${person._id}`} >
+                  <IconButton key={person._id} size='small' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
                     <Box sx={{width: '-webkit-fill-available' , color:'#111' , display:'flex'}}>
                       <img src={person.image ? person.image : "/null-profile.jpg"} style={{ width:'30px' , height:'30px' ,borderRadius:'50%',border:'1px solid #000' }} alt="" />
                       <Box sx={{ display:'flex' , justifyContent:'center' , alignItems:'center' }}>
-                        <h5 style={{ fontSize:'13px'  , marginLeft:'5px' }}>{person.firstName + ' ' + person.lastName}</h5>
+                        <Box sx={{ display:'block'  , textAlign:'left'}}>
+                          <h5 style={{ fontSize:'13px'  , marginLeft:'5px' }}>{person.firstName + ' ' + person.lastName}</h5>
+                          <h6 style={{ fontSize:'10px'  , marginLeft:'5px' , fontFamily:'monospace' }}>{person?.job}</h6>
+                        </Box>
                     </Box>
                     </Box>
                   </IconButton>
+                  </Link>
                   <hr />
                 </>
               ))}
-            </Box>
+            </Box></a>
+            : '' }
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>

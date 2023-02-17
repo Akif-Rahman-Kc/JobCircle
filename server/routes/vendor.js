@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { addComment, addPost, deleteComment, deletePost, editPost, getAllPosts, getPosts, likedPost, reportPost } from '../controller/postController.js';
 const router = Router();
 import { vendorSignUp, vendorSignIn, vendorAuth, vendorEditProfile, VendorRemoveProfilePhoto } from '../controller/vendorController.js';
-import { getJobs } from '../controller/workController.js';
+import { getJobs, searchAllPeople } from '../controller/workController.js';
 import { vendorJWT } from '../middleware/auth.js';
 
 // Authentication
@@ -15,7 +15,7 @@ router.post('/add_post', vendorJWT,addPost)
 router.patch('/edit_post', editPost)
 router.delete('/delete_post', deletePost)
 router.patch('/report_post', reportPost)
-router.get('/get_posts', vendorJWT,getPosts)
+router.get('/get_posts', getPosts)
 router.get('/get_all_posts', vendorJWT,getAllPosts)
 router.patch('/liked_post', likedPost)
 router.patch('/add_comment', addComment)
@@ -27,5 +27,8 @@ router.patch('/remove_profile_photo', vendorJWT,VendorRemoveProfilePhoto)
 
 // Works
 router.get('/get_jobs', vendorJWT,getJobs)
+
+//Search
+router.get('/search', searchAllPeople)
 
 export default router;

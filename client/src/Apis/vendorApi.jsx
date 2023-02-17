@@ -48,7 +48,7 @@ export const VendorAddPost = async (formData, Token) => {
 
 export const VendorGetPosts = async (vendorId, Token) => {
     try {
-        const {data} = await VendorApi.get(`/get_posts?vendorId=${vendorId}`, {headers:{"vendortoken":Token}})
+        const {data} = await VendorApi.get(`/get_posts?vendorId=${vendorId}`)
         return data;
     } catch (error) {
         console.log(error);
@@ -159,6 +159,17 @@ export const DeletePost = async (postId) => {
 export const ReportPost = async (message,postId,reporterId) => {
     try {
         const {data} = await VendorApi.patch('/report_post',{message,postId,reporterId})
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const VendorSearchAllPeople = async (word) => {
+    try {
+        const {data} = await VendorApi.get(`/search?vlaue=${word}`)
         return data;
     } catch (error) {
         console.log(error);

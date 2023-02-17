@@ -1,7 +1,7 @@
 import { Router } from 'express';
 const router = Router();
-import { userSignUp, userSignIn, userAuth, editProfile, removeProfilePhoto, savedVendors, searchAllPeople } from '../controller/userConroller.js';
-import { getJobs, getWorker, getWorkers } from '../controller/workController.js';
+import { userSignUp, userSignIn, userAuth, editProfile, removeProfilePhoto, savedVendors } from '../controller/userConroller.js';
+import { connectWithPeople, getJobs, getWorker, getWorkers, searchAllPeople } from '../controller/workController.js';
 import { getAllPosts } from '../controller/postController.js';
 import { userJWT } from '../middleware/auth.js';
 
@@ -28,5 +28,8 @@ router.get('/get_worker', getWorker)
 
 //Search
 router.get('/search', searchAllPeople)
+
+//Connect
+router.patch('/connect', connectWithPeople)
 
 export default router;

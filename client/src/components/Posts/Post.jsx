@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import VendorNavbar from "@/components/Navabar/VendorNavbar";
-import { useDispatch, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { vendorDetails } from "@/redux/vendor";
 import HomeIcon from "@mui/icons-material/Home";
 import { AddCommnet, DeleteComment, DeletePost, GetAllPosts, LikedPost, ReportPost, VendorisAuthApi } from "@/Apis/vendorApi";
@@ -33,6 +33,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Carousel from "react-material-ui-carousel";
 import Moment from 'react-moment'
+import { ConnectWithPeople } from "@/Apis/userApi";
 
 const Posts = (props) => {
     const [comment, setComment] = useState('');
@@ -117,6 +118,10 @@ const Posts = (props) => {
           props.setrefreshComment(!props.refreshComment)
         }
       }
+      
+      const connect = () =>{
+        const response = ConnectWithPeople(props.user._id, props.post.vendorId._id)
+      }
 
     return ( 
         <>
@@ -143,7 +148,8 @@ const Posts = (props) => {
                       </Link>
                       }
                       { props.user._id == props.post.vendorId._id ? '' :
-                      <Grid
+                      <Button
+                        onClick={connect}
                         sx={{
                           ml: "auto",
                           p: 0.1,
@@ -155,11 +161,12 @@ const Posts = (props) => {
                           borderRadius: "25px",
                           color: "#fff",
                           display:'flex',
-                          boxShadow: 3 
+                          boxShadow: 3 ,
+                          ":hover":{ bgcolor:'#1976d2' }
                         }}
                       >
-                        <PersonAddIcon sx={{ width:'15px' , mr: 0.3 }}/><h6 style={{ marginTop:'6px' }}>Connect</h6>
-                      </Grid>
+                        <PersonAddIcon sx={{ width:'15px' , mr: 0.3 }}/><h6 style={{ marginTop:'3px' }}>Connect</h6>
+                      </Button>
                        }
                     </Box>
                     <p

@@ -54,6 +54,7 @@ const WorkerProfile = (props) => {
 
     useEffect(() => {
         async function invokePosts(){
+          const token = localStorage.getItem
           const response = await VendorGetPosts(props.worker._id)
           if (response) {
             console.log(response);

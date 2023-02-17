@@ -23,6 +23,7 @@ import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import Swal from 'sweetalert2';
+import { VendorSearchAllPeople } from '@/Apis/vendorApi';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -66,6 +67,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function VendorNavbar() {
     const router = useRouter()
+    const [ allPeople, setAllPeople ] = React.useState([])
+  const [ openBox, setOpenBox ] = React.useState(false)
 
   const { vendor } = useSelector((state)=>state.vendorInfo)
 
@@ -83,6 +86,14 @@ export default function VendorNavbar() {
       }
     });
   };
+
+  const searchAllUsers = async (value)=>{
+    const response = await VendorSearchAllPeople(value)
+    if (response) {
+      console.log(response.allPeople);
+      setAllPeople(response.allPeople)
+    }
+  }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -110,9 +121,38 @@ export default function VendorNavbar() {
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
+              onChange={(e)=>searchAllUsers(e.target.value)}
+              onKeyUp={()=>{
+                setOpenBox(true)
+              }}
+              onBlur={()=>{
+                setOpenBox(false)
+              }}
               placeholder="Search…"
               inputProps={{ 'aria-label': 'search' }}
             />
+            { openBox ?
+            <a><Box className='search comments' zIndex={-500} mt={-1.5} py={2} bgcolor={'#fff'} position={'fixed'} height={'300px'} sx={{ borderLeft:'1px solid lightgray' , borderBottom:'1px solid lightgray' , borderRight:'1px solid lightgray' , width:{ xs:'68vw' , sm:'251px' , md:'234px' } , borderBottomRightRadius:'15px' , borderBottomLeftRadius:'15px' , overflowY:'auto' }}>
+              {allPeople.map((person)=>(
+                <>
+                  <Link href={`/vendor/worker_profile/${person._id}`}>
+                  <IconButton key={person._id} size='small' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
+                    <Box sx={{width: '-webkit-fill-available' , color:'#111' , display:'flex'}}>
+                      <img src={person.image ? person.image : "/null-profile.jpg"} style={{ width:'30px' , height:'30px' ,borderRadius:'50%',border:'1px solid #000' }} alt="" />
+                      <Box sx={{ display:'flex' , justifyContent:'center' , alignItems:'center' }}>
+                        <Box sx={{ display:'block'  , textAlign:'left'}}>
+                          <h5 style={{ fontSize:'13px'  , marginLeft:'5px' }}>{person.firstName + ' ' + person.lastName}</h5>
+                          <h6 style={{ fontSize:'10px'  , marginLeft:'5px' , fontFamily:'monospace' }}>{person?.job}</h6>
+                        </Box>
+                    </Box>
+                    </Box>
+                  </IconButton>
+                  </Link>
+                  <hr />
+                </>
+              ))}
+            </Box></a>
+            : '' }
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>

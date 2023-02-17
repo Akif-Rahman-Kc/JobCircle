@@ -109,3 +109,14 @@ export const SearchAllPeople = async (word) => {
         console.log(error);
     }
 }
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const ConnectWithPeople = async (userId,followingId) => {
+    try {
+        const {data} = await UserApi.patch(`/connect?userId=${userId}&&followingId=${followingId}`)
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
