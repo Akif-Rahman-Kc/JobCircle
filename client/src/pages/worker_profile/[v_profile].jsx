@@ -31,6 +31,7 @@ import WorkerProfile from "@/components/ProfileView/WorkerProfile";
 import UserProfile from "@/components/ProfileView/UserProfile";
 import BottomNavbar from "@/components/Navabar/BottomNavbar";
 import Swal from "sweetalert2";
+import AccountCircle from "@mui/icons-material/AccountCircle";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -112,11 +113,12 @@ export default function Worker_Profile({worker, current}) {
                       backgroundColor: "#fff",
                     }}
                   >
-                    <EngineeringIcon/>
-                    <h3 style={{ marginLeft:'7px' , fontSize:'22px' }}>Worker Profile</h3>
+                    {current == 'vendor' ? <EngineeringIcon/> : <AccountCircle/>}
+                    
+                    {current == 'vendor' ? <h3 style={{ marginLeft:'7px' , fontSize:'22px' }}>Worker Profile</h3> : <h3 style={{ marginLeft:'7px' , fontSize:'22px' }}>User Profile</h3> }
                   </Grid>
                 </Grid>
-                {current == 'vendor' ? <WorkerProfile worker={worker} user={user}/> : <UserProfile worker={worker}/> }
+                {current == 'vendor' ? <WorkerProfile worker={worker} user={user} vendor={false}/> : <UserProfile user={user} worker={worker} vendor={false}/> }
                 
               </Grid>
             </Grid>

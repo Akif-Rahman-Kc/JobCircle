@@ -130,7 +130,7 @@ export default function VendorWorker_Profile({worker, current}) {
                     <h3 style={{ marginLeft:'7px' , fontSize:'22px' }}>Worker Profile</h3>
                   </Grid>
                 </Grid>
-                {current == 'vendor' ? <WorkerProfile worker={worker} user={vendor}/> : <UserProfile worker={worker}/> }
+                {current == 'vendor' ? <WorkerProfile worker={worker} user={vendor} vendor={true}/> : <UserProfile worker={worker} user={vendor} vendor={true}/> }
               </Grid>
             </Grid>
             <Grid md={3}>

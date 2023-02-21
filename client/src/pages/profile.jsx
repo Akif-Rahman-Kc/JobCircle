@@ -237,7 +237,7 @@ const Profile = () => {
                         
                         </>
                       ))
-                    : <Connections/>}
+                    : <Connections user={user} vendor={false}/>}
                     </Grid>
                   </Box>
                 </Grid>

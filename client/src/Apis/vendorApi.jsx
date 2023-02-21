@@ -175,3 +175,14 @@ export const VendorSearchAllPeople = async (word) => {
         console.log(error);
     }
 }
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const VendorGetAllConnectors = async (userId) => {
+    try {
+        const {data} = await VendorApi.get(`/get_all_connectors?userId=${userId}`)
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}

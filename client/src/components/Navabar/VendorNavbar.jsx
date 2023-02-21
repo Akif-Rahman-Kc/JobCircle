@@ -132,8 +132,8 @@ export default function VendorNavbar() {
               inputProps={{ 'aria-label': 'search' }}
             />
             { openBox ?
-            <a><Box className='search comments' zIndex={-500} mt={-1.5} py={2} bgcolor={'#fff'} position={'fixed'} height={'300px'} sx={{ borderLeft:'1px solid lightgray' , borderBottom:'1px solid lightgray' , borderRight:'1px solid lightgray' , width:{ xs:'68vw' , sm:'251px' , md:'234px' } , borderBottomRightRadius:'15px' , borderBottomLeftRadius:'15px' , overflowY:'auto' }}>
-              {allPeople.map((person)=>(
+            <a><Box className='search comments' zIndex={-500} mt={-1.5} py={2} bgcolor={'#fff'} position={'fixed'} maxHeight={'300px'} sx={{ borderLeft:'1px solid lightgray' , borderBottom:'1px solid lightgray' , borderRight:'1px solid lightgray' , width:{ xs:'68vw' , sm:'251px' , md:'234px' } , borderBottomRightRadius:'15px' , borderBottomLeftRadius:'15px' , overflowY:'auto' }}>
+                {allPeople.length > 0 ? allPeople.map((person)=>(
                 <>
                   <Link href={`/vendor/worker_profile/${person._id}`}>
                   <IconButton key={person._id} size='small' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
@@ -150,7 +150,7 @@ export default function VendorNavbar() {
                   </Link>
                   <hr />
                 </>
-              ))}
+              )) : <h5>Sorry, Nothing found!</h5>}
             </Box></a>
             : '' }
           </Search>

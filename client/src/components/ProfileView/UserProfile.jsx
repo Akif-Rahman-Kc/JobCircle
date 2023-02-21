@@ -17,7 +17,7 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { userDetails } from "@/redux/user";
 import EngineeringIcon from "@mui/icons-material/Engineering";
-import { GetJobs, GetWorkers, isAuthApi } from "@/Apis/userApi";
+import { ConnectWithPeople, getAllConnectors, GetJobs, GetWorkers, isAuthApi } from "@/Apis/userApi";
 import MailIcon from '@mui/icons-material/Mail';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
@@ -30,6 +30,7 @@ import { BsFillChatDotsFill, IconName } from "react-icons/bs";
 import Posts from "@/components/Posts/Post";
 import { VendorGetPosts } from "@/Apis/vendorApi";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import Connections from "../Connections/connection";
 
 const style = {
     position: "absolute",
@@ -45,11 +46,83 @@ const style = {
     borderRadius: "10px",
   };
 
-const WorkerProfile = (props) => {
+const UserProfile = (props) => {
+
+  const [connected, setConnected] = useState(null);
+  const [status, setStatus] = useState("");
+  const [refreshPost, setrefreshPost] = useState(false);
+  const [ connectionLength, setConnectionLength] = useState()
+  const [ openConnectionBox, setOpenConnectionBox] = useState(false)
+
+  useEffect(() => {
+    async function invoke(){
+      const resp = await getAllConnectors(props.user._id)
+      if (resp) {
+        if (resp.connections.length > 0) {
+          resp?.connections.map((obj)=>{
+            if (obj.connectorId == props.worker._id) {
+              setConnected(true)
+              setStatus(obj.status)
+            }else{
+              setConnected(false)
+            }
+          })
+        } else{
+          setConnected(false)
+        }
+      }
+      const res = await getAllConnectors(props.worker._id)
+      if (res) {
+        const connectedConnection = res.connections.filter((obj)=>obj.status == 'connected')
+        setConnectionLength(connectedConnection.length)
+      }else{
+        setConnectionLength('0')
+      }
+    }
+    invoke();
+  }, [connected, refreshPost , props.user]);
+
+  useEffect(() => {
+    async function invoke(){
+      const res = await getAllConnectors(props.worker._id)
+      if (res) {
+        const connectedConnection = res.connections.filter((obj)=>obj.status == 'connected')
+        setConnectionLength(connectedConnection.length)
+      }else{
+        setConnectionLength('0')
+      }
+    }
+    invoke();
+  }, [connectionLength, refreshPost]);
+
+  const connect = () =>{
+    const response = ConnectWithPeople(props.user._id, props.worker._id)
+    if (response) {
+      setrefreshPost(!refreshPost)
+    }
+  }
 
     return ( 
         <>
             <Grid sx={{ pt: 7 }}>
+                {openConnectionBox ? 
+                  <Box
+                  sx={{
+                    p: 2,
+                    width: "-webkit-fill-available",
+                    boxShadow: 3,
+                    border: "1px solid lightgray",
+                    borderRadius: "15px",
+                    minHeight: "34.5vw",
+                    backgroundColor: "#fff",
+                    m: 2,
+                  }}
+                > 
+                  <Button onClick={()=> setOpenConnectionBox(false)} sx={{ float:'right' , fontSize:'10px' , border: 1 , py: 0.3 , pt: 0.5 }}>Back</Button>
+                  <br />
+                  <Connections user={props.worker} vendor={props.vendor}/>
+                </Box>
+                  :
                   <Box
                     sx={{
                       px: 3,
@@ -77,11 +150,15 @@ const WorkerProfile = (props) => {
                           />
                         </Grid>
                         <Grid
+                          onClick={()=> setOpenConnectionBox(true)}
                           xs={4}
                           sx={{
+                            cursor:'pointer',
                             color: "blue",
+                            ":active":{color:'#8282ff'},
                             textAlign: "center",
                             fontFamily: "sans-serif",
+                            height: 'fit-content'
                           }}
                         >
                           <h5
@@ -93,7 +170,7 @@ const WorkerProfile = (props) => {
                           >
                             Connections
                           </h5>
-                          <h4>21</h4>
+                          <h4>{connectionLength}</h4>
                         </Grid>
                         <Grid xs={4} sx={{ mt: -1, textAlign: "end" }}>
                           <IconButton>
@@ -107,9 +184,11 @@ const WorkerProfile = (props) => {
                             {props.worker.firstName + ' ' + props.worker.lastName}
                           </h3>
                           <h6>{props.worker.job}</h6>
-                          <Button sx={{ backgroundColor:'#1976d2' , color:'#fff' , fontSize:'9.5px' , py: 0 , px: 4 , pt: 0.2 , ":hover":{ backgroundColor:'#1976d2' } , mb: 0.6 }}><PersonAddIcon sx={{ width:'18px' , mt: -0.3 , mr: 0.2 }}/>Connect</Button>
+                            {connected ? <Button onClick={connect} sx={{ mt: 1.5 , boxShadow: 3 , backgroundColor:'#fff' , color:'#1976d2' , fontSize:'9.5px'  , px: 4 , py: 0.24 , ":hover":{ backgroundColor:'#fff' } , mb: 0.6  , border:'1px solid #1976d2' , fontWeight:'900' }}>{status}</Button> :
+                              <Button onClick={connect} sx={{ mt: 1.5 , boxShadow: 3 , backgroundColor:'#1976d2' , color:'#fff' , fontSize:'9.5px' , py: 0 , px: 4 , pt: 0.2 , ":hover":{ backgroundColor:'#1976d2' } , mb: 0.6 }}><PersonAddIcon sx={{ width:'18px' , mt: -0.3 , mr: 0.2 }}/>Connect</Button>
+                            }
                             <br/>
-                            <Box sx={{ width:'113px' , display:'flex' }}>
+                            <Box sx={{ mt: 0.2 , width:'113px' , display:'flex' }}>
                               <IconButton sx={{ backgroundColor:'#1976d2' , color:'#fff' , ":hover":{ backgroundColor:'#1976d2' } , width:'50px' , height:'25px' , borderRadius:'15px' }}>
                                 <BsFillChatDotsFill style={{ width:'17px' }}/>
                               </IconButton>
@@ -124,9 +203,10 @@ const WorkerProfile = (props) => {
                       <h4>Email :<a href={props.worker.email}><span style={{ color:'blue' }}>{props.worker.email}</span></a></h4>
                     </Box>
                   </Box>
+                  }
                 </Grid>
         </>
      );
 }
  
-export default WorkerProfile;
+export default UserProfile;

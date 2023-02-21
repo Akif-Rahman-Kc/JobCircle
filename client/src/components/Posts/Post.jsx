@@ -33,7 +33,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Carousel from "react-material-ui-carousel";
 import Moment from 'react-moment'
-import { ConnectWithPeople } from "@/Apis/userApi";
+import { ConnectWithPeople, getAllConnectors } from "@/Apis/userApi";
 
 const Posts = (props) => {
     const [comment, setComment] = useState('');
@@ -118,10 +118,6 @@ const Posts = (props) => {
           props.setrefreshComment(!props.refreshComment)
         }
       }
-      
-      const connect = () =>{
-        const response = ConnectWithPeople(props.user._id, props.post.vendorId._id)
-      }
 
     return ( 
         <>
@@ -141,33 +137,58 @@ const Posts = (props) => {
                       <Box sx={{ pt: 1.7, fontFamily: "sans-serif" }}>
                         <Box display={'flex'}>
                           <h4 style={{ color:'#000' , marginRight:'10px' }}>{props.post.vendorId.firstName + ' ' + props.post.vendorId.lastName}</h4>
-                          <Moment style={{ fontSize:'10px'  , color:'gray' , marginTop:'4.5px' }} fromNow>{props.post?.updatedAt}</Moment>
+                          <Moment style={{ fontSize:'10px'  , color:'gray' , marginTop:'4.5px' }} fromNow>{props.post?.createdAt}</Moment>
                         </Box>
                         <h6 style={{ color:'#000' }}>{props.post.vendorId.job}</h6>
                       </Box>
                       </Link>
                       }
-                      { props.user._id == props.post.vendorId._id ? '' :
-                      <Button
-                        onClick={connect}
-                        sx={{
-                          ml: "auto",
-                          p: 0.1,
-                          pl: 1.9,
-                          pr: 2,
-                          backgroundColor: "#1976d2",
-                          mt: 2,
-                          mb: 2,
-                          borderRadius: "25px",
-                          color: "#fff",
-                          display:'flex',
-                          boxShadow: 3 ,
-                          ":hover":{ bgcolor:'#1976d2' }
-                        }}
-                      >
-                        <PersonAddIcon sx={{ width:'15px' , mr: 0.3 }}/><h6 style={{ marginTop:'3px' }}>Connect</h6>
-                      </Button>
-                       }
+                      {/* { props.user._id == props.post.vendorId._id ? '' :
+                      <Box sx={{ ml:'auto' }}>
+                        {props.post.connected ?
+                        <Button
+                          onClick={connect}
+                          sx={{
+                            ml: "auto",
+                            p: 0.1,
+                            pl: 1.9,
+                            pr: 2,
+                            backgroundColor: "#fff",
+                            border: 1,
+                            mt: 2,
+                            mb: 2,
+                            borderRadius: "25px",
+                            color: "#1976d2",
+                            display:'flex',
+                            boxShadow: 3 ,
+                            ":hover":{ bgcolor:'#fff' }
+                          }}
+                        >
+                          <h6 style={{ marginTop:'3px' , marginBottom:'3px' , fontWeight:'900'  }}>{props.post.status}</h6>
+                        </Button>
+                        :
+                        <Button
+                          onClick={connect}
+                          sx={{
+                            ml: "auto",
+                            p: 0.1,
+                            pl: 1.9,
+                            pr: 2,
+                            backgroundColor: "#1976d2",
+                            mt: 2,
+                            mb: 2,
+                            borderRadius: "25px",
+                            color: "#fff",
+                            display:'flex',
+                            boxShadow: 3 ,
+                            ":hover":{ bgcolor:'#1976d2' }
+                          }}
+                        >
+                          <PersonAddIcon sx={{ width:'15px' , mr: 0.3 }}/><h6 style={{ marginTop:'3px' }}>Connect</h6>
+                        </Button>
+                        }
+                      </Box>
+                       } */}
                     </Box>
                     <p
                       style={{

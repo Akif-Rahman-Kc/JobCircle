@@ -13,7 +13,7 @@ import VendorNavbar from "@/components/Navabar/VendorNavbar";
 import { useDispatch, useSelector } from "react-redux";
 import { vendorDetails } from "@/redux/vendor";
 import HomeIcon from "@mui/icons-material/Home";
-import { AddCommnet, DeleteComment, GetAllPosts, LikedPost, VendorisAuthApi } from "@/Apis/vendorApi";
+import { AddCommnet, DeleteComment, GetAllPosts, LikedPost, VendorGetAllConnectors, VendorisAuthApi } from "@/Apis/vendorApi";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -30,6 +30,7 @@ const inter = Inter({ subsets: ["latin"] });
 export default function VendorHome() {
   const router = useRouter();
   const [posts, setPosts] = useState([]);
+  const [connections, setConnections] = useState([]);
   const [refreshComment, setrefreshComment] = useState(false);
   const { vendor } = useSelector((state) => state.vendorInfo);
   const dispatch = useDispatch();
@@ -60,6 +61,10 @@ export default function VendorHome() {
       } else {
         router.push("/vendor/signin");
       }
+      const resp = await VendorGetAllConnectors(vendor._id)
+      if (resp) {
+        setConnections(resp.connections)
+      }
       let vendorToken = localStorage.getItem("vendortoken");
       const res = await GetAllPosts(vendorToken);
       if (res) {
@@ -74,7 +79,7 @@ export default function VendorHome() {
     async function invoke(){
       let vendorToken = localStorage.getItem("vendortoken");
       const res = await GetAllPosts(vendorToken);
-      if (res) {
+      if (res.auth != false) {
         res.map(async (doc)=>{
           doc.Likes.map((obj)=>{
             if (obj.likerId == vendor._id) {
@@ -151,9 +156,7 @@ export default function VendorHome() {
                     }}
                   >
                   {posts.map((post)=>(
-                    <>
-                      <Posts post = {post} setrefreshComment={setrefreshComment} refreshComment={refreshComment} user={vendor} vendor={true}/>
-                    </>
+                      <Posts post = {post} setrefreshComment={setrefreshComment} refreshComment={refreshComment} user={vendor} vendor={true}/> 
                     ))}
                   </Box>
                 </Grid>

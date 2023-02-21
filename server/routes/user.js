@@ -1,9 +1,11 @@
 import { Router } from 'express';
 const router = Router();
 import { userSignUp, userSignIn, userAuth, editProfile, removeProfilePhoto, savedVendors } from '../controller/userConroller.js';
-import { connectWithPeople, getJobs, getWorker, getWorkers, searchAllPeople } from '../controller/workController.js';
+import { connectWithPeople, getAllConnectors, getJobs, getWorker, getWorkers, searchAllPeople } from '../controller/workController.js';
 import { getAllPosts } from '../controller/postController.js';
 import { userJWT } from '../middleware/auth.js';
+import { createChat, findChat, getUser, userChats } from '../controller/chatController.js';
+import { addMessage, getMessages } from '../controller/messageController.js';
 
 // Authentication
 
@@ -31,5 +33,16 @@ router.get('/search', searchAllPeople)
 
 //Connect
 router.patch('/connect', connectWithPeople)
+router.get('/get_all_connectors', getAllConnectors)
+
+//Chats
+router.post('/create_chat', createChat)
+router.get('/get_chats', userChats)
+router.get('/get_specific_chat', findChat)
+router.get('/get_user', getUser)
+
+//Messages
+router.post('/add_message', addMessage)
+router.get('/get_messages', getMessages)
 
 export default router;

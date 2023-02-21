@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { addComment, addPost, deleteComment, deletePost, editPost, getAllPosts, getPosts, likedPost, reportPost } from '../controller/postController.js';
 const router = Router();
 import { vendorSignUp, vendorSignIn, vendorAuth, vendorEditProfile, VendorRemoveProfilePhoto } from '../controller/vendorController.js';
-import { getJobs, searchAllPeople } from '../controller/workController.js';
+import { getAllConnectors, getJobs, searchAllPeople } from '../controller/workController.js';
 import { vendorJWT } from '../middleware/auth.js';
 
 // Authentication
@@ -30,5 +30,8 @@ router.get('/get_jobs', vendorJWT,getJobs)
 
 //Search
 router.get('/search', searchAllPeople)
+
+//Connect
+router.get('/get_all_connectors', getAllConnectors)
 
 export default router;

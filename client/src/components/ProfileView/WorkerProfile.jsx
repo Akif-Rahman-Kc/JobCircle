@@ -17,7 +17,7 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { userDetails } from "@/redux/user";
 import EngineeringIcon from "@mui/icons-material/Engineering";
-import { GetJobs, GetWorkers, isAuthApi } from "@/Apis/userApi";
+import { ConnectWithPeople, getAllConnectors, GetJobs, GetWorkers, isAuthApi } from "@/Apis/userApi";
 import MailIcon from '@mui/icons-material/Mail';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
@@ -31,6 +31,7 @@ import Posts from "@/components/Posts/Post";
 import { VendorGetPosts } from "@/Apis/vendorApi";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import BeenhereIcon from '@mui/icons-material/Beenhere';
+import Connections from "../Connections/connection";
 
 const style = {
     position: "absolute",
@@ -47,17 +48,23 @@ const style = {
   };
 
 const WorkerProfile = (props) => {
+    const [ location, setLocation ] = useState(false)
+    const [ locationErr, setLocationErr ] = useState('')
+    const [ date, setDate ] = useState(false)
+    const [ dateErr, setDateErr ] = useState('')
     const [ flag, setFlag ] = useState(false)
     const [open, setOpen] = useState(false);
     const [posts, setPosts] = useState([]);
+    const [connected, setConnected] = useState(null);
+    const [status, setStatus] = useState("");
     const [refreshPost, setrefreshPost] = useState(false);
+    const [ connectionLength, setConnectionLength] = useState(null)
+    const [ openConnectionBox, setOpenConnectionBox] = useState(false)
 
     useEffect(() => {
         async function invokePosts(){
-          const token = localStorage.getItem
           const response = await VendorGetPosts(props.worker._id)
           if (response) {
-            console.log(response);
             response.map(async (doc)=>{
               doc.Likes.map((obj)=>{
                 if (obj.likerId == props.user._id) {
@@ -70,7 +77,49 @@ const WorkerProfile = (props) => {
           }
         }
         invokePosts();
-      }, [refreshPost , props.user]);
+      }, [ refreshPost , props.user ]);
+
+      useEffect(() => {
+        async function invokePosts(){
+          const resp = await getAllConnectors(props.user._id)
+          if (resp) {
+            if (resp.connections.length > 0) {
+              resp?.connections.map((obj)=>{
+                if (obj.connectorId == props.worker._id) {
+                  setConnected(true)
+                  setStatus(obj.status)
+                }else{
+                  setConnected(false)
+                }
+              })
+            } else{
+              setConnected(false)
+            }
+            
+          }
+          const res = await getAllConnectors(props.worker._id)
+          if (res) {
+            const connectedConnection = res.connections.filter((obj)=>obj.status == 'connected')
+            setConnectionLength(connectedConnection.length)
+          }else{
+            setConnectionLength('0')
+          }
+        }
+        invokePosts();
+      }, [connected, refreshPost , props.user, connectionLength ]);
+
+      useEffect(()=>{
+        async function invoke(){
+          const res = await getAllConnectors(props.worker._id)
+          if (res) {
+            const connectedConnection = res.connections.filter((obj)=>obj.status == 'connected')
+            setConnectionLength(connectedConnection.length)
+          }else{
+            setConnectionLength('0')
+          }
+        }
+        invoke()
+      },[connected, refreshPost, connectionLength])
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -80,6 +129,22 @@ const WorkerProfile = (props) => {
           date: data.get('date'),
           details: data.get('details'),
         }
+        if (data.location && data.date) {
+          setDate(false)
+          setLocation(false)
+          setLocationErr('')
+          setDateErr('')
+          const res = await Booking(data, props.worker._id)
+        } else {
+          if (data.location =='') {
+            setLocation(true)
+            setLocationErr('Please enter your location')
+          }
+          if (data.date =='') {
+            setDate(true)
+            setDateErr('Please enter the date')
+          }
+        }
         console.log(data);
       };
     
@@ -88,9 +153,35 @@ const WorkerProfile = (props) => {
         setOpen(false);
       };
 
+      const connect = () =>{
+        console.log(props.user._id, props.worker._id);
+        const response = ConnectWithPeople(props.user._id, props.worker._id)
+        if (response) {
+          setrefreshPost(!refreshPost)
+        }
+      }
+
     return ( 
         <>
             <Grid sx={{ pt: 7 }}>
+                {openConnectionBox ? 
+                  <Box
+                  sx={{
+                    p: 2,
+                    width: "-webkit-fill-available",
+                    boxShadow: 3,
+                    border: "1px solid lightgray",
+                    borderRadius: "15px",
+                    minHeight: "34.5vw",
+                    backgroundColor: "#fff",
+                    m: 2,
+                  }}
+                > 
+                  <Button onClick={()=> setOpenConnectionBox(false)} sx={{ float:'right' , fontSize:'10px' , border: 1 , py: 0.3 , pt: 0.5 }}>Back</Button>
+                  <br />
+                  <Connections user={props.worker} vendor={props.vendor}/>
+                </Box>
+                  :
                   <Box
                     sx={{
                       p: 2,
@@ -133,11 +224,15 @@ const WorkerProfile = (props) => {
                           </a>
                         </Grid>
                         <Grid
+                          onClick={()=> setOpenConnectionBox(true)}
                           xs={4}
                           sx={{
+                            cursor:'pointer',
                             color: "blue",
+                            ":active":{color:'#8282ff'},
                             textAlign: "center",
                             fontFamily: "sans-serif",
+                            height: 'fit-content'
                           }}
                         >
                           <h5
@@ -149,7 +244,7 @@ const WorkerProfile = (props) => {
                           >
                             Connections
                           </h5>
-                          <h4>21</h4>
+                          <h4>{connectionLength}</h4>
                         </Grid>
                         <Grid xs={4} sx={{ mt: -1, textAlign: "end" }}>
                           <IconButton>
@@ -167,17 +262,19 @@ const WorkerProfile = (props) => {
                       <h5>Working Days : <span style={{ color:'blue' }}>{props.worker.jobDays} Year</span></h5>
                     </Box> : ''}
                     <Box sx={{ width:'100%' , mt: 1 }}>
-                            <Button sx={{ boxShadow: 3 , backgroundColor:'#1976d2' , color:'#fff' , fontSize:'9.5px' , py: 0 , px: 4 , pt: 0.2 , ":hover":{ backgroundColor:'#1976d2' } , mb: 0.6 }}><PersonAddIcon sx={{ width:'18px' , mt: -0.3 , mr: 0.2 }}/>Connect</Button>
-                            <Button onClick={handleOpen} sx={{ boxShadow: 3 , float:'right' , backgroundColor:'#1976d2' , color:'#fff' , fontSize:'10px' , py: 0 , px: 4 , pt: 0.3 , ":hover":{ backgroundColor:'#1976d2' } }}><BeenhereIcon sx={{ width:'16px' , mt: -0.3 , mr: 0.2 }}/>Booking</Button>
-                            <br/>
-                            <Box sx={{ width:'113px' , display:'flex' }}>
-                              <IconButton sx={{ boxShadow: 3 , backgroundColor:'#1976d2' , color:'#fff' , ":hover":{ backgroundColor:'#1976d2' } , width:'50px' , height:'25px' , borderRadius:'15px' }}>
-                                <BsFillChatDotsFill style={{ width:'17px' }}/>
-                              </IconButton>
-                              <IconButton href={`tel:${props.worker.phoneNo}`} sx={{ boxShadow: 3 , ml: 'auto' , backgroundColor:'#1976d2' , color:'#fff' , ":hover":{ backgroundColor:'#1976d2' } , width:'50px' , height:'25px' , borderRadius:'15px' }}>
-                                <LocalPhoneIcon sx={{ width:'17px' }}/>
-                              </IconButton>
-                            </Box>
+                      {connected ? <Button onClick={connect} sx={{ boxShadow: 3 , backgroundColor:'#fff' , color:'#1976d2' , fontSize:'9.5px'  , px: 4 , py: 0.24 , ":hover":{ backgroundColor:'#fff' } , mb: 0.6  , border:'1px solid #1976d2' , fontWeight:'900' }}>{status}</Button> :
+                        <Button onClick={connect} sx={{ boxShadow: 3 , backgroundColor:'#1976d2' , color:'#fff' , fontSize:'9.5px' , py: 0 , px: 4 , pt: 0.2 , ":hover":{ backgroundColor:'#1976d2' } , mb: 0.6 }}><PersonAddIcon sx={{ width:'18px' , mt: -0.3 , mr: 0.2 }}/>Connect</Button>
+                      }
+                      <Button onClick={handleOpen} sx={{ boxShadow: 3 , float:'right' , backgroundColor:'#1976d2' , color:'#fff' , fontSize:'10px' , py: 0 , px: 4 , pt: 0.3 , ":hover":{ backgroundColor:'#1976d2' } }}><BeenhereIcon sx={{ width:'16px' , mt: -0.3 , mr: 0.2 }}/>Booking</Button>
+                      <br/>
+                      <Box sx={{ width:'113px' , display:'flex' }}>
+                        <IconButton sx={{ boxShadow: 3 , backgroundColor:'#1976d2' , color:'#fff' , ":hover":{ backgroundColor:'#1976d2' } , width:'50px' , height:'25px' , borderRadius:'15px' }}>
+                          <BsFillChatDotsFill style={{ width:'17px' }}/>
+                        </IconButton>
+                        <IconButton href={`tel:${props.worker.phoneNo}`} sx={{ boxShadow: 3 , ml: 'auto' , backgroundColor:'#1976d2' , color:'#fff' , ":hover":{ backgroundColor:'#1976d2' } , width:'50px' , height:'25px' , borderRadius:'15px' }}>
+                          <LocalPhoneIcon sx={{ width:'17px' }}/>
+                        </IconButton>
+                      </Box>
                     </Box>
                     <Modal
                             open={open}
@@ -249,6 +346,8 @@ const WorkerProfile = (props) => {
                                       size="small"
                                       name="location"
                                       autoComplete="family-name"
+                                      error={location}
+                                      helperText={locationErr}
                                       autoFocus
                                     />
                                   </Grid>
@@ -260,6 +359,8 @@ const WorkerProfile = (props) => {
                                       size="small"
                                       name="date"
                                       autoComplete="family-name"
+                                      error={date}
+                                      helperText={dateErr}
                                       autoFocus
                                     />
                                   </Grid>
@@ -272,8 +373,8 @@ const WorkerProfile = (props) => {
                                       padding:'10px',
                                       maxWidth: "-webkit-fill-available",
                                       minWidth: "-webkit-fill-available",
-                                      maxHeight: "150px",
-                                      minHeight: "150px",
+                                      maxHeight: "100px",
+                                      minHeight: "100px",
                                       overflowY: "auto",
                                     }}
                                   ></TextareaAutosize>
@@ -359,11 +460,10 @@ const WorkerProfile = (props) => {
                       </Grid>
                     </Grid>
                     {posts.map((post)=>(
-                    <>
                       <Posts post = {post} setrefreshComment={setrefreshPost} refreshComment={refreshPost} user={props.user} vendor={true}/>
-                    </>
                     ))}
                   </Box>
+                  }
                 </Grid>
         </>
      );

@@ -35,7 +35,7 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { BsFillTrashFill, IconName } from "react-icons/bs";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { storage } from "@/firebase/config";
-import { DeletePost, EditPost, VendorAddPost, VendorGetPosts, VendorisAuthApi } from "@/Apis/vendorApi";
+import { DeletePost, EditPost, VendorAddPost, VendorGetAllConnectors, VendorGetPosts, VendorisAuthApi } from "@/Apis/vendorApi";
 import ModeIcon from '@mui/icons-material/Mode';
 import ReportIcon from '@mui/icons-material/Report';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -47,6 +47,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Carousel from 'react-material-ui-carousel'
 import { MdCloudUpload } from "react-icons/md";
+import Connections from '@/components/Connections/connection';
+import { getAllConnectors } from '@/Apis/userApi';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -74,6 +76,8 @@ export default function VendorProfile() {
   const [posts, setPosts] = useState([]);
   const [refreshPost, setrefreshPost] = useState(false);
   const [ openMoreBox, setOpenMoreBox] = useState(null)
+  const [ connectionLength, setConnectionLength] = useState()
+  const [ openConnectionBox, setOpenConnectionBox] = useState(false)
   const [ modalPost, setModalPost] = useState({})
   const uploadImg = useRef()
 
@@ -127,9 +131,15 @@ export default function VendorProfile() {
         })
         setPosts(response);
       }
+      const resp = await VendorGetAllConnectors(vendor._id)
+      if (resp) {
+        setConnectionLength(resp.connections.length)
+      }else{
+        setConnectionLength('0')
+      }
     }
     invokePosts();
-  }, [refreshPost , vendor]);
+  }, [refreshPost , vendor, connectionLength]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -262,6 +272,24 @@ export default function VendorProfile() {
                   </Grid>
                 </Grid>
                 <Grid sx={{ pt: 7 }}>
+                {openConnectionBox ? 
+                  <Box
+                  sx={{
+                    p: 2,
+                    width: "-webkit-fill-available",
+                    boxShadow: 3,
+                    border: "1px solid lightgray",
+                    borderRadius: "15px",
+                    minHeight: "34.5vw",
+                    backgroundColor: "#fff",
+                    m: 2,
+                  }}
+                > 
+                  <Button onClick={()=> setOpenConnectionBox(false)} sx={{ float:'right' , fontSize:'10px' , border: 1 , py: 0.3 , pt: 0.5 }}>Back</Button>
+                  <br />
+                  <Connections user={vendor} vendor={true}/>
+                </Box>
+                : 
                   <Box
                     sx={{
                       p: 2,
@@ -305,11 +333,15 @@ export default function VendorProfile() {
                           </Link>
                         </Grid>
                         <Grid
+                          onClick={()=> setOpenConnectionBox(true)}
                           xs={4}
                           sx={{
+                            cursor:'pointer',
                             color: "blue",
+                            ":active":{color:'#8282ff'},
                             textAlign: "center",
                             fontFamily: "sans-serif",
+                            height: 'fit-content'
                           }}
                         >
                           <h5
@@ -321,7 +353,7 @@ export default function VendorProfile() {
                           >
                             Connections
                           </h5>
-                          <h4>21</h4>
+                          <h4>{connectionLength}</h4>
                         </Grid>
                         <Grid xs={4} sx={{ mt: -1, textAlign: "end" }}>
                           <IconButton onClick={handleOpen}>
@@ -529,6 +561,7 @@ export default function VendorProfile() {
                     </>
                     ))}
                   </Box>
+                  }
                 </Grid>
               </Grid>
             </Grid>

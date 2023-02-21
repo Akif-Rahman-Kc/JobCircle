@@ -24,7 +24,7 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { userDetails } from "@/redux/user";
 import HomeIcon from "@mui/icons-material/Home";
-import { isAuthApi, UserGetAllPosts } from "@/Apis/userApi";
+import { getAllConnectors, isAuthApi, UserGetAllPosts } from "@/Apis/userApi";
 import Posts from "@/components/Posts/Post";
 import { GetAllPosts } from "@/Apis/vendorApi";
 import BottomNavbar from "@/components/Navabar/BottomNavbar";
@@ -69,7 +69,6 @@ export default function Home() {
       let userToken=  localStorage.getItem('usertoken')
       const res = await UserGetAllPosts(userToken);
       if (res) {
-        
         setPosts(res);
       }
     }
@@ -80,7 +79,7 @@ export default function Home() {
     async function invoke(){
       let userToken=  localStorage.getItem('usertoken')
       const res = await UserGetAllPosts(userToken);
-      if (res) {
+      if (res.auth != false) {
         res.map(async (doc)=>{
           doc.Likes.map((obj)=>{
             if (obj.likerId == user._id) {
@@ -154,9 +153,7 @@ export default function Home() {
                     }}
                   >
                     {posts.map((post)=>(
-                    <>
                       <Posts post = {post} setrefreshComment={setrefreshComment} refreshComment={refreshComment} user={user} vendor={false}/>
-                    </>
                     ))}
                   </Box>
                 </Grid>

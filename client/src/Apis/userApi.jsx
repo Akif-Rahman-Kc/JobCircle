@@ -120,3 +120,69 @@ export const ConnectWithPeople = async (userId,followingId) => {
         console.log(error);
     }
 }
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const getAllConnectors = async (userId) => {
+    try {
+        const {data} = await UserApi.get(`/get_all_connectors?userId=${userId}`)
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const GetChats = async (userId) => {
+    try {
+        const {data} = await UserApi.get(`/get_chats?userId=${userId}`)
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const AddChat = async (ids) => {
+    try {
+        const {data} = await UserApi.post('/create_chat', ids)
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const GetUser = async (userId) => {
+    try {
+        const {data} = await UserApi.get(`/get_user?userId=${userId}`)
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const GetMessages = async (chatId) => {
+    try {
+        const {data} = await UserApi.get(`/get_messages?chatId=${chatId}`)
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const AddMessage = async (message) => {
+    try {
+        const {data} = await UserApi.post('/add_message' , message)
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}

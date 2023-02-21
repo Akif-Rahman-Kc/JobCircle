@@ -48,14 +48,13 @@ export async function getWorker(req, res) {
 export async function searchAllPeople(req, res) {
     try {
         const word = req.query.vlaue.trim();
-        // const users = await User.find({
-        //     firstName: { $regex: new RegExp(`^${word}.*`, "i") },
-        // })
+        const users = await User.find({
+            firstName: { $regex: new RegExp(`^${word}.*`, "i") },
+        })
         const vendors = await Vendor.find({
             firstName: { $regex: new RegExp(`^${word}.*`, "i") },
         })
-        // let allPeople = [...users,...vendors]
-        let allPeople = vendors
+        let allPeople = [...users,...vendors]
         res.json({allPeople});
     } catch (error) {
         console.log(error)
@@ -66,42 +65,81 @@ export async function searchAllPeople(req, res) {
 
 export async function connectWithPeople(req, res) {
     try {
-        console.log(req.query,"///");
-        const user = await User.findById(req.query.followingId)
-        const vendor = await Vendor.findById(req.query.followingId)
+        const { userId, followingId } = req.query
+        const user = await User.findById(followingId)
+        const vendor = await Vendor.findById(followingId)
 
-        const existuserId = await Connection.findOne({userId:req.query.userId})
-
+        const existuserId = await Connection.findOne({userId:userId})
         if (existuserId) {
-            const exist = await Connection.findOne({connections:{ "$in": [req.query.userId] }})
-            await Connection.updateOne({userId:req.query.userId},{
-                $push:{
-                    connections:{
-                        connectorId:req.query.followingId
+            const existFollowingId = existuserId.connections.find((obj)=>obj.connectorId.toString() === followingId.toString())
+            if (existFollowingId) {
+                await Connection.updateOne({userId:userId},{
+                    $pull:{
+                        connections:{
+                            connectorId:followingId,
+                        }
                     }
-                }
-            })
+                })
+            } else {
+                await Connection.updateOne({userId:userId},{
+                    $push:{
+                        connections:{
+                            connectorId:followingId,
+                            connectorName:vendor? vendor.firstName + ' ' + vendor.lastName : user.firstName + ' ' + user.lastName,
+                            connectorImage:vendor? vendor.image : user.image
+                        }
+                    }
+                })
+            }
+            
         } else {
-            await Connection.create({userId:req.query.userId})
-            await Connection.updateOne({userId:req.query.userId},{
+            await Connection.create({userId:userId})
+            await Connection.updateOne({userId:userId},{
                 $push:{
                     connections:{
-                        connectorId:req.query.followingId
+                        connectorId:followingId,
+                        connectorName:vendor? vendor.firstName + ' ' + vendor.lastName : user.firstName + ' ' + user.lastName,
+                        connectorImage:vendor? vendor.image : user.image
                     }
                 }
             })
         }
 
-        const follower = await Connection.findOne({connections:{ "$in": [req.query.userId] }})
+        const follower = await Connection.findOne({userId:followingId})
         if (follower != null) {
-            await Connection.updateOne({userId:req.query.followingId ,  "connections.$.connectorId":req.query.followingId},{
-                $set:{
-                    "connections.$.status":'connected'
-                }
-            })
+            const existUserIn = follower.connections.find((obj)=>obj.connectorId.toString() === userId.toString())
+            if (existUserIn?.status === 'pending' ) {
+                await Connection.updateOne({userId:followingId ,  "connections.connectorId":userId},{
+                    $set:{
+                        "connections.$.status":'connected'
+                    }
+                })
+                await Connection.updateOne({userId:userId ,  "connections.connectorId":followingId},{
+                    $set:{
+                        "connections.$.status":'connected'
+                    }
+                })
+            }else{
+                await Connection.updateOne({userId:followingId ,  "connections.connectorId":userId},{
+                    $set:{
+                        "connections.$.status":'pending'
+                    }
+                })
+            }
         }
+        res.json(true);
+    } catch (error) {
+        console.log(error)
+    }
+}
 
-        res.json();
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function getAllConnectors(req, res) {
+    try {
+        let connection = await Connection.findOne({userId:req.query.userId})
+        
+        res.json(connection);
     } catch (error) {
         console.log(error)
     }

@@ -11,6 +11,14 @@ const connectionSchema = new Schema({
             type:String,
             required: true,
         },
+        connectorName:{
+            type:String,
+            required: true,
+        },
+        connectorImage:{
+            type:String,
+            required: true,
+        },
         status:{
             type:String,
             default:'pending'
