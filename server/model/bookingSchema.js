@@ -1,9 +1,9 @@
 import { Schema, model } from 'mongoose';
 
 const bookingSchema = new Schema({
-    userId:{
+    vendorId:{
         type:Schema.Types.ObjectId,
-        ref:'users',
+        ref:'vendor',
         required: true,
     },
     bookings:[{
@@ -33,7 +33,7 @@ const bookingSchema = new Schema({
         status:{
             type:String,
         },
-    }]
+    },{ timestamps: true }]
 },{ timestamps: true })
 
 export default model('bookings',bookingSchema);

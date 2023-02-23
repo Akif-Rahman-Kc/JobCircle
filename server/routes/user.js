@@ -6,6 +6,7 @@ import { getAllPosts } from '../controller/postController.js';
 import { userJWT } from '../middleware/auth.js';
 import { createChat, findChat, getUser, userChats } from '../controller/chatController.js';
 import { addMessage, getMessages } from '../controller/messageController.js';
+import { addBooking } from '../controller/bookingController.js';
 
 // Authentication
 
@@ -44,5 +45,9 @@ router.get('/get_user', getUser)
 //Messages
 router.post('/add_message', addMessage)
 router.get('/get_messages', getMessages)
+
+//Booking
+router.post('/add_booking', addBooking)
+// router.get('/get_user_bookings', getUserBooking)
 
 export default router;

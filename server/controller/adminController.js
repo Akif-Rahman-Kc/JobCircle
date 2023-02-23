@@ -1,5 +1,6 @@
 import Admin from '../model/adminSchema.js'
 import User from '../model/userSchema.js'
+import Job from '../model/jobSchema.js'
 import Vendor from '../model/vendorSchema.js'
 import jwt from 'jsonwebtoken'
 import { compare } from 'bcrypt'
@@ -69,6 +70,18 @@ export async function getVendors(req, res) {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+export async function adminGetJobs(req, res) {
+    try {
+        const jobs = await Job.find().sort({createdAt:-1})
+
+        res.json(jobs)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 export async function userBlock(req, res) {
     try {
         await User.updateOne({_id:req.query.userId},{
@@ -114,6 +127,23 @@ export async function vendorActive(req, res) {
             isBlock:false
         })
         res.json({status:"success"})
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function deleteJobs(req, res) {
+    try {
+        const job = await Job.findById(req.query.jobId)
+        const vendor = await Vendor.findOne({job:job.jobName})
+        if (vendor) {
+            res.json({status:"failed"})
+        } else {
+            await Job.remove({_id:req.query.jobId})
+            res.json({status:"success"})
+        }
     } catch (error) {
         console.log(error)
     }

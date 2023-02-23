@@ -17,7 +17,7 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { userDetails } from "@/redux/user";
 import EngineeringIcon from "@mui/icons-material/Engineering";
-import { ConnectWithPeople, getAllConnectors, GetJobs, GetWorkers, isAuthApi } from "@/Apis/userApi";
+import { Booking, ConnectWithPeople, getAllConnectors, GetJobs, GetWorkers, isAuthApi } from "@/Apis/userApi";
 import MailIcon from '@mui/icons-material/Mail';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
@@ -134,7 +134,8 @@ const WorkerProfile = (props) => {
           setLocation(false)
           setLocationErr('')
           setDateErr('')
-          const res = await Booking(data, props.worker._id)
+          handleClose()
+          const res = await Booking(data, props.worker._id, props.user._id)
         } else {
           if (data.location =='') {
             setLocation(true)
@@ -145,7 +146,6 @@ const WorkerProfile = (props) => {
             setDateErr('Please enter the date')
           }
         }
-        console.log(data);
       };
     
       const handleOpen = () => setOpen(true);
@@ -302,39 +302,8 @@ const WorkerProfile = (props) => {
                                 <h5 style={{ fontSize:'12px' , margin:'4px' }}>{props.worker.jobDays}</h5>
                                   <Box className='comments' sx={{ border:1 , borderRadius: 1 , height:{xs: '190px' , sm:'200px' , md: '200px' } , overflowY:'auto' }}>  
                                     <hr />
-                                    <h6  style={{ padding:'4px' }}>21/01/2023</h6>
+                                    <h6  style={{ padding:'4px' }}>Feb 25, 2023</h6>
                                     <hr />
-                                    <h6  style={{ padding:'4px' }}>21/01/2023</h6>
-                                    <hr />
-                                    <h6 style={{ padding:'4px' }}>21/01/2023</h6>
-                                    <hr />
-                                    <h6 style={{ padding:'4px' }}>21/01/2023</h6>
-                                    <hr />
-                                    <h6 style={{ padding:'4px' }}>21/01/2023</h6>
-                                    <hr />
-                                    <h6  style={{ padding:'4px' }}>21/01/2023</h6>
-                                    <hr />
-                                    <h6 style={{ padding:'4px' }}>21/01/2023</h6>
-                                    <hr />
-                                    <h6 style={{ padding:'4px' }}>21/01/2023</h6>
-                                    <hr />
-                                    <h6 style={{ padding:'4px' }}>21/01/2023</h6>
-                                    <hr />
-                                    <h6  style={{ padding:'4px' }}>21/01/2023</h6>
-                                    <hr />
-                                    <h6 style={{ padding:'4px' }}>21/01/2023</h6>
-                                    <hr />
-                                    <h6 style={{ padding:'4px' }}>21/01/2023</h6>
-                                    <hr />
-                                    <h6 style={{ padding:'4px' }}>21/01/2023</h6>
-                                    <hr />
-                                    <h6  style={{ padding:'4px' }}>21/01/2023</h6>
-                                    <hr />
-                                    <h6 style={{ padding:'4px' }}>21/01/2023</h6>
-                                    <hr />
-                                    <h6 style={{ padding:'4px' }}>21/01/2023</h6>
-                                    <hr />
-                                    <h6 style={{ padding:'4px' }}>21/01/2023</h6>
                                   </Box>
                                 </Grid>
                                 <Grid xs={6} sx={{ p: 1 , ml: 0.2 , border:1 , borderRadius: 2 }}>
@@ -357,7 +326,11 @@ const WorkerProfile = (props) => {
                                       id="date"
                                       label="Date"
                                       size="small"
+                                      type="date"
                                       name="date"
+                                      InputLabelProps={{
+                                        shrink: true,
+                                      }}
                                       autoComplete="family-name"
                                       error={date}
                                       helperText={dateErr}

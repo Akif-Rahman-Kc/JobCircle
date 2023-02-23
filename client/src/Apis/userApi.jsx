@@ -186,3 +186,25 @@ export const AddMessage = async (message) => {
         console.log(error);
     }
 }
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const Booking = async (bookingDetails, vendorId, userId) => {
+    try {
+        const {data} = await UserApi.post(`/add_booking?vendorId=${vendorId}&&userId=${userId}` , bookingDetails)
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+// /////////////////////////////////////////////////////////////////////////////
+
+// export const GetUserBookings = async (userId) => {
+//     try {
+//         const {data} = await UserApi.get(`/get_user_bookings?userId=${userId}`)
+//         return data;
+//     } catch (error) {
+//         console.log(error);
+//     }
+// }

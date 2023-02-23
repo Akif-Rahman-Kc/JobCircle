@@ -39,14 +39,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   function createData(name, calories, fat, carbs, protein) {
     return { name, calories, fat, carbs, protein };
   }
-  
-  const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-  ];
 
 const Users = () => {
   const router = useRouter()
@@ -114,6 +106,7 @@ const Users = () => {
                                         <StyledTableCell align="center">NO</StyledTableCell>
                                         <StyledTableCell align="center">NAME</StyledTableCell>
                                         <StyledTableCell align="center">E-MAIL</StyledTableCell>
+                                        <StyledTableCell align="center">JOB</StyledTableCell>
                                         <StyledTableCell align="center">PLACE</StyledTableCell>
                                         <StyledTableCell align="center">PHONE NO</StyledTableCell>
                                         <StyledTableCell align="center">OPTIONS</StyledTableCell>
@@ -125,10 +118,14 @@ const Users = () => {
                                         <StyledTableCell align="center" component="th" scope="row">
                                             {i + 1}
                                         </StyledTableCell>
-                                        <StyledTableCell align="center" component="th" scope="row">
-                                            {vendor.firstName + ' ' + vendor.lastName}
+                                        <StyledTableCell sx={{ display:'flex' }} component="th" scope="row">
+                                        <img src={vendor.image ? vendor.image : "/null-profile.jpg"} style={{ width: "30px", height: "fit-content", borderRadius: "50%", border: "1px solid #000", marginRight:'3px' }} alt="" />
+                                          <Box sx={{ display:'flex' , justifyContent:'center' , alignItems:'center' }}>
+                                              <h5 style={{ fontSize:'13px'  , marginLeft:'5px' , color:'#fff' }}>{vendor.firstName + ' ' + vendor.lastName}</h5>   
+                                          </Box>
                                         </StyledTableCell>
                                         <StyledTableCell align="center">{vendor.email}</StyledTableCell>
+                                        <StyledTableCell align="center">{vendor.job}</StyledTableCell>
                                         <StyledTableCell align="center">{vendor.locality + ', ' + vendor.city}</StyledTableCell>
                                         <StyledTableCell align="center">{vendor.phoneNo}</StyledTableCell>
                                         <StyledTableCell align="center">

@@ -46,6 +46,17 @@ export const AdminGetVendors = async (Token) => {
 
 /////////////////////////////////////////////////////////////////////////////
 
+export const AdminGetJobs = async (Token) => {
+    try {
+        const {data} = await AdminApi.get('/get_jobs', {headers:{"admintoken":Token}})
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
 export const isBlocked = async (userId, Token) => {
     try {
         const {data} = await AdminApi.patch(`/user_blocked?userId=${userId}`, {} , {headers:{"admintoken":Token}})
@@ -82,6 +93,17 @@ export const isVendorBlocked = async (vendorId, Token) => {
 export const isVendorActivated = async (vendorId, Token) => {
     try {
         const {data} = await AdminApi.patch(`/vendor_actived?vendorId=${vendorId}`, {} , {headers:{"admintoken":Token}})
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const DeleteJob = async (jobId, Token) => {
+    try {
+        const {data} = await AdminApi.delete(`/delete_job?jobId=${jobId}`, {headers:{"admintoken":Token}})
         return data;
     } catch (error) {
         console.log(error);

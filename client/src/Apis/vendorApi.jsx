@@ -186,3 +186,36 @@ export const VendorGetAllConnectors = async (userId) => {
         console.log(error);
     }
 }
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const GetBookings = async (vendorId, Token) => {
+    try {
+        const {data} = await VendorApi.get(`/get_bookings?vendorId=${vendorId}`, {headers:{"vendortoken":Token}})
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const AcceptBooking = async (vendorId, bookingId, Token) => {
+    try {
+        const {data} = await VendorApi.patch(`/accept_booking?vendorId=${vendorId}&&bookingId=${bookingId}`, {} , {headers:{"vendortoken":Token}})
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const DeclineBooking = async (vendorId, bookingId, Token) => {
+    try {
+        const {data} = await VendorApi.patch(`/decline_booking?vendorId=${vendorId}&&bookingId=${bookingId}`, {} , {headers:{"vendortoken":Token}})
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}

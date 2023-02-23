@@ -6,11 +6,16 @@ import Vendor from '../model/vendorSchema.js'
 
 export async function createChat(req, res) {
     try {
-        const newChat = new Chat({
-            members: [req.body.senderId,req.body.recieverId]
-        })
-        const result = await newChat.save()
-        res.json(result)
+        const chat = await Chat.findOne({members:{$all:[req.body.senderId,req.body.recieverId]}})
+        if(chat == null){
+            const newChat = new Chat({
+                members: [req.body.senderId,req.body.recieverId]
+            })
+            const result = await newChat.save()
+            res.json(result)
+        }else{
+            res.json(false)
+        }
     } catch (error) {
         console.log(error)
     }

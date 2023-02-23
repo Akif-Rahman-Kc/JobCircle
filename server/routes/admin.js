@@ -1,6 +1,6 @@
 import { Router } from 'express';
 const router = Router();
-import { adminAuth, adminSignIn, getUsers, getVendors, userActive, userBlock, vendorActive, vendorBlock } from '../controller/adminController.js';
+import { adminAuth, adminGetJobs, adminSignIn, deleteJobs, getUsers, getVendors, userActive, userBlock, vendorActive, vendorBlock } from '../controller/adminController.js';
 import { adminJWT } from '../middleware/auth.js';
 
 // Authentication
@@ -12,6 +12,10 @@ router.get('/get_users', adminJWT,getUsers)
 
 // Get Vendors
 router.get('/get_vendors', adminJWT,getVendors)
+
+// Get Jobs
+router.get('/get_jobs', adminJWT,adminGetJobs)
+router.delete('/delete_job', adminJWT,deleteJobs)
 
 //Block & Active
 router.patch('/user_blocked', adminJWT,userBlock)

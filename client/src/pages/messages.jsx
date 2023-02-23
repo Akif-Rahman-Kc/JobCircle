@@ -3,7 +3,7 @@ import { Avatar, Button, Grid, IconButton, Input } from '@mui/material';
 import Sidebar from '@/components/Navabar/Sidebar';
 import AdminNavbar from '@/components/Navabar/AdminNavbar';
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import SendIcon from '@mui/icons-material/Send';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { AdminisAuthApi } from '@/Apis/adminApi';
@@ -17,6 +17,7 @@ import { userDetails } from '@/redux/user';
 import MessageSideOne from '@/components/Messages/MessageSide1';
 import MessageSideTwo from '@/components/Messages/MessageSide2';
 import { io } from 'socket.io-client';
+import { AuthContext } from '@/store/Context';
 
 const Messages = () => {
 const router = useRouter()
@@ -26,26 +27,28 @@ const [ onlineUsers, setOnlineUsers ] = useState([])
 const [ sendMessage, setSendMessage ] = useState(null)
 const [ recieveMessage, setRecieveMessage ] = useState(null)
 const [ allPeople, setAllPeople ] = useState([])
-const socket = useRef()
+// const socket = useRef()
 const { user } = useSelector((state)=>state.userInfo)
 const dispatch = useDispatch()
 
+const { socket } = useContext(AuthContext)
+
 useEffect(()=>{
     if (sendMessage !== null) {
-        socket.current.emit("send-message", sendMessage)
+        socket.emit("send-message", sendMessage)
     }
 },[sendMessage])
 
 useEffect(()=>{
-    socket.current = io('http://localhost:8800')
-    socket.current.emit("new-user-add", user._id)
-    socket.current.on("get-users", (users)=>{
+    
+    socket.emit("new-user-add", user._id)
+    socket.on("get-users", (users)=>{
         setOnlineUsers(users)
     })
 },[user])
 
 useEffect(()=>{
-    socket.current.on("recieve-message", (data)=>{
+    socket.on("recieve-message", (data)=>{
         setRecieveMessage(data)
     })
 },[])
@@ -110,7 +113,6 @@ useEffect(()=>{
     }
     const res = await AddChat(ids)
     if (res) {
-        console.log(res,"=====");
         setChats([...chats, res])
     }
   }
@@ -178,7 +180,7 @@ useEffect(()=>{
                                 <Box sx={{ display:'flex' , backgroundColor:'#fff' , p: 0.5 , borderRadius:'10px' , boxShadow: 3 , mb: 1 }}>
                                     <Avatar/>
                                     <Box sx={{ display:'flex' , alignItems:'center' , border:'1px solid gray' , borderRadius:'30px' , width:'100%' , mx: 1 , px: 2 }}>
-                                        <Input onBlur={(()=>setAllPeople([]))} onChange={(e)=>searchAllUsers(e.target.value)} placeholder='Search...' sx={{ width:'100%' , fontSize:'13px' , ":before":{ border: 0 , content:'none'  } , ":after":{ border: 0 } }}/>
+                                        <Input onFocus={(()=>setAllPeople([]))} onChange={(e)=>searchAllUsers(e.target.value)} placeholder='Search...' sx={{ width:'100%' , fontSize:'13px' , ":before":{ border: 0 , content:'none'  } , ":after":{ border: 0 } }}/>
                                     </Box>
                                 </Box>
                                 <Box className='comments' sx={{ overflowY:'auto' , width:'100%' , height:'59vh' }}>

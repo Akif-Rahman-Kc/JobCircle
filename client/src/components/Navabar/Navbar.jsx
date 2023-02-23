@@ -125,7 +125,7 @@ export default function Navbar() {
               onKeyUp={()=>{
                 setOpenBox(true)
               }}
-              onBlur={()=>{
+              onFocus={()=>{
                 setOpenBox(false)
               }}
               placeholder="Search…"

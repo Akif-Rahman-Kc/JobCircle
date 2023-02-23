@@ -110,8 +110,11 @@ const Users = () => {
                                         <StyledTableCell align="center" component="th" scope="row">
                                             {i + 1}
                                         </StyledTableCell>
-                                        <StyledTableCell align="center" component="th" scope="row">
-                                            {user.firstName + ' ' + user.lastName}
+                                        <StyledTableCell sx={{ display:'flex' }} component="th" scope="row">
+                                        <img src={user.image ? user.image : "/null-profile.jpg"} style={{ width: "30px", height: "fit-content", borderRadius: "50%", border: "1px solid #000", marginRight:'3px' }} alt="" />
+                                          <Box sx={{ display:'flex' , justifyContent:'center' , alignItems:'center' }}>
+                                              <h5 style={{ fontSize:'13px'  , marginLeft:'5px' , color:'#fff' }}>{user.firstName + ' ' + user.lastName}</h5>   
+                                          </Box>
                                         </StyledTableCell>
                                         <StyledTableCell align="center">{user.email}</StyledTableCell>
                                         <StyledTableCell align="center">{user.locality + ', ' + user.city}</StyledTableCell>

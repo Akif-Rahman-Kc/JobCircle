@@ -39,13 +39,15 @@ import Connections from "@/components/Connections/connection";
 import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
 import TurnedInIcon from '@mui/icons-material/TurnedIn';
 import { useTheme } from "styled-components";
+import BorderColorIcon from '@mui/icons-material/BorderColor';
 import ErrorIcon from '@mui/icons-material/Error';
+import Bookings from "@/components/Bookings/Booking";
 
 const inter = Inter({ subsets: ["latin"] });
 
 const Profile = () => {
     const [ flag, setFlag ] = useState(false)
-    const [ page, setPage ] = useState(false)
+    const [ page, setPage ] = useState('')
     const [ refresh, setRefresh ] = useState(false)
     const router = useRouter();
     const { user } = useSelector((state)=>state.userInfo)
@@ -201,11 +203,12 @@ const Profile = () => {
                         <h6>EDIT PROFILE</h6>
                       </Grid>
                       </Link>
-                      <Button onClick={()=> setPage(false)} sx={{ boxShadow: 3 , backgroundColor:'#1976d2' , color:'#fff' , fontSize:'9.5px' , py: 0.5 , px: 4 , pt: 0.6 , mt: 4 , ":hover":{ backgroundColor:'#1976d2' } , width: '-webkit-fill-available' , borderRadius:'15px' }}><PersonAddIcon sx={{ width:'18px' , mt: -0.3 , mr: 0.2 }}/>Connections</Button>
-                      <Button onClick={()=> setPage(true)} sx={{ boxShadow: 3 , backgroundColor:'#1976d2' , color:'#fff' , fontSize:'9.5px' , py: 0.5 , px: 4 , pt: 0.6 , mt: 1 , ":hover":{ backgroundColor:'#1976d2' } , width: '-webkit-fill-available' , borderRadius:'15px' }}><BookmarksIcon sx={{ width:'16px' , mt: -0.3 , mr: 0.2 }}/>Saved</Button>
+                      <Button onClick={()=> setPage('')} sx={{ boxShadow: 3 , backgroundColor:'#1976d2' , color:'#fff' , fontSize:'9.5px' , py: 0.5 , px: 4 , pt: 0.6 , mt: 4 , ":hover":{ backgroundColor:'#1976d2' } , width: '-webkit-fill-available' , borderRadius:'15px' }}><PersonAddIcon sx={{ width:'18px' , mt: -0.3 , mr: 0.2 }}/>Connections</Button>
+                      <Button onClick={()=> setPage('saved')} sx={{ boxShadow: 3 , backgroundColor:'#1976d2' , color:'#fff' , fontSize:'9.5px' , py: 0.5 , px: 4 , pt: 0.6 , mt: 1 , ":hover":{ backgroundColor:'#1976d2' } , width: '-webkit-fill-available' , borderRadius:'15px' }}><BookmarksIcon sx={{ width:'16px' , mt: -0.3 , mr: 0.2 }}/>Saved</Button>
+                      <Button onClick={()=> setPage('bookings')} sx={{ boxShadow: 3 , backgroundColor:'#1976d2' , color:'#fff' , fontSize:'9.5px' , py: 0.5 , px: 4 , pt: 0.6 , mt: 1 , ":hover":{ backgroundColor:'#1976d2' } , width: '-webkit-fill-available' , borderRadius:'15px' }}><BorderColorIcon sx={{ width:'16px' , mt: -0.3 , mr: 0.2 }}/>Bookings</Button>
                     </Grid>
                     <Grid className="comments" xs={7} p={2} ml={0.7} backgroundColor={'lightgray'} borderRadius={3} height={'486px'} sx={{ overflowY:'auto' }}>
-                    {page ? 
+                    {page == 'saved' ? 
                      user.Saved.length == 0 ? 
                      <Box sx={{ color:'gray' , textAlign:'center' , mt:'50%' }}>
                         <ErrorIcon sx={{ fontSize:'80px' }}/>
@@ -237,7 +240,7 @@ const Profile = () => {
                         
                         </>
                       ))
-                    : <Connections user={user} vendor={false}/>}
+                    : page == 'bookings' ? <Bookings user={user}/> : <Connections user={user} vendor={false}/>}
                     </Grid>
                   </Box>
                 </Grid>

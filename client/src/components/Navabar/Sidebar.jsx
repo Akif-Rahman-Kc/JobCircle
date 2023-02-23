@@ -6,7 +6,7 @@ import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import PeopleAltRoundedIcon from '@mui/icons-material/PeopleAltRounded';
 import EngineeringRoundedIcon from '@mui/icons-material/EngineeringRounded';
 import PlaylistAddCheckCircleRoundedIcon from '@mui/icons-material/PlaylistAddCheckCircleRounded';
-import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
+import ReportIcon from '@mui/icons-material/Report';
 import ManageAccountsRoundedIcon from '@mui/icons-material/ManageAccountsRounded';
 
 const Sidebar = () => {
@@ -36,16 +36,16 @@ const Sidebar = () => {
                         <p className={styles.butttonText}>VENDORS</p>
                     </Box>
                     </Link>
-                    <Link href='/admin/notifications'>
+                    <Link href='/admin/jobs'>
                     <Box className={styles.button}>
                         <PlaylistAddCheckCircleRoundedIcon/>
                         <p className={styles.butttonText}>JOBS</p>
                     </Box>
                     </Link>
-                    <Link href='/admin/notifications'>
+                    <Link href='/admin/reports'>
                     <Box className={styles.button}>
-                        <NotificationsRoundedIcon/>
-                        <p className={styles.butttonText}>NOTIFICATIONS</p>
+                        <ReportIcon/>
+                        <p className={styles.butttonText}>REPORTS</p>
                     </Box>
                     </Link>
                     <Link href='/admin/profile'>
