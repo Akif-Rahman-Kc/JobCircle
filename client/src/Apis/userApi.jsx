@@ -198,6 +198,17 @@ export const Booking = async (bookingDetails, vendorId, userId) => {
     }
 }
 
+/////////////////////////////////////////////////////////////////////////////
+
+export const ReportVendor = async (message,vendorId,reporterId) => {
+    try {
+        const {data} = await UserApi.patch('/report_vendor',{message,vendorId,reporterId})
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 // /////////////////////////////////////////////////////////////////////////////
 
 // export const GetUserBookings = async (userId) => {

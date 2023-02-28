@@ -110,7 +110,7 @@ export default function VendorWorker_Profile({worker, current}) {
                     pt: 4,
                     display: "flex",
                     position: "fixed",
-                    zIndex: 99,
+                    zIndex: 1000,
                   }}
                 >
                   <Grid

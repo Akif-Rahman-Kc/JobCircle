@@ -18,6 +18,8 @@ import MessageSideOne from '@/components/Messages/MessageSide1';
 import MessageSideTwo from '@/components/Messages/MessageSide2';
 import { io } from 'socket.io-client';
 import { AuthContext } from '@/store/Context';
+import MessageMobileSideOne from '@/components/Messages/MessageMobileSide1';
+import MessageMobileSideTwo from '@/components/Messages/MessageMobileSide2';
 
 const Messages = () => {
 const router = useRouter()
@@ -27,6 +29,7 @@ const [ onlineUsers, setOnlineUsers ] = useState([])
 const [ sendMessage, setSendMessage ] = useState(null)
 const [ recieveMessage, setRecieveMessage ] = useState(null)
 const [ allPeople, setAllPeople ] = useState([])
+const [ messageTwo, setMessageTwo ] = useState(false)
 // const socket = useRef()
 const { user } = useSelector((state)=>state.userInfo)
 const dispatch = useDispatch()
@@ -117,7 +120,7 @@ useEffect(()=>{
     }
   }
 
-    return ( 
+    return (
         <>
         <Navbar />
         <Box sx={{ mt: { xs: 10 , sm: 11 , md: 12} }}>
@@ -217,243 +220,54 @@ useEffect(()=>{
                             <MessageSideTwo chat={currentChat} currentUserId={user._id} setSendMessage={setSendMessage} recieveMessage={recieveMessage}/>
                         </Grid>
                         <Grid sx={{ display:{ xs:'flex' , sm:'flex' , md:'none' } }}>
-                            <Grid sx={{ p: 1 , width:'100%' , height:'58vh' , borderRadius:'15px' , backgroundColor:'#e3e3e3' , color:'#000' , boxShadow: 3 , border:'1px solid lightgray' }}>
-                                {/* <Box sx={{ p: 0.8  , display:'flex' , bgcolor:'lightgray' , borderRadius:'10px' }}>
-                                    <img src="/null-profile.jpg" style={{ width:'45px' ,borderRadius:'50%',border:'1px solid #000' }} alt="" />
-                                    <Box sx={{ display:'flex' , justifyContent:'center' , alignItems:'center' }}>
-                                        <h4 style={{ fontSize:'13px'  , marginLeft:'5px' }}>Akif Rahman</h4>
-                                    </Box>
-                                </Box>
-                                <Box className='comments' sx={{ mt: 0.5 , p: 1  , display:'block' , bgcolor:'lightgray' , borderRadius:'10px' , height:'40.6vh' , overflowY:'auto' }}>
-                                    <Box sx={{ display:'flex' , justifyContent:'center' }}>
-                                        <Box sx={{ py: 0.5 , px: 2 , backgroundColor:'#b8ccd3' , height:'fit-content' , width:'fit-content' , borderRadius:1 , boxShadow: 1 }}>
-                                            <h6>Yesterday</h6>
-                                        </Box>
-                                    </Box>
-                                    <Box sx={{ mt: 2 }}>
-                                        <Box sx={{ my: 1 , display:'flex' , ml:'auto' , width:'80%' , lineBreak:'anywhere'  }}>
-                                            <Box sx={{ display:'block' , ml:'auto' , textAlign:'end' , mr: 1  }}>
-                                                <Box sx={{ ml:'auto' , mb:0.2 , p: 1 , fontSize:'12px' , backgroundColor:'#e9e9e9' , height:'fit-content' , width:'fit-content' , borderTopLeftRadius:'5px' , borderBottomLeftRadius:'5px' , borderBottomRightRadius:'9px' }}>
-                                                    Hello
-                                                </Box>
-                                                <h6 style={{ marginLeft:'auto' , fontSize:'8px' , color:'gray' }}>1.20 PM</h6>
-                                            </Box>
-                                        </Box>
-                                        <Box sx={{ my: 1 , display:'flex' , width:'80%' , lineBreak:'anywhere'  }}>
-                                            
-                                            <Box sx={{ ml: 1 , display:'block' , mr: 1  }}>
-                                                <Box sx={{ fontSize:'12px' , p: 1 , mb:0.2 , backgroundColor:'#a3a3a3' , height:'fit-content' , width:'fit-content' , borderTopRightRadius:'5px' , borderBottomLeftRadius:'9px' , borderBottomRightRadius:'5px'  }}>
-                                                Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available.
-                                                </Box>
-                                                <h6 style={{ fontSize:'8px' , color:'gray' }}>1.20 PM</h6>
-                                            </Box>
-                                        </Box>
-                                        <Box sx={{ my: 1 , display:'flex' , ml:'auto' , width:'80%' , lineBreak:'anywhere'  }}>
-                                            <Box sx={{ display:'block' , ml:'auto' , textAlign:'end' , mr: 1  }}>
-                                                <Box sx={{ ml:'auto' , mb:0.2 , p: 1 , fontSize:'12px' , backgroundColor:'#e9e9e9' , height:'fit-content' , width:'fit-content' , borderTopLeftRadius:'5px' , borderBottomLeftRadius:'5px' , borderBottomRightRadius:'9px' }}>
-                                                    Hello
-                                                </Box>
-                                                <h6 style={{ marginLeft:'auto' , fontSize:'8px' , color:'gray' }}>1.20 PM</h6>
-                                            </Box>
-                                        </Box>
-                                        <Box sx={{ my: 1 , display:'flex' , width:'80%' , lineBreak:'anywhere'  }}>
-                                            <Box sx={{ ml: 1 , display:'block' , mr: 1  }}>
-                                                <Box sx={{ fontSize:'12px' , p: 1 , mb:0.2 , backgroundColor:'#a3a3a3' , height:'fit-content' , width:'fit-content' , borderTopRightRadius:'5px' , borderBottomLeftRadius:'9px' , borderBottomRightRadius:'5px'  }}>
-                                                Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available.
-                                                </Box>
-                                                <h6 style={{ fontSize:'8px' , color:'gray' }}>1.20 PM</h6>
-                                            </Box>
-                                        </Box>
-                                    </Box>
-                                </Box>
-                                <Box sx={{ mt: 0.5 , p: 0.8  , display:'flex' , bgcolor:'lightgray' , borderRadius:'10px' }}>
-                                    <Box sx={{ width:'100%' , display:'flex' }}>
-                                        <Box sx={{ mt:'auto' , display:'flex' , alignItems:'center' , borderRadius:'30px' , width:'90%' , mx: 1 , px: 2 , py: 0.7 , bgcolor:'#fff' }}>
-                                            <Input placeholder='Message' sx={{ width:'100%' , fontSize:'13px' , ":before":{ border: 0 , content:'none'  } , ":after":{ border: 0 } }}/>
-                                        </Box>
-                                        <IconButton sx={{ backgroundColor:'#1976d2' , color:'#fff' , borderRadius:'30px' , width:'39px' , height:'39px' , ":hover":{ backgroundColor:'#1976d2' } }}><SendIcon sx={{ width:'70%' }}/></IconButton>
-                                    </Box>
-                                </Box> */}
-                                {/* ////////////////////////////////////// */}
+                            <Grid sx={{ p: 1 , width:'100%' , height:'65vh' , borderRadius:'15px' , backgroundColor:'#e3e3e3' , color:'#000' , boxShadow: 3 , border:'1px solid lightgray' }}>
+                                {!messageTwo && 
                                 <Box sx={{ display:'flex' , backgroundColor:'#fff' , p: 0.5 , borderRadius:'10px' , boxShadow: 3 , mb: 1 }}>
                                     <Avatar sx={{ width: { xs:35 , sm:40 }, height: { xs:35 , sm:40 } }}/>
                                     <Box sx={{ display:'flex' , alignItems:'center' , border:'1px solid gray' , borderRadius:'30px' , width:'100%' , mx: 1 , px: 2 }}>
-                                        <Input placeholder='Search...' sx={{ width:'100%' , fontSize:'13px' , ":before":{ border: 0 , content:'none'  } , ":after":{ border: 0 } }}/>
+                                        <Input onFocus={(()=>setAllPeople([]))} onChange={(e)=>searchAllUsers(e.target.value)} placeholder='Search...' sx={{ width:'100%' , fontSize:'13px' , ":before":{ border: 0 , content:'none'  } , ":after":{ border: 0 } }}/>
                                     </Box>
                                 </Box>
-                                <Box className='comments' sx={{ overflowY:'auto' , width:'100%' , height:'48vh' }}>
-                                    <IconButton size='large' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
-                                        <Box sx={{width: '-webkit-fill-available' , color:'#111' , display:'flex'}}>
-                                            <img src="/null-profile.jpg" style={{ width:'11%' , height:'11%' ,borderRadius:'50%',border:'1px solid #000' }} alt="" />
-                                            <Box sx={{ display:'flex' , justifyContent:'center' , alignItems:'center' }}>
-                                                <h5 style={{ fontSize:'13px'  , marginLeft:'5px' }}>Akif Rahman</h5>
-                                            </Box>
-                                            <p style={{ fontSize:'11px'  , marginLeft:'auto' }}>Jan 10</p>
-                                        </Box>
-                                    </IconButton>
-                                    <hr />
-                                    <IconButton size='large' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
-                                        <Box sx={{width: '-webkit-fill-available' , color:'#111' , display:'flex'}}>
-                                            <img src="/null-profile.jpg" style={{ width:'11%' , height:'11%' ,borderRadius:'50%',border:'1px solid #000' }} alt="" />
-                                            <Box sx={{ display:'flex' , justifyContent:'center' , alignItems:'center' }}>
-                                                <h5 style={{ fontSize:'13px'  , marginLeft:'5px' }}>Akif Rahman</h5>
-                                            </Box>
-                                            <p style={{ fontSize:'11px'  , marginLeft:'auto' }}>Jan 10</p>
-                                        </Box>
-                                    </IconButton>
-                                    <hr />
-                                    <IconButton size='large' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
-                                        <Box sx={{width: '-webkit-fill-available' , color:'#111' , display:'flex'}}>
-                                            <img src="/null-profile.jpg" style={{ width:'11%' , height:'11%' ,borderRadius:'50%',border:'1px solid #000' }} alt="" />
-                                            <Box sx={{ display:'flex' , justifyContent:'center' , alignItems:'center' }}>
-                                                <h5 style={{ fontSize:'13px'  , marginLeft:'5px' }}>Akif Rahman</h5>
-                                            </Box>
-                                            <p style={{ fontSize:'11px'  , marginLeft:'auto' }}>Jan 10</p>
-                                        </Box>
-                                    </IconButton>
-                                    <hr />
-                                    <IconButton size='large' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
-                                        <Box sx={{width: '-webkit-fill-available' , color:'#111' , display:'flex'}}>
-                                            <img src="/null-profile.jpg" style={{ width:'11%' , height:'11%' ,borderRadius:'50%',border:'1px solid #000' }} alt="" />
-                                            <Box sx={{ display:'flex' , justifyContent:'center' , alignItems:'center' }}>
-                                                <h5 style={{ fontSize:'13px'  , marginLeft:'5px' }}>Akif Rahman</h5>
-                                            </Box>
-                                            <p style={{ fontSize:'11px'  , marginLeft:'auto' }}>Jan 10</p>
-                                        </Box>
-                                    </IconButton>
-                                    <hr />
-                                    <IconButton size='large' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
-                                        <Box sx={{width: '-webkit-fill-available' , color:'#111' , display:'flex'}}>
-                                            <img src="/null-profile.jpg" style={{ width:'11%' , height:'11%' ,borderRadius:'50%',border:'1px solid #000' }} alt="" />
-                                            <Box sx={{ display:'flex' , justifyContent:'center' , alignItems:'center' }}>
-                                                <h5 style={{ fontSize:'13px'  , marginLeft:'5px' }}>Akif Rahman</h5>
-                                            </Box>
-                                            <p style={{ fontSize:'11px'  , marginLeft:'auto' }}>Jan 10</p>
-                                        </Box>
-                                    </IconButton>
-                                    <hr />
-                                    <IconButton size='large' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
-                                        <Box sx={{width: '-webkit-fill-available' , color:'#111' , display:'flex'}}>
-                                            <img src="/null-profile.jpg" style={{ width:'11%' , height:'11%' ,borderRadius:'50%',border:'1px solid #000' }} alt="" />
-                                            <Box sx={{ display:'flex' , justifyContent:'center' , alignItems:'center' }}>
-                                                <h5 style={{ fontSize:'13px'  , marginLeft:'5px' }}>Akif Rahman</h5>
-                                            </Box>
-                                            <p style={{ fontSize:'11px'  , marginLeft:'auto' }}>Jan 10</p>
-                                        </Box>
-                                    </IconButton>
-                                    <hr />
-                                    <IconButton size='large' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
-                                        <Box sx={{width: '-webkit-fill-available' , color:'#111' , display:'flex'}}>
-                                            <img src="/null-profile.jpg" style={{ width:'11%' , height:'11%' ,borderRadius:'50%',border:'1px solid #000' }} alt="" />
-                                            <Box sx={{ display:'flex' , justifyContent:'center' , alignItems:'center' }}>
-                                                <h5 style={{ fontSize:'13px'  , marginLeft:'5px' }}>Akif Rahman</h5>
-                                            </Box>
-                                            <p style={{ fontSize:'11px'  , marginLeft:'auto' }}>Jan 10</p>
-                                        </Box>
-                                    </IconButton>
-                                    <hr />
-                                    <IconButton size='large' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
-                                        <Box sx={{width: '-webkit-fill-available' , color:'#111' , display:'flex'}}>
-                                            <img src="/null-profile.jpg" style={{ width:'11%' , height:'11%' ,borderRadius:'50%',border:'1px solid #000' }} alt="" />
-                                            <Box sx={{ display:'flex' , justifyContent:'center' , alignItems:'center' }}>
-                                                <h5 style={{ fontSize:'13px'  , marginLeft:'5px' }}>Akif Rahman</h5>
-                                            </Box>
-                                            <p style={{ fontSize:'11px'  , marginLeft:'auto' }}>Jan 10</p>
-                                        </Box>
-                                    </IconButton>
-                                    <hr />
-                                    <IconButton size='large' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
-                                        <Box sx={{width: '-webkit-fill-available' , color:'#111' , display:'flex'}}>
-                                            <img src="/null-profile.jpg" style={{ width:'11%' , height:'11%' ,borderRadius:'50%',border:'1px solid #000' }} alt="" />
-                                            <Box sx={{ display:'flex' , justifyContent:'center' , alignItems:'center' }}>
-                                                <h5 style={{ fontSize:'13px'  , marginLeft:'5px' }}>Akif Rahman</h5>
-                                            </Box>
-                                            <p style={{ fontSize:'11px'  , marginLeft:'auto' }}>Jan 10</p>
-                                        </Box>
-                                    </IconButton>
-                                    <hr />
-                                    <IconButton size='large' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
-                                        <Box sx={{width: '-webkit-fill-available' , color:'#111' , display:'flex'}}>
-                                            <img src="/null-profile.jpg" style={{ width:'11%' , height:'11%' ,borderRadius:'50%',border:'1px solid #000' }} alt="" />
-                                            <Box sx={{ display:'flex' , justifyContent:'center' , alignItems:'center' }}>
-                                                <h5 style={{ fontSize:'13px'  , marginLeft:'5px' }}>Akif Rahman</h5>
-                                            </Box>
-                                            <p style={{ fontSize:'11px'  , marginLeft:'auto' }}>Jan 10</p>
-                                        </Box>
-                                    </IconButton>
-                                    <hr />
-                                    <IconButton size='large' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
-                                        <Box sx={{width: '-webkit-fill-available' , color:'#111' , display:'flex'}}>
-                                            <img src="/null-profile.jpg" style={{ width:'11%' , height:'11%' ,borderRadius:'50%',border:'1px solid #000' }} alt="" />
-                                            <Box sx={{ display:'flex' , justifyContent:'center' , alignItems:'center' }}>
-                                                <h5 style={{ fontSize:'13px'  , marginLeft:'5px' }}>Akif Rahman</h5>
-                                            </Box>
-                                            <p style={{ fontSize:'11px'  , marginLeft:'auto' }}>Jan 10</p>
-                                        </Box>
-                                    </IconButton>
-                                    <hr />
-                                    <IconButton size='large' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
-                                        <Box sx={{width: '-webkit-fill-available' , color:'#111' , display:'flex'}}>
-                                            <img src="/null-profile.jpg" style={{ width:'11%' , height:'11%' ,borderRadius:'50%',border:'1px solid #000' }} alt="" />
-                                            <Box sx={{ display:'flex' , justifyContent:'center' , alignItems:'center' }}>
-                                                <h5 style={{ fontSize:'13px'  , marginLeft:'5px' }}>Akif Rahman</h5>
-                                            </Box>
-                                            <p style={{ fontSize:'11px'  , marginLeft:'auto' }}>Jan 10</p>
-                                        </Box>
-                                    </IconButton>
-                                    <hr />
-                                    <IconButton size='large' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
-                                        <Box sx={{width: '-webkit-fill-available' , color:'#111' , display:'flex'}}>
-                                            <img src="/null-profile.jpg" style={{ width:'11%' , height:'11%' ,borderRadius:'50%',border:'1px solid #000' }} alt="" />
-                                            <Box sx={{ display:'flex' , justifyContent:'center' , alignItems:'center' }}>
-                                                <h5 style={{ fontSize:'13px'  , marginLeft:'5px' }}>Akif Rahman</h5>
-                                            </Box>
-                                            <p style={{ fontSize:'11px'  , marginLeft:'auto' }}>Jan 10</p>
-                                        </Box>
-                                    </IconButton>
-                                    <hr />
-                                    <IconButton size='large' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
-                                        <Box sx={{width: '-webkit-fill-available' , color:'#111' , display:'flex'}}>
-                                            <img src="/null-profile.jpg" style={{ width:'11%' , height:'11%' ,borderRadius:'50%',border:'1px solid #000' }} alt="" />
-                                            <Box sx={{ display:'flex' , justifyContent:'center' , alignItems:'center' }}>
-                                                <h5 style={{ fontSize:'13px'  , marginLeft:'5px' }}>Akif Rahman</h5>
-                                            </Box>
-                                            <p style={{ fontSize:'11px'  , marginLeft:'auto' }}>Jan 10</p>
-                                        </Box>
-                                    </IconButton>
-                                    <hr />
-                                    <IconButton size='large' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
-                                        <Box sx={{width: '-webkit-fill-available' , color:'#111' , display:'flex'}}>
-                                            <img src="/null-profile.jpg" style={{ width:'11%' , height:'11%' ,borderRadius:'50%',border:'1px solid #000' }} alt="" />
-                                            <Box sx={{ display:'flex' , justifyContent:'center' , alignItems:'center' }}>
-                                                <h5 style={{ fontSize:'13px'  , marginLeft:'5px' }}>Akif Rahman</h5>
-                                            </Box>
-                                            <p style={{ fontSize:'11px'  , marginLeft:'auto' }}>Jan 10</p>
-                                        </Box>
-                                    </IconButton>
-                                    <hr />
-                                    <IconButton size='large' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
-                                        <Box sx={{width: '-webkit-fill-available' , color:'#111' , display:'flex'}}>
-                                            <img src="/null-profile.jpg" style={{ width:'11%' , height:'11%' ,borderRadius:'50%',border:'1px solid #000' }} alt="" />
-                                            <Box sx={{ display:'flex' , justifyContent:'center' , alignItems:'center' }}>
-                                                <h5 style={{ fontSize:'13px'  , marginLeft:'5px' }}>Akif Rahman</h5>
-                                            </Box>
-                                            <p style={{ fontSize:'11px'  , marginLeft:'auto' }}>Jan 10</p>
-                                        </Box>
-                                    </IconButton>
-                                    <hr />
-                                    <IconButton size='large' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
-                                        <Box sx={{width: '-webkit-fill-available' , color:'#111' , display:'flex'}}>
-                                            <img src="/null-profile.jpg" style={{ width:'11%' , height:'11%' ,borderRadius:'50%',border:'1px solid #000' }} alt="" />
-                                            <Box sx={{ display:'flex' , justifyContent:'center' , alignItems:'center' }}>
-                                                <h5 style={{ fontSize:'13px'  , marginLeft:'5px' }}>Akif Rahman</h5>
-                                            </Box>
-                                            <p style={{ fontSize:'11px'  , marginLeft:'auto' }}>Jan 10</p>
-                                        </Box>
-                                    </IconButton>
-                                    <hr />
+                                }
+                                {!messageTwo && 
+                                <Box className='comments' sx={{ overflowY:'auto' , width:'100%' , height:'56vh' }}>
+                                    {allPeople.map((people)=>(
+                                        <>
+                                        {people._id != user._id && 
+                                        <>
+                                            <IconButton onClick={()=>addChat(people)} size='large' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
+                                                <Box sx={{width: '-webkit-fill-available' , color:'#111' , display:'flex'}}>
+                                                    <img src={people?.image ? people.image : "/null-profile.jpg"} style={{ width:'11%' , height:'11%' ,borderRadius:'50%',border:'1px solid #000' }} alt="" />
+                                                    <Box sx={{ display:'flex' , justifyContent:'center' , alignItems:'center' }}>
+                                                        <h5 style={{ fontSize:'13px'  , marginLeft:'5px' }}>{people?.firstName + ' ' + people?.lastName}</h5>   
+                                                    </Box>
+                                                    <p style={{ fontSize:'11px'  , marginLeft:'auto' }}>Jan 10</p>
+                                                </Box>
+                                            </IconButton>
+                                            <hr />
+                                        </>
+                                        }
+                                        </>
+                                    ))}
+                                    {allPeople.length > 0 ? <hr style={{ height:'10px' , backgroundColor:'gray' }}/> : ''}
+                                    {allPeople.length > 0 ? <hr/> : ''}
+                                    {chats.map((chat)=>(
+                                        <>
+                                        <IconButton onClick={()=>{
+                                            setCurrentChat(chat)
+                                            setMessageTwo(true)
+                                            }} size='large' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
+                                            <MessageMobileSideOne data={chat} currentUserId={user._id}/>
+                                        </IconButton>
+                                        <hr />
+                                        </>
+                                    ))}
                                 </Box>
+                                }
                                 {/* /////////////////////////////// */}
+                                {messageTwo &&
+                                <MessageMobileSideTwo chat={currentChat} currentUserId={user._id} setSendMessage={setSendMessage} recieveMessage={recieveMessage} setMessageTwo = {setMessageTwo}/>
+                                }
                             </Grid>
                         </Grid>
                     </Grid>

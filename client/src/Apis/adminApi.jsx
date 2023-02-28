@@ -109,3 +109,36 @@ export const DeleteJob = async (jobId, Token) => {
         console.log(error);
     }
 }
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const AdminGetReportPosts = async (Token) => {
+    try {
+        const {data} = await AdminApi.get('/all_report_posts', {headers:{"admintoken":Token}})
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const DeleteReportPost = async (postId, Token) => {
+    try {
+        const {data} = await AdminApi.delete(`/delete_post?postId=${postId}`, {headers:{"admintoken":Token}})
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const AdminGetReportVendors = async (Token) => {
+    try {
+        const {data} = await AdminApi.get('/all_report_vendors', {headers:{"admintoken":Token}})
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}

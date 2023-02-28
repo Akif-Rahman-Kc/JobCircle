@@ -65,6 +65,24 @@ const vendorSchema = new Schema({
         type: Boolean,
         default:false
     },
+    Reports:[{
+        reporterId:{
+            type:String,
+            required: true,
+        },
+        reportMessage:{
+            type:String,
+            required: true,
+        },
+        reporterName:{
+            type:String,
+            required: true,
+        },
+        reporterImage:{
+            type:String,
+            required: true,
+        },
+    },{ timestamps: true }],
     
 },{ timestamps: true })
 

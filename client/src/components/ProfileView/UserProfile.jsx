@@ -173,9 +173,6 @@ const UserProfile = (props) => {
                           <h4>{connectionLength}</h4>
                         </Grid>
                         <Grid xs={4} sx={{ mt: -1, textAlign: "end" }}>
-                          <IconButton>
-                            <MoreVertIcon />
-                          </IconButton>
                         </Grid>
                       </Grid>
                     </Box>

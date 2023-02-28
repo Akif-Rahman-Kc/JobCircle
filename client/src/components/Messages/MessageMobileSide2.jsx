@@ -1,12 +1,13 @@
 import Box from '@mui/material/Box';
 import { Grid, IconButton, Input } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useEffect, useRef, useState } from 'react';
 import { AddMessage, GetMessages, GetUser } from '@/Apis/userApi';
 import moment from 'moment';
 import InputEmojiWithRef from 'react-input-emoji';
 
-const MessageSideTwo = ({ chat, currentUserId, setSendMessage, recieveMessage }) => {
+const MessageMobileSideTwo = ({ chat, currentUserId, setSendMessage, recieveMessage, setMessageTwo }) => {
 
     const [ userData, setUserData ] = useState(null)
     const [ messages, setMessages ] = useState([])
@@ -75,43 +76,44 @@ const MessageSideTwo = ({ chat, currentUserId, setSendMessage, recieveMessage })
 
     return ( 
         <>
-        {notSelectMsg ? 
-         <Grid sx={{ p: 1 , width:'65%' , ml: 1 , height:'69vh' , borderRadius:'15px' , backgroundColor:'#e3e3e3' , color:'gray' , boxShadow: 3 , border:'1px solid lightgray' , display:'flex' , justifyContent:'center' , alignItems:'center' }}>
+        {notSelectMsg ?
             <h1>Tap on a Chat to start Conversation...</h1>
-         </Grid>
         :
-        <Grid sx={{ p: 1 , width:'65%' , ml: 1 , height:'69vh' , borderRadius:'15px' , backgroundColor:'#e3e3e3' , color:'#000' , boxShadow: 3 , border:'1px solid lightgray' }}>
+        <>
             <Box sx={{ p: 0.8  , display:'flex' , bgcolor:'lightgray' , borderRadius:'10px' }}>
+                <IconButton onClick={()=>setMessageTwo(false)}>
+                <ArrowBackIcon/>  
+                </IconButton>
                 <img src={userData?.image ? userData.image : "/null-profile.jpg"} style={{ width:'45px' ,borderRadius:'50%',border:'1px solid #000' }} alt="" />
                 <Box sx={{ display:'flex' , justifyContent:'center' , alignItems:'center' }}>
                     <h4 style={{ fontSize:'13px'  , marginLeft:'5px' }}>{userData?.firstName + ' ' + userData?.lastName}</h4>
                 </Box>
             </Box>
-            <Box className='comments' sx={{ mt: 0.5 , p: 2  , display:'block' , bgcolor:'lightgray' , borderRadius:'10px' , height:'47.7vh' , overflowY:'auto' }}>
+            <Box className='comments' sx={{ mt: 0.5 , p: 1  , display:'block' , bgcolor:'lightgray' , borderRadius:'10px' , height:'45.6vh' , overflowY:'auto' }}>
                 <Box sx={{ display:'flex' , justifyContent:'center' }}>
                     <Box sx={{ py: 0.5 , px: 2 , backgroundColor:'#b8ccd3' , height:'fit-content' , width:'fit-content' , borderRadius:1 , boxShadow: 1 }}>
                         <h6>Yesterday</h6>
                     </Box>
                 </Box>
-                <Box sx={{ mt: 1 }}>
+                <Box sx={{ mt: 2 }}>
                     {messages.map((message)=>(
                         <>
                             {message.senderId == currentUserId ?
-                            <Box ref={scroll} sx={{ m: 2 , display:'flex' , ml:'auto' , width:'80%' , lineBreak:'anywhere'  }}>
+                            <Box ref={scroll} sx={{ my: 1 , display:'flex' , ml:'auto' , width:'80%' , lineBreak:'anywhere'  }}>
                                 <Box sx={{ display:'block' , ml:'auto' , textAlign:'end' , mr: 1  }}>
-                                    <Box sx={{ ml:'auto' , mb:0.2 , p: 1 , height:'fit-content' , bgcolor:'#e9e9e9' , width:'fit-content' , borderTopLeftRadius:'9px' , borderBottomLeftRadius:'9px' , borderBottomRightRadius:'9px' }}>
+                                    <Box sx={{ ml:'auto' , mb:0.2 , p: 1 , fontSize:'12px' , height:'fit-content' , bgcolor:'#e9e9e9' , width:'fit-content' , borderTopLeftRadius:'5px' , borderBottomLeftRadius:'5px' , borderBottomRightRadius:'5px' }}>
                                         {message.text}
                                     </Box>
-                                    <h6 style={{ marginLeft:'auto' , fontSize:'9px' , color:'gray' }}>{moment(message.createdAt).format('LT')}</h6>
+                                    <h6 style={{ marginLeft:'auto' , fontSize:'8px' , color:'gray' }}>{moment(message.createdAt).format('LT')}</h6>
                                 </Box>
                             </Box>
                             :
-                            <Box ref={scroll} sx={{ m: 2 , display:'flex' , lineBreak:'anywhere'  }}>
-                                <Box sx={{ display:'block' , ml: 1  }}>
-                                    <Box sx={{ mb:0.2 , p: 1 , height:'fit-content' , bgcolor:'#a3a3a3' , width:'fit-content' , borderTopRightRadius:'10px' , borderBottomRightRadius:'10px' , borderBottomLeftRadius:'10px' }}>
+                            <Box ref={scroll} sx={{ my: 1 , display:'flex' , width:'80%' , lineBreak:'anywhere'  }}>
+                                <Box sx={{ display:'block' , ml: 1 , mr: 1 }}>
+                                    <Box sx={{ mb:0.2 , p: 1 , height:'fit-content' , fontSize:'12px' , bgcolor:'#a3a3a3' , width:'fit-content' , borderTopRightRadius:'5px' , borderBottomRightRadius:'5px' , borderBottomLeftRadius:'5px' }}>
                                         {message.text}
                                     </Box>
-                                    <h6 style={{ fontSize:'9px' , color:'gray' }}>{moment(message.createdAt).format('LT')}</h6>
+                                    <h6 style={{ fontSize:'8px' , color:'gray' }}>{moment(message.createdAt).format('LT')}</h6>
                                 </Box>
                             </Box>
                             }
@@ -124,13 +126,13 @@ const MessageSideTwo = ({ chat, currentUserId, setSendMessage, recieveMessage })
                     <Box sx={{ mt:'auto' , display:'flex' , alignItems:'center' , borderRadius:'30px' , width:'90%' , mx: 1 , bgcolor:'#fff' }}>
                         <InputEmojiWithRef value={newMessage} onChange={handleChange} placeholder='Message' sx={{ width:'100%' , fontSize:'13px' , ":before":{ border: 0 , content:'none'  } , ":after":{ border: 0 } }}/>
                     </Box>
-                    <IconButton disabled={newMessage.trim()===""} onClick={handleSend} sx={{ ":disabled":{ bgcolor:'#6CA0E7' } , mt: 0.3 , backgroundColor:'#1976d2' , color:'#fff' , borderRadius:'30px' , width:'48px' , height:'48px' , ":hover":{ backgroundColor:'#1976d2' } }}><SendIcon sx={{ width:'70%' }}/></IconButton>
+                    <IconButton disabled={newMessage.trim()===""} onClick={handleSend} sx={{ ":disabled":{ bgcolor:'#6CA0E7' } , backgroundColor:'#1976d2' , color:'#fff' , borderRadius:'30px' , width:'48px' , height:'48px' , ":hover":{ backgroundColor:'#1976d2' } }}><SendIcon sx={{ width:'70%' }}/></IconButton>
                 </Box>
             </Box>
-        </Grid>
+        </>
         }
         </>
      );
 }
  
-export default MessageSideTwo;
+export default MessageMobileSideTwo;

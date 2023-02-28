@@ -157,3 +157,31 @@ export async function savedVendors(req, res) {
         console.log(error)
     }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function reportVendor(req, res) {
+    try {
+        const vendor = await Vendor.findById(req.body.reporterId)
+        const user = await User.findById(req.body.reporterId)
+        const vend = await Vendor.findById(req.body.vendorId)
+        const exist = vend.Reports.find((obj)=> obj.reporterId.toString() === req.body.reporterId.toString())
+        if (exist) {
+            res.json({status:'failed'})
+        } else {
+            await Vendor.updateOne({_id:req.body.vendorId},{
+                $push:{
+                    Reports:{
+                        reporterId:req.body.reporterId,
+                        reportMessage:req.body.message,
+                        reporterName:vendor ? vendor.firstName + ' ' + vendor.lastName : user.firstName + ' ' + user.lastName,
+                        reporterImage:vendor ? vendor.image : user.image, 
+                    }
+                }
+            })
+            res.json({status:'success'})
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}

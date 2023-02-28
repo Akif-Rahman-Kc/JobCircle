@@ -13,6 +13,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import Link from "next/link";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { Grid } from '@mui/material';
+import { useSelector } from 'react-redux';
 
 const StyledFab = styled(Fab)({
   position: 'absolute',
@@ -24,6 +25,9 @@ const StyledFab = styled(Fab)({
 });
 
 export default function VendorBottomNavbar() {
+
+  const { vendor } = useSelector((state)=>state.vendorInfo)
+
   return (
       
       <AppBar position="fixed" color="primary" sx={{ boxShadow: '1px -2px 15px 1px #888888' , top: 'auto', bottom: 0 , display:{ xs:'flex' , sm:'flex' , md:'none' } }}>
@@ -117,7 +121,7 @@ export default function VendorBottomNavbar() {
               <Box
               >
                 <img
-                  src={"/null-profile.jpg"}
+                  src={vendor.image ? vendor.image : "/null-profile.jpg"}
                   style={{ m: 0, width: "24px", borderRadius: "50%" }}
                   alt=""
                 />

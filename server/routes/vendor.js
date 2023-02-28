@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { acceptBooking, declineBooking, getBookings } from '../controller/bookingController.js';
+import { acceptBooking, declineBooking, getBookingDates, getBookings } from '../controller/bookingController.js';
 import { addComment, addPost, deleteComment, deletePost, editPost, getAllPosts, getPosts, likedPost, reportPost } from '../controller/postController.js';
 const router = Router();
 import { vendorSignUp, vendorSignIn, vendorAuth, vendorEditProfile, VendorRemoveProfilePhoto } from '../controller/vendorController.js';
@@ -39,5 +39,6 @@ router.get('/get_all_connectors', getAllConnectors)
 router.get('/get_bookings', vendorJWT,getBookings)
 router.patch('/accept_booking', vendorJWT,acceptBooking)
 router.patch('/decline_booking', vendorJWT,declineBooking)
+router.get('/get_booking_dates', getBookingDates)
 
 export default router;

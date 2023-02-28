@@ -219,3 +219,14 @@ export const DeclineBooking = async (vendorId, bookingId, Token) => {
         console.log(error);
     }
 }
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const GetBookingDates = async (vendorId) => {
+    try {
+        const {data} = await VendorApi.get(`/get_booking_dates?vendorId=${vendorId}`)
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}

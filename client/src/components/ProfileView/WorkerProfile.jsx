@@ -4,6 +4,7 @@ import { Box } from "@mui/system";
 import {
   Avatar,
   Button,
+  Collapse,
   Grid,
   IconButton,
   Modal,
@@ -17,7 +18,7 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { userDetails } from "@/redux/user";
 import EngineeringIcon from "@mui/icons-material/Engineering";
-import { Booking, ConnectWithPeople, getAllConnectors, GetJobs, GetWorkers, isAuthApi } from "@/Apis/userApi";
+import { Booking, ConnectWithPeople, getAllConnectors, GetJobs, GetWorkers, isAuthApi, ReportVendor } from "@/Apis/userApi";
 import MailIcon from '@mui/icons-material/Mail';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
@@ -26,12 +27,16 @@ import PhotoSizeSelectActualIcon from "@mui/icons-material/PhotoSizeSelectActual
 import SmartDisplayIcon from "@mui/icons-material/SmartDisplay";
 import Link from "next/link";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
 import { BsFillChatDotsFill, IconName } from "react-icons/bs";
 import Posts from "@/components/Posts/Post";
-import { VendorGetPosts } from "@/Apis/vendorApi";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { GetBookingDates, VendorGetPosts } from "@/Apis/vendorApi";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import BeenhereIcon from '@mui/icons-material/Beenhere';
 import Connections from "../Connections/connection";
+import moment from "moment/moment";
 
 const style = {
     position: "absolute",
@@ -60,6 +65,9 @@ const WorkerProfile = (props) => {
     const [refreshPost, setrefreshPost] = useState(false);
     const [ connectionLength, setConnectionLength] = useState(null)
     const [ openConnectionBox, setOpenConnectionBox] = useState(false)
+    const [ openReportBox, setOpenReportBox] = useState(null)
+    const [ booked, setBooked] = useState(false)
+    const [ bookings, setBookings] = useState([])
 
     useEffect(() => {
         async function invokePosts(){
@@ -121,6 +129,16 @@ const WorkerProfile = (props) => {
         invoke()
       },[connected, refreshPost, connectionLength])
 
+      useEffect(()=>{
+        async function invoke(){
+          const res = await GetBookingDates(props.worker._id)
+          if (res) {
+            setBookings(res.bookings.bookings)
+          }
+        }
+        invoke()
+      },[booked])
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         let data = new FormData(event.currentTarget);
@@ -136,6 +154,9 @@ const WorkerProfile = (props) => {
           setDateErr('')
           handleClose()
           const res = await Booking(data, props.worker._id, props.user._id)
+          if (res) {
+            setBooked(!booked)
+          }
         } else {
           if (data.location =='') {
             setLocation(true)
@@ -161,8 +182,26 @@ const WorkerProfile = (props) => {
         }
       }
 
+      const reportVendor = async (msg,vendorId)=>{
+        const res = await ReportVendor(msg, vendorId, props.user._id)
+        setOpenReportBox(null)
+        if (res.status == 'failed') {
+          toast.error('Your already reported this Post!', {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          })
+        }
+      }
+
     return ( 
         <>
+          <ToastContainer/>
             <Grid sx={{ pt: 7 }}>
                 {openConnectionBox ? 
                   <Box
@@ -247,9 +286,31 @@ const WorkerProfile = (props) => {
                           <h4>{connectionLength}</h4>
                         </Grid>
                         <Grid xs={4} sx={{ mt: -1, textAlign: "end" }}>
-                          <IconButton>
-                            <MoreVertIcon />
+                          <IconButton onClick={() =>
+                            openReportBox
+                              ? setOpenReportBox(null)
+                              : setOpenReportBox(props.worker._id)
+                          }>
+                            <ReportGmailerrorredIcon />
                           </IconButton>
+                          <Collapse
+                            sx={{ backgroundColor:'#fff' , border:'3px double #111' , position:'absolute' , borderRadius:'7px' , p: 1 , ml: { xs: 0 , sm: 7 , md: 2} , zIndex:'100' }}
+                            in={openReportBox == props.worker._id}
+                            timeout="auto"
+                            unmountOnExit
+                          >
+                            <Button onClick={()=> reportVendor('Its spam!',props.worker._id)} sx={{ fontSize:'12px' , width:'inherit' , color:'#111' , justifyContent: 'flex-start' , textTransform: 'capitalize' }}>Its spam!</Button>
+                            <br />
+                            <Button onClick={()=> reportVendor('Scam or Fraud',props.worker._id)} sx={{ fontSize:'12px' , width:'inherit' , color:'#111' , justifyContent: 'flex-start' , textTransform: 'capitalize' }}>Scam or Fraud</Button>
+                            <br />
+                            <Button onClick={()=> reportVendor("I just don't like it!",props.worker._id)} sx={{ fontSize:'12px' , width:'inherit' , color:'#111' , justifyContent: 'flex-start' , textTransform: 'capitalize' }}>I just don't like it!</Button>
+                            <br />
+                            <Button onClick={()=> reportVendor('Its illegal!',props.worker._id)} sx={{ fontSize:'12px' , width:'inherit' , color:'#111' , justifyContent: 'flex-start' , textTransform: 'capitalize' }}>Its illegal!</Button>
+                            <br />
+                            <Button onClick={()=> reportVendor('False information!',props.worker._id)} sx={{ fontSize:'12px' , width:'inherit' , color:'#111' , justifyContent: 'flex-start' , textTransform: 'capitalize' }}>False information!</Button>
+                            <br />
+                            <Button onClick={()=> reportVendor('Something else',props.worker._id)} sx={{ fontSize:'12px' , width:'inherit' , color:'#111' , justifyContent: 'flex-start' , textTransform: 'capitalize' }}>Something else</Button>
+                          </Collapse>
                         </Grid>
                       </Grid>
                     </Box>
@@ -302,8 +363,13 @@ const WorkerProfile = (props) => {
                                 <h5 style={{ fontSize:'12px' , margin:'4px' }}>{props.worker.jobDays}</h5>
                                   <Box className='comments' sx={{ border:1 , borderRadius: 1 , height:{xs: '190px' , sm:'200px' , md: '200px' } , overflowY:'auto' }}>  
                                     <hr />
-                                    <h6  style={{ padding:'4px' }}>Feb 25, 2023</h6>
-                                    <hr />
+                                    {bookings.map((obj)=>(
+                                      <>
+                                        <h6  style={{ padding:'4px' }}>{moment(obj.date).format('ll')}</h6>
+                                        <hr />
+                                      </>
+                                    ))}
+                                    
                                   </Box>
                                 </Grid>
                                 <Grid xs={6} sx={{ p: 1 , ml: 0.2 , border:1 , borderRadius: 2 }}>

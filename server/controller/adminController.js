@@ -1,6 +1,7 @@
 import Admin from '../model/adminSchema.js'
 import User from '../model/userSchema.js'
 import Job from '../model/jobSchema.js'
+import Post from '../model/postSchema.js'
 import Vendor from '../model/vendorSchema.js'
 import jwt from 'jsonwebtoken'
 import { compare } from 'bcrypt'
@@ -144,6 +145,42 @@ export async function deleteJobs(req, res) {
             await Job.remove({_id:req.query.jobId})
             res.json({status:"success"})
         }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function allReportPosts(req, res) {
+    try {
+        const posts = await Post.find()
+        const reportPosts = posts.filter((doc)=> doc.Reports.length > 0)
+        res.json({status:'success' , reportPosts})
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function deleteReportPost(req, res) {
+    try {
+        await Post.deleteOne({_id:req.query.postId})
+        
+        res.json(true)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function allReportVendors(req, res) {
+    try {
+        const vendors = await Vendor.find()
+        const reportVendors = vendors.filter((doc)=> doc.Reports.length > 0)
+        res.json({status:'success' , reportVendors})
     } catch (error) {
         console.log(error)
     }

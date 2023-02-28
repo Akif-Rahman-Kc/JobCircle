@@ -8,6 +8,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import styles from '@/styles/adminHome.module.css'
+import ReportIcon from '@mui/icons-material/Report';
 import Link from "next/link";
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import PeopleAltRoundedIcon from '@mui/icons-material/PeopleAltRounded';
@@ -64,10 +65,10 @@ export default function AdminNavbar(props) {
                         <p className={styles.butttonXsText}>JOBS</p>
                     </Box>
                     </Link>
-                    <Link href='/admin/notifications'>
+                    <Link href='/admin/reports'>
                     <Box className={styles.buttonXs}>
-                        <NotificationsRoundedIcon sx={{ width:'20px' }}/>
-                        <p className={styles.butttonXsText}>NOTIFICATIONS</p>
+                        <ReportIcon sx={{ width:'20px' }}/>
+                        <p className={styles.butttonXsText}>REPORTS</p>
                     </Box>
                     </Link>
                     <Link href='/admin/profile'>

@@ -84,6 +84,18 @@ export async function declineBooking(req, res) {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+export async function getBookingDates(req, res) {
+    try {
+        const bookings = await Booking.findOne({vendorId:req.query.vendorId})
+
+        res.json({status:'success', bookings})
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // export async function getUserBooking(req, res) {
 //     try {
 //         const allBookings = await Booking.aggregate([
