@@ -7,6 +7,7 @@ import { userJWT } from '../middleware/auth.js';
 import { createChat, findChat, getUser, userChats } from '../controller/chatController.js';
 import { addMessage, getMessages } from '../controller/messageController.js';
 import { addBooking } from '../controller/bookingController.js';
+import { addNotification } from '../controller/notificationController.js';
 
 // Authentication
 
@@ -21,7 +22,7 @@ router.patch('/remove_profile_photo', userJWT,removeProfilePhoto)
 // Saved Vendors
 router.patch('/saved_vendors', userJWT,savedVendors)
 
-//Posts
+// Posts
 router.get('/get_all_posts', userJWT,getAllPosts)
 
 // Works
@@ -29,22 +30,25 @@ router.get('/get_jobs', userJWT,getJobs)
 router.get('/get_workers', getWorkers)
 router.get('/get_worker', getWorker)
 
-//Search
+// Search
 router.get('/search', searchAllPeople)
 
-//Connect
+// Connect
 router.patch('/connect', connectWithPeople)
 router.get('/get_all_connectors', getAllConnectors)
 
-//Chats
+// Chats
 router.post('/create_chat', createChat)
 router.get('/get_chats', userChats)
 router.get('/get_specific_chat', findChat)
 router.get('/get_user', getUser)
 
-//Messages
+// Messages
 router.post('/add_message', addMessage)
 router.get('/get_messages', getMessages)
+
+// Notifications
+router.post('/add_notification', addNotification)
 
 //Booking
 router.post('/add_booking', addBooking)

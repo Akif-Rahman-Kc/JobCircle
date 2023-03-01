@@ -6,7 +6,7 @@ import Messages from "@/components/Messages/Message";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlined";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import VendorNavbar from "@/components/Navabar/VendorNavbar";
@@ -33,7 +33,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Carousel from "react-material-ui-carousel";
 import Moment from 'react-moment'
-import { ConnectWithPeople, getAllConnectors } from "@/Apis/userApi";
+import { AddNotification, ConnectWithPeople, getAllConnectors } from "@/Apis/userApi";
+import { AuthContext } from "@/store/Context";
 
 const Posts = (props) => {
     const [comment, setComment] = useState('');
@@ -43,6 +44,8 @@ const Posts = (props) => {
     const [ openMoreBox, setOpenMoreBox] = useState(null)
     const [ openReportBox, setOpenReportBox] = useState(null)
     const [ modalPost, setModalPost] = useState({})
+
+    const { sendNotification, setSendNotification } = useContext(AuthContext)
 
     const handleEditPostModalOpen = (post) => {
       setModalPost(post)
@@ -56,14 +59,16 @@ const Posts = (props) => {
     }
     const handleLikeModalClose = () => setOpenLikeModal(false)
 
-    const liked = async (postId)=>{
+    const liked = async (postId, vendorId)=>{
         const res = await LikedPost(postId, props.user._id)
-        if (res) {
-            props.setrefreshComment(!props.refreshComment)
+        if (res.status === "success") {
+            const res = await AddNotification({senderId:props.user._id, recieverId:vendorId, content:`${props.user.firstName + ' ' + props.user.lastName} Liked your post`})
+            setSendNotification({recieverId:vendorId, notification:`${props.user.firstName + ' ' + props.user.lastName} Liked your post`})
         }
+        props.setrefreshComment(!props.refreshComment)
       }
     
-      const addComment = async (postId)=>{
+      const addComment = async (postId, vendorId)=>{
         const data = {
           comment,
           postId,
@@ -72,6 +77,8 @@ const Posts = (props) => {
         if (data.comment) {
           const res = await AddCommnet(data)
         if (res) {
+            const res = await AddNotification({senderId:props.user._id, recieverId:vendorId, content:`${props.user.firstName + ' ' + props.user.lastName} Commented your post`})
+            setSendNotification({recieverId:vendorId, notification:`${props.user.firstName + ' ' + props.user.lastName} Commented your post`})
             props.setrefreshComment(!props.refreshComment)
         }
       }
@@ -223,7 +230,7 @@ const Posts = (props) => {
                       }}
                     >
                       <Grid xs={3}>
-                        <IconButton onClick={()=>liked(props.post._id)} size="large" sx={{ color: "#1976d2" }}>
+                        <IconButton onClick={()=>liked(props.post._id, props.post.vendorId._id)} size="large" sx={{ color: "#1976d2" }}>
                           {
                             props.post.like ? <ThumbUpAltIcon/> : <ThumbUpOffAltIcon />
                           }
@@ -397,7 +404,7 @@ const Posts = (props) => {
                                 onChange={(e)=>setComment(e.target.value)}
                                 sx={{ width: "100%", pl: 2 }}
                               />
-                              <IconButton onClick={()=>addComment(props.post._id)} sx={{ backgroundColor:'#1976d2' , color:'#fff' , borderRadius:'30px' , width:'32px' , height:'32px' , ":hover":{ backgroundColor:'#1976d2' } }}><SendIcon sx={{ width:'70%' }}/></IconButton>
+                              <IconButton onClick={()=>addComment(props.post._id, props.post.vendorId._id)} sx={{ backgroundColor:'#1976d2' , color:'#fff' , borderRadius:'30px' , width:'32px' , height:'32px' , ":hover":{ backgroundColor:'#1976d2' } }}><SendIcon sx={{ width:'70%' }}/></IconButton>
                             </Box>
                             <CardContent
                               className="comments"

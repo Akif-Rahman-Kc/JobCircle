@@ -13,12 +13,12 @@ import {
 } from "@mui/material";
 import Notifications from "@/components/Notifications/Notification";
 import Messages from "@/components/Messages/Message";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { userDetails } from "@/redux/user";
 import EngineeringIcon from "@mui/icons-material/Engineering";
-import { Booking, ConnectWithPeople, getAllConnectors, GetJobs, GetWorkers, isAuthApi, ReportVendor } from "@/Apis/userApi";
+import { AddNotification, Booking, ConnectWithPeople, getAllConnectors, GetJobs, GetWorkers, isAuthApi, ReportVendor } from "@/Apis/userApi";
 import MailIcon from '@mui/icons-material/Mail';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
@@ -37,6 +37,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import BeenhereIcon from '@mui/icons-material/Beenhere';
 import Connections from "../Connections/connection";
 import moment from "moment/moment";
+import { AuthContext } from "@/store/Context";
 
 const style = {
     position: "absolute",
@@ -68,6 +69,8 @@ const WorkerProfile = (props) => {
     const [ openReportBox, setOpenReportBox] = useState(null)
     const [ booked, setBooked] = useState(false)
     const [ bookings, setBookings] = useState([])
+
+    const { sendNotification, setSendNotification } = useContext(AuthContext)
 
     useEffect(() => {
         async function invokePosts(){
@@ -174,12 +177,13 @@ const WorkerProfile = (props) => {
         setOpen(false);
       };
 
-      const connect = () =>{
-        console.log(props.user._id, props.worker._id);
-        const response = ConnectWithPeople(props.user._id, props.worker._id)
-        if (response) {
-          setrefreshPost(!refreshPost)
+      const connect = async () =>{
+        const response =await ConnectWithPeople(props.user._id, props.worker._id)
+        if (response.connection) {
+          const res = await AddNotification({senderId:props.user._id, recieverId:props.worker._id, content:`${props.user.firstName + ' ' + props.user.lastName} Commented your post`})
+          setSendNotification({recieverId:props.worker._id, notification:`${props.user.firstName + ' ' + props.user.lastName} Connected you`})
         }
+        setrefreshPost(!refreshPost)
       }
 
       const reportVendor = async (msg,vendorId)=>{

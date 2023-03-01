@@ -12,12 +12,12 @@ import {
 } from "@mui/material";
 import Notifications from "@/components/Notifications/Notification";
 import Messages from "@/components/Messages/Message";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { userDetails } from "@/redux/user";
 import EngineeringIcon from "@mui/icons-material/Engineering";
-import { ConnectWithPeople, getAllConnectors, GetJobs, GetWorkers, isAuthApi } from "@/Apis/userApi";
+import { AddNotification, ConnectWithPeople, getAllConnectors, GetJobs, GetWorkers, isAuthApi } from "@/Apis/userApi";
 import MailIcon from '@mui/icons-material/Mail';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
@@ -31,6 +31,7 @@ import Posts from "@/components/Posts/Post";
 import { VendorGetPosts } from "@/Apis/vendorApi";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import Connections from "../Connections/connection";
+import { AuthContext } from "@/store/Context";
 
 const style = {
     position: "absolute",
@@ -53,6 +54,8 @@ const UserProfile = (props) => {
   const [refreshPost, setrefreshPost] = useState(false);
   const [ connectionLength, setConnectionLength] = useState()
   const [ openConnectionBox, setOpenConnectionBox] = useState(false)
+
+  const { sendNotification, setSendNotification } = useContext(AuthContext)
 
   useEffect(() => {
     async function invoke(){
@@ -95,11 +98,13 @@ const UserProfile = (props) => {
     invoke();
   }, [connectionLength, refreshPost]);
 
-  const connect = () =>{
-    const response = ConnectWithPeople(props.user._id, props.worker._id)
-    if (response) {
-      setrefreshPost(!refreshPost)
+  const connect = async () =>{
+    const response = await ConnectWithPeople(props.user._id, props.worker._id)
+    if (response.connection) {
+      const res = await AddNotification({senderId:props.user._id, recieverId:props.worker._id, content:`${props.user.firstName + ' ' + props.user.lastName} Commented your post`})
+      setSendNotification({recieverId:props.worker._id, notification:`${props.user.firstName + ' ' + props.user.lastName} Connected you`})
     }
+    setrefreshPost(!refreshPost)
   }
 
     return ( 

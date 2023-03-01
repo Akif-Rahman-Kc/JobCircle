@@ -31,4 +31,16 @@ io.on("connection", (socket)=> {
         activeUsers = activeUsers.filter((user)=> user.socketId !== socket.id)
         io.emit('get-users', activeUsers)
     })
+
+    socket.on("send-notification", (data) => {
+        const { recieverId } = data;
+        const user = activeUsers.find(user => {
+               return user.userId ===recieverId;
+               
+        })
+        if(user) {
+            io.to(user.socketId).emit('recieve-notification', data)
+        }
+
+    })
 })

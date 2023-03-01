@@ -107,6 +107,7 @@ export async function likedPost(req, res) {
                     }
                 }
             })
+            res.json({status:"exist"})
         } else {
             await Post.updateOne({_id:req.query.postId},{
                 $push:{
@@ -117,9 +118,8 @@ export async function likedPost(req, res) {
                     }
                 }
             })
+            res.json({status:"success"})
         }
-        
-        res.json({status:"success"})
     } catch (error) {
         console.log(error)
     }

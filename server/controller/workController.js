@@ -65,6 +65,7 @@ export async function searchAllPeople(req, res) {
 
 export async function connectWithPeople(req, res) {
     try {
+        let con = false
         const { userId, followingId } = req.query
         const user = await User.findById(followingId)
         const vendor = await Vendor.findById(followingId)
@@ -90,6 +91,7 @@ export async function connectWithPeople(req, res) {
                         }
                     }
                 })
+                con = true
             }
             
         } else {
@@ -103,6 +105,7 @@ export async function connectWithPeople(req, res) {
                     }
                 }
             })
+            con = true
         }
 
         const follower = await Connection.findOne({userId:followingId})
@@ -127,7 +130,8 @@ export async function connectWithPeople(req, res) {
                 })
             }
         }
-        res.json(true);
+        console.log(con);
+        res.json({status:'success', connection:con});
     } catch (error) {
         console.log(error)
     }

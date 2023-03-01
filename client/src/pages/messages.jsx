@@ -24,7 +24,6 @@ import MessageMobileSideTwo from '@/components/Messages/MessageMobileSide2';
 const Messages = () => {
 const router = useRouter()
 const [ chats, setChats ] = useState([])
-const [ currentChat, setCurrentChat ] = useState(null)
 const [ onlineUsers, setOnlineUsers ] = useState([])
 const [ sendMessage, setSendMessage ] = useState(null)
 const [ recieveMessage, setRecieveMessage ] = useState(null)
@@ -34,7 +33,7 @@ const [ messageTwo, setMessageTwo ] = useState(false)
 const { user } = useSelector((state)=>state.userInfo)
 const dispatch = useDispatch()
 
-const { socket } = useContext(AuthContext)
+const { socket, setCurrentChat, currentChat } = useContext(AuthContext)
 
 useEffect(()=>{
     if (sendMessage !== null) {

@@ -209,6 +209,17 @@ export const ReportVendor = async (message,vendorId,reporterId) => {
     }
 }
 
+/////////////////////////////////////////////////////////////////////////////
+
+export const AddNotification = async (formData) => {
+    try {
+        const {data} = await UserApi.post('/add_notification',formData)
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 // /////////////////////////////////////////////////////////////////////////////
 
 // export const GetUserBookings = async (userId) => {
