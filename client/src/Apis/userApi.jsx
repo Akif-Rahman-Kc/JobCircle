@@ -220,6 +220,17 @@ export const AddNotification = async (formData) => {
     }
 }
 
+/////////////////////////////////////////////////////////////////////////////
+
+export const GetNotifications = async (userId) => {
+    try {
+        const {data} = await UserApi.get(`/get_notifications?userId=${userId}`)
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 // /////////////////////////////////////////////////////////////////////////////
 
 // export const GetUserBookings = async (userId) => {

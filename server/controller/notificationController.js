@@ -12,3 +12,14 @@ export async function addNotification(req, res) {
         console.log(error)
     }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function getNotifications(req, res) {
+    try {
+        const notifications = await Notification.find({recieverId:req.query.userId})
+        res.json(notifications)
+    } catch (error) {
+        console.log(error)
+    }
+}

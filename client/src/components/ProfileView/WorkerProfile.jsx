@@ -180,7 +180,7 @@ const WorkerProfile = (props) => {
       const connect = async () =>{
         const response =await ConnectWithPeople(props.user._id, props.worker._id)
         if (response.connection) {
-          const res = await AddNotification({senderId:props.user._id, recieverId:props.worker._id, content:`${props.user.firstName + ' ' + props.user.lastName} Commented your post`})
+          const res = await AddNotification({senderId:props.user._id, recieverId:props.worker._id, content:`${props.user.firstName + ' ' + props.user.lastName} Connected you`})
           setSendNotification({recieverId:props.worker._id, notification:`${props.user.firstName + ' ' + props.user.lastName} Connected you`})
         }
         setrefreshPost(!refreshPost)

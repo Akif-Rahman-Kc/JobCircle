@@ -7,7 +7,7 @@ import { userJWT } from '../middleware/auth.js';
 import { createChat, findChat, getUser, userChats } from '../controller/chatController.js';
 import { addMessage, getMessages } from '../controller/messageController.js';
 import { addBooking } from '../controller/bookingController.js';
-import { addNotification } from '../controller/notificationController.js';
+import { addNotification, getNotifications } from '../controller/notificationController.js';
 
 // Authentication
 
@@ -49,6 +49,7 @@ router.get('/get_messages', getMessages)
 
 // Notifications
 router.post('/add_notification', addNotification)
+router.get('/get_notifications', getNotifications)
 
 //Booking
 router.post('/add_booking', addBooking)
