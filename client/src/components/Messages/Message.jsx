@@ -8,10 +8,9 @@ import { useSelector } from 'react-redux';
 import { AuthContext } from '@/store/Context';
 import { useRouter } from 'next/router';
 
-const Messages = () => {
+const Messages = ({user}) => {
   const router = useRouter()
   const [ chats, setChats ] = useState([])
-  const { user } = useSelector((state)=>state.userInfo)
 
   const { setCurrentChat, currentChat } = useContext(AuthContext)
 

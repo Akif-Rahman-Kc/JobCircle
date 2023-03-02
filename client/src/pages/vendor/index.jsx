@@ -104,7 +104,7 @@ export default function VendorHome() {
             sx={{ justifyContent: "center", mt: 10, display: "flex" }}
           >
             <Grid md={3}>
-              <Notifications />
+              <Notifications user={vendor} />
             </Grid>
             <Grid sm={12} md={5}>
               <Grid sm={12} md={12}>
@@ -163,7 +163,7 @@ export default function VendorHome() {
               </Grid>
             </Grid>
             <Grid md={3}>
-              <Messages />
+              <Messages user={vendor} />
             </Grid>
           </Grid>
         </Box>

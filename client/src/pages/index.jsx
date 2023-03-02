@@ -104,7 +104,7 @@ export default function Home() {
             sx={{ justifyContent: "center", mt: 10, display: "flex" }}
           >
             <Grid md={3}>
-              <Notifications />
+              <Notifications user={user} />
             </Grid>
             <Grid sm={12} md={5}>
               <Grid sm={12} md={12}>
@@ -160,7 +160,7 @@ export default function Home() {
               </Grid>
             </Grid>
             <Grid md={3}>
-              <Messages />
+              <Messages user={user} />
             </Grid>
           </Grid>
         </Box>

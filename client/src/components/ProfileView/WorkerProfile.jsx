@@ -136,7 +136,7 @@ const WorkerProfile = (props) => {
         async function invoke(){
           const res = await GetBookingDates(props.worker._id)
           if (res) {
-            setBookings(res.bookings.bookings)
+            setBookings(res.bookings?.bookings)
           }
         }
         invoke()
@@ -367,7 +367,7 @@ const WorkerProfile = (props) => {
                                 <h5 style={{ fontSize:'12px' , margin:'4px' }}>{props.worker.jobDays}</h5>
                                   <Box className='comments' sx={{ border:1 , borderRadius: 1 , height:{xs: '190px' , sm:'200px' , md: '200px' } , overflowY:'auto' }}>  
                                     <hr />
-                                    {bookings.map((obj)=>(
+                                    {bookings?.map((obj)=>(
                                       <>
                                         <h6  style={{ padding:'4px' }}>{moment(obj.date).format('ll')}</h6>
                                         <hr />

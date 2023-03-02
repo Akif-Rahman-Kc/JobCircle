@@ -7,13 +7,10 @@ import { useSelector } from 'react-redux';
 import { AuthContext } from '@/store/Context';
 import { GetNotifications } from '@/Apis/userApi';
 
-const Notifications = () => {
+const Notifications = ({user}) => {
 
   const router = useRouter()
   const [ notifications, setNotifications ] = useState([])
-  const { user } = useSelector((state)=>state.userInfo)
-
-  const { setCurrentChat, currentChat } = useContext(AuthContext)
 
   useEffect(()=>{
     async function invoke(){

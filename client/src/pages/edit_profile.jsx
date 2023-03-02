@@ -209,7 +209,7 @@ const EditProfile = () => {
             sx={{ justifyContent: "center", mt: 10, display: "flex" }}
           >
             <Grid md={3}>
-              <Notifications />
+              <Notifications user={user} />
             </Grid>
             <Grid sm={12} md={5}>
               <Grid sm={12} md={12}>
@@ -419,7 +419,7 @@ const EditProfile = () => {
               </Grid>
             </Grid>
             <Grid md={3}>
-              <Messages />
+              <Messages user={user} />
             </Grid>
           </Grid>
         </Box>

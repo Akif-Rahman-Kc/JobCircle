@@ -65,7 +65,7 @@ export default function VendorWorkers({workers}) {
   return (
     <>
       <div>
-        <VendorNavbar />
+        <VendorNavbar user={vendor} />
         <Box>
           <Grid
             container
@@ -146,7 +146,7 @@ export default function VendorWorkers({workers}) {
               </Grid>
             </Grid>
             <Grid md={3}>
-              <Messages />
+              <Messages user={vendor} />
             </Grid>
           </Grid>
         </Box>
