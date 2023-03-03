@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 import Notifications from "@/components/Notifications/Notification";
 import Messages from "@/components/Messages/Message";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,6 +19,8 @@ import Link from "next/link";
 import VendorBottomNavbar from "@/components/Navabar/VendorBottomNavbar";
 import Swal from "sweetalert2";
 import moment from "moment/moment";
+import { AddNotification } from "@/Apis/userApi";
+import { AuthContext } from "@/store/Context";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,6 +30,8 @@ export default function VendorWorks() {
   const [ refresh, setRefresh ] = useState(false)
   const { vendor } = useSelector((state)=>state.vendorInfo)
   const dispatch = useDispatch()
+
+  const { sendNotification, setSendNotification } = useContext(AuthContext)
 
   useEffect(()=>{
     async function invoke(){
@@ -74,7 +78,9 @@ export default function VendorWorks() {
     let vendorToken=  localStorage.getItem('vendortoken')
     const response = await AcceptBooking(vendor._id, bookingId, vendorToken)
     if (response) {
-        setRefresh(!refresh)
+      const res = await AddNotification({senderId:vendor._id, recieverId:response.currentBookerId, content:`${vendor.firstName + ' ' + vendor.lastName} Accepted your Job request`})
+      setSendNotification({recieverId:response.currentBookerId, notification:`${vendor.firstName + ' ' + vendor.lastName} Accepted your Job request`})
+      setRefresh(!refresh)
     }
   }
 
@@ -82,7 +88,9 @@ export default function VendorWorks() {
     let vendorToken=  localStorage.getItem('vendortoken')
     const response = await DeclineBooking(vendor._id, bookingId, vendorToken)
     if (response) {
-        setRefresh(!refresh)
+      const res = await AddNotification({senderId:vendor._id, recieverId:response.currentBookerId, content:`${vendor.firstName + ' ' + vendor.lastName} Declined your Job request`})
+      setSendNotification({recieverId:response.currentBookerId, notification:`${vendor.firstName + ' ' + vendor.lastName} Declined your Job request`})
+      setRefresh(!refresh)
     }
   }
 

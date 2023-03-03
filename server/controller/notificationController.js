@@ -17,7 +17,7 @@ export async function addNotification(req, res) {
 
 export async function getNotifications(req, res) {
     try {
-        const notifications = await Notification.find({recieverId:req.query.userId})
+        const notifications = await Notification.find({recieverId:req.query.userId}).sort({createdAt:-1})
         res.json(notifications)
     } catch (error) {
         console.log(error)

@@ -20,7 +20,7 @@ const notificationSchema = new Schema({
     
 },{ timestamps: true,
     capped: {
-    size:1024,
+    size:10024,
     max: 1000,
     autoIndexId:true
 } })

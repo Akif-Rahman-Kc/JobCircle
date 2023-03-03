@@ -61,7 +61,10 @@ export async function acceptBooking(req, res) {
                 "bookings.$.status":'Confirmed'
             }
         })
-        res.json({status:'success'})
+        let currentBookerId = await Booking.findOne({vendorId:req.query.vendorId})
+        currentBookerId = currentBookerId.bookings.filter((doc)=>doc._id == req.query.bookingId)
+        currentBookerId = currentBookerId[0].bookerId
+        res.json({status:'success', currentBookerId})
     } catch (error) {
         console.log(error)
     }
@@ -76,7 +79,10 @@ export async function declineBooking(req, res) {
                 "bookings.$.status":'Pending'
             }
         })
-        res.json({status:'success'})
+        let currentBookerId = await Booking.findOne({vendorId:req.query.vendorId})
+        currentBookerId = currentBookerId.bookings.filter((doc)=>doc._id == req.query.bookingId)
+        currentBookerId = currentBookerId[0].bookerId
+        res.json({status:'success', currentBookerId})
     } catch (error) {
         console.log(error)
     }
