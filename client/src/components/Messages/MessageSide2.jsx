@@ -6,12 +6,13 @@ import { AddMessage, GetMessages, GetUser } from '@/Apis/userApi';
 import moment from 'moment';
 import InputEmojiWithRef from 'react-input-emoji';
 
-const MessageSideTwo = ({ chat, currentUserId, setSendMessage, recieveMessage, setRefresh, refresh }) => {
+const MessageSideTwo = ({ chat, currentUserId, setSendMessage, recieveMessage, setRefresh, refresh, onlineUsers, user }) => {
 
     const [ userData, setUserData ] = useState(null)
     const [ messages, setMessages ] = useState([])
     const [ newMessage, setNewMessage ] = useState("")
     const [ notSelectMsg, setNotSelectMessage ] = useState(false)
+    const [ online, setOnline ] = useState(false)
     const scroll = useRef()
 
     useEffect(()=>{
@@ -45,6 +46,15 @@ const MessageSideTwo = ({ chat, currentUserId, setSendMessage, recieveMessage, s
                     setMessages(response)
                 }
             }
+        }
+        invoke()
+    },[chat])
+
+    useEffect(()=>{
+        async function invoke(){
+            const chatMember = chat?.members.find((member)=> member !== user._id)
+            const online = onlineUsers?.find((user)=> user.userId === chatMember)
+            setOnline(online)
         }
         invoke()
     },[chat])
@@ -85,15 +95,13 @@ const MessageSideTwo = ({ chat, currentUserId, setSendMessage, recieveMessage, s
             <Box sx={{ p: 0.8  , display:'flex' , bgcolor:'lightgray' , borderRadius:'10px' }}>
                 <img src={userData?.image ? userData.image : "/null-profile.jpg"} style={{ width:'45px' ,borderRadius:'50%',border:'1px solid #000' }} alt="" />
                 <Box sx={{ display:'flex' , justifyContent:'center' , alignItems:'center' }}>
-                    <h4 style={{ fontSize:'13px'  , marginLeft:'5px' }}>{userData?.firstName + ' ' + userData?.lastName}</h4>
+                    <Box sx={{ textAlign:'start' }}>
+                        <h4 style={{ fontSize:'13px'  , marginLeft:'5px' }}>{userData?.firstName + ' ' + userData?.lastName}</h4>
+                        {online && <h5 style={{ fontSize:'9px'  , marginLeft:'5px', color:'green' }}>Online</h5>}
+                    </Box>
                 </Box>
             </Box>
             <Box className='comments' sx={{ mt: 0.5 , p: 2  , display:'block' , bgcolor:'lightgray' , borderRadius:'10px' , height:'47.7vh' , overflowY:'auto' }}>
-                <Box sx={{ display:'flex' , justifyContent:'center' }}>
-                    <Box sx={{ py: 0.5 , px: 2 , backgroundColor:'#b8ccd3' , height:'fit-content' , width:'fit-content' , borderRadius:1 , boxShadow: 1 }}>
-                        <h6>Yesterday</h6>
-                    </Box>
-                </Box>
                 <Box sx={{ mt: 1 }}>
                     {messages.map((message)=>(
                         <>

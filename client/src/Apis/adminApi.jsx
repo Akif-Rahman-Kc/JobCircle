@@ -142,3 +142,14 @@ export const AdminGetReportVendors = async (Token) => {
         console.log(error);
     }
 }
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const GetTotalCount = async (Token) => {
+    try {
+        const {data} = await AdminApi.get('/get_total_count', {headers:{"admintoken":Token}})
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}

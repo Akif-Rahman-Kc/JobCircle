@@ -71,12 +71,6 @@ export default function AdminNavbar(props) {
                         <p className={styles.butttonXsText}>REPORTS</p>
                     </Box>
                     </Link>
-                    <Link href='/admin/profile'>
-                    <Box className={styles.buttonXs}>
-                        <ManageAccountsRoundedIcon sx={{ width:'20px' }}/>
-                        <p className={styles.butttonXsText}>PROFILE</p>
-                    </Box>
-                    </Link>
                 </Box>
             </Grid>
     </>

@@ -44,7 +44,6 @@ useEffect(()=>{
 },[sendMessage])
 
 useEffect(()=>{
-    
     socket.emit("new-user-add", user._id)
     socket.on("get-users", (users)=>{
         setOnlineUsers(users)
@@ -121,6 +120,12 @@ useEffect(()=>{
     }
   }
 
+  const checkOnlineStatus = (chat)=>{
+    const chatMember = chat.members.find((member)=> member !== user._id)
+    const online = onlineUsers.find((user)=> user.userId === chatMember)
+    return online ? true : false
+  }
+
   useEffect(()=>{
     async function invoke(){
       const res = await GetNotifications(user._id)
@@ -178,7 +183,6 @@ useEffect(()=>{
                                                     <Box sx={{ display:'flex' , justifyContent:'center' , alignItems:'center' }}>
                                                         <h5 style={{ fontSize:'13px'  , marginLeft:'5px' }}>{people?.firstName + ' ' + people?.lastName}</h5>   
                                                     </Box>
-                                                    <p style={{ fontSize:'11px'  , marginLeft:'auto' }}>Jan 10</p>
                                                 </Box>
                                             </IconButton>
                                             <hr />
@@ -191,14 +195,14 @@ useEffect(()=>{
                                     {chats.map((chat)=>(
                                         <>
                                         <IconButton onClick={()=>setCurrentChat(chat)} size='large' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
-                                            <MessageSideOne data={chat} currentUserId={user._id}/>
+                                            <MessageSideOne data={chat} currentUserId={user._id} online={checkOnlineStatus(chat)}/>
                                         </IconButton>
                                         <hr />
                                         </>
                                     ))}
                                 </Box>
                             </Grid>
-                            <MessageSideTwo chat={currentChat} currentUserId={user._id} setSendMessage={setSendMessage} recieveMessage={recieveMessage} setRefresh={setRefresh} refresh={refresh}/>
+                            <MessageSideTwo chat={currentChat} currentUserId={user._id} setSendMessage={setSendMessage} recieveMessage={recieveMessage} setRefresh={setRefresh} refresh={refresh} onlineUsers={onlineUsers} user={user}/>
                         </Grid>
                         <Grid sx={{ display:{ xs:'flex' , sm:'flex' , md:'none' } }}>
                             <Grid sx={{ p: 1 , width:'100%' , height:'65vh' , borderRadius:'15px' , backgroundColor:'#e3e3e3' , color:'#000' , boxShadow: 3 , border:'1px solid lightgray' }}>
@@ -238,7 +242,7 @@ useEffect(()=>{
                                             setCurrentChat(chat)
                                             setMessageTwo(true)
                                             }} size='large' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
-                                            <MessageMobileSideOne data={chat} currentUserId={user._id}/>
+                                            <MessageMobileSideOne data={chat} currentUserId={user._id}  online={checkOnlineStatus(chat)} />
                                         </IconButton>
                                         <hr />
                                         </>
@@ -246,7 +250,7 @@ useEffect(()=>{
                                 </Box>
                                 }
                                 {messageTwo &&
-                                <MessageMobileSideTwo chat={currentChat} currentUserId={user._id} setSendMessage={setSendMessage} recieveMessage={recieveMessage} setMessageTwo = {setMessageTwo} setRefresh={setRefresh} refresh={refresh}/>
+                                <MessageMobileSideTwo chat={currentChat} currentUserId={user._id} setSendMessage={setSendMessage} recieveMessage={recieveMessage} setMessageTwo = {setMessageTwo} setRefresh={setRefresh} refresh={refresh} onlineUsers={onlineUsers} user={user}/>
                                 }
                             </Grid>
                         </Grid>

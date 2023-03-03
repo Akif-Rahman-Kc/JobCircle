@@ -48,12 +48,6 @@ const Sidebar = () => {
                         <p className={styles.butttonText}>REPORTS</p>
                     </Box>
                     </Link>
-                    <Link href='/admin/profile'>
-                    <Box className={styles.button}>
-                        <ManageAccountsRoundedIcon/>
-                        <p className={styles.butttonText}>PROFILE</p>
-                    </Box>
-                    </Link>
                 </Box>
             </Grid>
         </>

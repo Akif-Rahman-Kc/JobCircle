@@ -185,3 +185,19 @@ export async function allReportVendors(req, res) {
         console.log(error)
     }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function getTotalCount(req, res) {
+    try {
+        let users = await User.find()
+        users = users.length
+        let vendors = await Vendor.find()
+        vendors = vendors.length
+        console.log(users, '====' , vendors);
+        /////////////////////////////////          Paassing Count and Showing ////////////////
+        res.json({users,vendors})
+    } catch (error) {
+        console.log(error)
+    }
+}

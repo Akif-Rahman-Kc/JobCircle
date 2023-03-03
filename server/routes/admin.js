@@ -1,6 +1,6 @@
 import { Router } from 'express';
 const router = Router();
-import { adminAuth, adminGetJobs, adminSignIn, allReportPosts, allReportVendors, deleteJobs, deleteReportPost, getUsers, getVendors, userActive, userBlock, vendorActive, vendorBlock } from '../controller/adminController.js';
+import { adminAuth, adminGetJobs, adminSignIn, allReportPosts, allReportVendors, deleteJobs, deleteReportPost, getTotalCount, getUsers, getVendors, userActive, userBlock, vendorActive, vendorBlock } from '../controller/adminController.js';
 import { adminJWT } from '../middleware/auth.js';
 
 // Authentication
@@ -27,5 +27,8 @@ router.patch('/vendor_actived', adminJWT,vendorActive)
 router.get('/all_report_posts', adminJWT,allReportPosts)
 router.get('/all_report_vendors', adminJWT,allReportVendors)
 router.delete('/delete_post', adminJWT, deleteReportPost)
+
+// Dashboard
+router.get('/get_total_count', adminJWT,getTotalCount)
 
 export default router;
