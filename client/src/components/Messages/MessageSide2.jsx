@@ -6,7 +6,7 @@ import { AddMessage, GetMessages, GetUser } from '@/Apis/userApi';
 import moment from 'moment';
 import InputEmojiWithRef from 'react-input-emoji';
 
-const MessageSideTwo = ({ chat, currentUserId, setSendMessage, recieveMessage }) => {
+const MessageSideTwo = ({ chat, currentUserId, setSendMessage, recieveMessage, setRefresh, refresh }) => {
 
     const [ userData, setUserData ] = useState(null)
     const [ messages, setMessages ] = useState([])
@@ -67,6 +67,7 @@ const MessageSideTwo = ({ chat, currentUserId, setSendMessage, recieveMessage })
         }
         const recieverId = chat.members.find((id) => id !== currentUserId)
         setSendMessage({...message, recieverId})
+        setRefresh(!refresh)
     }
 
     useEffect(()=>{

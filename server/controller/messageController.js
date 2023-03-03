@@ -1,4 +1,5 @@
 import Message from '../model/messageSchema.js'
+import Chat from '../model/chatSchema.js'
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -11,6 +12,9 @@ export async function addMessage(req, res) {
             text
         })
         const result = await message.save()
+        await Chat.updateOne({_id:req.body.chatId},{
+            sortHelper:Math.random()
+        })
         res.json(result)
     } catch (error) {
         console.log(error)

@@ -17,42 +17,46 @@ import { AuthContext } from '@/store/Context';
 import { useDispatch, useSelector } from 'react-redux';
 import MessageSideOne from '@/components/Messages/MessageSide1';
 import { userDetails } from '@/redux/user';
+import { VendorisAuthApi } from '@/Apis/vendorApi';
+import { vendorDetails } from '@/redux/vendor';
+import VendorNavbar from '@/components/Navabar/VendorNavbar';
+import VendorBottomNavbar from '@/components/Navabar/VendorBottomNavbar';
 
-const Notifications = () => {
+const VendorNotifications = () => {
 
     const router = useRouter()
     const [ chats, setChats ] = useState([])
     const [ notifications, setNotifications ] = useState([])
-    const { user } = useSelector((state)=>state.userInfo)
+    const { vendor } = useSelector((state) => state.vendorInfo);
     const dispatch = useDispatch()
     const { setCurrentChat, currentChat } = useContext(AuthContext)
 
     useEffect(()=>{
         async function invoke(){
-            let token=  localStorage.getItem('usertoken')
+            let token=  localStorage.getItem('vendortoken')
             if (token) {
-                const response = await isAuthApi(token)
+                const response = await VendorisAuthApi(token)
                 if (response) {
                 if (response.auth) {
-                    if (response.userObj.isBlock) {
+                    if (response.vendorObj.isBlock) {
                     Swal.fire(
                         'Blocked!',
                         'Your account is blocked! Not allowed this application...',
                         'error'
                     ).then(()=>{
-                        localStorage.removeItem("usertoken");
-                        router.push("/auth/signin");
+                        localStorage.removeItem('vendortoken')
+                        router.push('/vendor/signin')
                     })
                     }else{
-                    dispatch(userDetails(response.userObj))
+                        dispatch(vendorDetails(response.vendorObj))
                     }
                 } else {
-                    router.push('/auth/signin')
+                    router.push("/vendor/signin");
                 }
                 }
                 
             } else {
-                router.push('/auth/signin')
+                router.push("/vendor/signin");
             }
         }
         invoke()
@@ -60,29 +64,29 @@ const Notifications = () => {
 
     useEffect(()=>{
         async function invoke(){
-        const res = await GetChats(user._id)
+        const res = await GetChats(vendor._id)
         if (res) {
             setChats(res)
         }
 
         }
         invoke()
-    },[user])
+    },[vendor])
 
     useEffect(()=>{
         async function invoke(){
-        const res = await GetNotifications(user._id)
+        const res = await GetNotifications(vendor._id)
         if (res) {
             setNotifications(res)
         }
 
         }
         invoke()
-    },[user])
+    },[vendor])
 
     return ( 
         <>
-        <Navbar />
+        <VendorNavbar />
         <Box sx={{ mt: { xs: 10 , sm: 11 , md: 12} }}>
         <Grid sx={{ mt: 1 , justifyContent:'center' , display:'flex' , ml:{ xs: 1 , sm: 3 , md: 6 } , mr:{ xs: 3 , sm: 5 , md: 7 } }}>
             <Grid md={3.3} sx={{ width:'35%' , mx: 1 , height:'84vh' , borderRadius:'15px' , backgroundColor:'#fff' , color:'#000' , boxShadow: 3 , border:'1px solid lightgray' , display: { xs: 'none', sm: 'none', md: 'block' } }}>
@@ -97,7 +101,7 @@ const Notifications = () => {
                                 setCurrentChat(chat)
                                 router.push('/messages')
                             }} size='large' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
-                                <MessageSideOne data={chat} currentUserId={user._id}/>
+                                <MessageSideOne data={chat} currentUserId={vendor._id}/>
                             </IconButton>
                             <hr />
                         </>
@@ -132,9 +136,9 @@ const Notifications = () => {
             </Grid>
         </Grid>
         </Box>
-        <BottomNavbar/>
+        <VendorBottomNavbar/>
         </>
      );
 }
  
-export default Notifications;
+export default VendorNotifications;

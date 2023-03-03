@@ -30,6 +30,7 @@ const [ sendMessage, setSendMessage ] = useState(null)
 const [ recieveMessage, setRecieveMessage ] = useState(null)
 const [ allPeople, setAllPeople ] = useState([])
 const [ messageTwo, setMessageTwo ] = useState(false)
+const [ refresh, setRefresh ] = useState(false)
 // const socket = useRef()
 const { user } = useSelector((state)=>state.userInfo)
 const dispatch = useDispatch()
@@ -100,7 +101,7 @@ useEffect(()=>{
 
     }
     invoke()
-  },[user])
+  },[user, refresh])
 
   const searchAllUsers = async (value)=>{
     const response = await SearchAllPeople(value)
@@ -197,7 +198,7 @@ useEffect(()=>{
                                     ))}
                                 </Box>
                             </Grid>
-                            <MessageSideTwo chat={currentChat} currentUserId={user._id} setSendMessage={setSendMessage} recieveMessage={recieveMessage}/>
+                            <MessageSideTwo chat={currentChat} currentUserId={user._id} setSendMessage={setSendMessage} recieveMessage={recieveMessage} setRefresh={setRefresh} refresh={refresh}/>
                         </Grid>
                         <Grid sx={{ display:{ xs:'flex' , sm:'flex' , md:'none' } }}>
                             <Grid sx={{ p: 1 , width:'100%' , height:'65vh' , borderRadius:'15px' , backgroundColor:'#e3e3e3' , color:'#000' , boxShadow: 3 , border:'1px solid lightgray' }}>
@@ -244,9 +245,8 @@ useEffect(()=>{
                                     ))}
                                 </Box>
                                 }
-                                {/* /////////////////////////////// */}
                                 {messageTwo &&
-                                <MessageMobileSideTwo chat={currentChat} currentUserId={user._id} setSendMessage={setSendMessage} recieveMessage={recieveMessage} setMessageTwo = {setMessageTwo}/>
+                                <MessageMobileSideTwo chat={currentChat} currentUserId={user._id} setSendMessage={setSendMessage} recieveMessage={recieveMessage} setMessageTwo = {setMessageTwo} setRefresh={setRefresh} refresh={refresh}/>
                                 }
                             </Grid>
                         </Grid>

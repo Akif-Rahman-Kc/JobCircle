@@ -27,7 +27,7 @@ export async function userChats(req, res) {
     try {
         const chat = await Chat.find({
             members:{$in:[req.query.userId]}
-        })
+        }).sort({updatedAt: -1})
         res.json(chat)
     } catch (error) {
         console.log(error)
