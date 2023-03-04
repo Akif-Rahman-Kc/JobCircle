@@ -194,8 +194,6 @@ export async function getTotalCount(req, res) {
         users = users.length
         let vendors = await Vendor.find()
         vendors = vendors.length
-        console.log(users, '====' , vendors);
-        /////////////////////////////////          Paassing Count and Showing ////////////////
         res.json({users,vendors})
     } catch (error) {
         console.log(error)

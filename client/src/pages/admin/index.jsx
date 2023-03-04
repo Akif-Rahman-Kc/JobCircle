@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box';
-import { Grid, Typography } from '@mui/material';
+import { Button, Grid, Typography } from '@mui/material';
 import Sidebar from '@/components/Navabar/Sidebar';
 import AdminNavbar from '@/components/Navabar/AdminNavbar';
 import { useRouter } from 'next/router';
@@ -9,6 +9,8 @@ import { AdminisAuthApi, GetTotalCount } from '@/Apis/adminApi';
 
 const AdminHome = () => {
 const router = useRouter()
+const [ users, setUsers ] = useState('')
+const [ vendors, setVendors ] = useState('')
 
   useEffect(()=>{
     async function invoke(){
@@ -33,6 +35,10 @@ const router = useRouter()
     async function invoke(){
       let token=  localStorage.getItem('admintoken')
       const res = await GetTotalCount(token)
+      if (res) {
+        setUsers(res.users)
+        setVendors(res.vendors)
+      }
     }
     invoke();
   },[])
@@ -56,8 +62,8 @@ const router = useRouter()
                                 </Box>
                                 <Box sx={{ display:'block' , textAlign:'center' , width:'-webkit-fill-available' , color:'#000' }}>
                                     <h2>Users</h2>
-                                    <h1 style={{ fontSize:'55px' }}>128</h1>
-                                    <h6>Last updated 3 minutes ago</h6>
+                                    <h1 style={{ fontSize:'55px' }}>{users}</h1>
+                                    <Button onClick={()=> router.push('/admin/users')} sx={{ textTransform:'capitalize' , color:'#000' , bgcolor:'#fff' , p: 0 , boxShadow:3 , ":hover":{ bgcolor:'#fff' } }}>Show</Button>
                                 </Box>
                               </Grid>
                               <Grid m={0.5} sx={{ width:{ xs:'100%' , sm:'100%' , md:'50%' } , display:'flex' , justifyContent:'center' , alignItems:'center' , boxShadow:'1px 1px 10px #111' , bgcolor:'lightgray' }} borderRadius={'10px'}>
@@ -66,8 +72,8 @@ const router = useRouter()
                                 </Box>
                                 <Box sx={{ display:'block' , textAlign:'center' , width:'-webkit-fill-available' , color:'#000' }}>
                                     <h2>Vendors</h2>
-                                    <h1 style={{ fontSize:'55px' }}>23</h1>
-                                    <h6>Last updated 3 minutes ago</h6>
+                                    <h1 style={{ fontSize:'55px' }}>{vendors}</h1>
+                                    <Button onClick={()=> router.push('/admin/vendors')} sx={{ textTransform:'capitalize' , color:'#000' , bgcolor:'#fff' , p: 0 , boxShadow:3 , ":hover":{ bgcolor:'#fff' } }}>Show</Button>
                                 </Box>
                               </Grid>
                             </Grid>
