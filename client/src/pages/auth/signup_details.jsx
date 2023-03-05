@@ -157,6 +157,8 @@ export default function SignUpDetails() {
                             autoComplete="family-name"
                             autoFocus
                             />
+                        </Grid>
+                        <Grid item xs={12}>
                             {/* <FormControl sx={{ width:'100%' }}>
                             <InputLabel id="locality">Locality *</InputLabel>
                             <Select
@@ -176,8 +178,6 @@ export default function SignUpDetails() {
                               <MenuItem value={30}>Madakkara</MenuItem>
                             </Select>
                             </FormControl> */}
-                        </Grid>
-                        <Grid item xs={12}>
                             <TextField
                             autoComplete="given-name"
                             name="city"

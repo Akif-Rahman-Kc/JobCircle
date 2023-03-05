@@ -1,32 +1,14 @@
 import { Inter } from "@next/font/google";
 import VendorNavbar from "@/components/Navabar/VendorNavbar";
 import { Box } from "@mui/system";
-import {
-  Avatar,
-  Button,
-  Grid,
-  IconButton,
-  Modal,
-  TextareaAutosize,
-  TextField,
-} from "@mui/material";
+import { Grid } from "@mui/material";
 import Notifications from "@/components/Notifications/Notification";
 import Messages from "@/components/Messages/Message";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import { userDetails } from "@/redux/user";
 import EngineeringIcon from "@mui/icons-material/Engineering";
-import { GetJobs, GetWorkers, isAuthApi } from "@/Apis/userApi";
-import MailIcon from '@mui/icons-material/Mail';
-import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
-import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
 import axios from "axios";
-import PhotoSizeSelectActualIcon from "@mui/icons-material/PhotoSizeSelectActual";
-import SmartDisplayIcon from "@mui/icons-material/SmartDisplay";
-import Link from "next/link";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { BsFillChatDotsFill, IconName } from "react-icons/bs";
 import WorkerProfile from "@/components/ProfileView/WorkerProfile";
 import { VendorisAuthApi } from "@/Apis/vendorApi";
 import { vendorDetails } from "@/redux/vendor";

@@ -1,26 +1,15 @@
 import { Inter } from "@next/font/google";
 import { Box } from "@mui/system";
-import { Avatar, Button, Card, CardContent, CardHeader, Collapse, Grid, IconButton, Input } from "@mui/material";
+import { Grid } from "@mui/material";
 import Notifications from "@/components/Notifications/Notification";
 import Messages from "@/components/Messages/Message";
-import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
-import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlined";
-import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useRouter } from "next/router";
 import VendorNavbar from "@/components/Navabar/VendorNavbar";
 import { useDispatch, useSelector } from "react-redux";
 import { vendorDetails } from "@/redux/vendor";
 import HomeIcon from "@mui/icons-material/Home";
-import { AddCommnet, DeleteComment, GetAllPosts, LikedPost, VendorGetAllConnectors, VendorisAuthApi } from "@/Apis/vendorApi";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { BsFillTrashFill } from "react-icons/bs";
-import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
-import SendIcon from '@mui/icons-material/Send';
-import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
+import { GetAllPosts, VendorGetAllConnectors, VendorisAuthApi } from "@/Apis/vendorApi";
 import Swal from "sweetalert2";
 import Posts from "@/components/Posts/Post";
 import VendorBottomNavbar from "@/components/Navabar/VendorBottomNavbar";
@@ -64,12 +53,15 @@ export default function VendorHome() {
       const resp = await VendorGetAllConnectors(vendor._id)
       if (resp) {
         setConnections(resp.connections)
+      }else{
+        router.push('/404')
       }
       let vendorToken = localStorage.getItem("vendortoken");
       const res = await GetAllPosts(vendorToken);
       if (res) {
-        
         setPosts(res);
+      }else{
+        router.push('/404')
       }
     }
     invoke();
@@ -79,16 +71,20 @@ export default function VendorHome() {
     async function invoke(){
       let vendorToken = localStorage.getItem("vendortoken");
       const res = await GetAllPosts(vendorToken);
-      if (res.auth != false) {
-        res.map(async (doc)=>{
-          doc.Likes.map((obj)=>{
-            if (obj.likerId == vendor._id) {
-              doc.like = true
-            }
+      if (res) {
+        if (res.auth != false) {
+          res.map(async (doc)=>{
+            doc.Likes.map((obj)=>{
+              if (obj.likerId == vendor._id) {
+                doc.like = true
+              }
+            })
+            doc.Comments = await doc.Comments.reverse()
           })
-          doc.Comments = await doc.Comments.reverse()
-        })
-        setPosts(res);
+          setPosts(res);
+        }
+      }else{
+        router.push('/404')
       }
     }
     invoke();

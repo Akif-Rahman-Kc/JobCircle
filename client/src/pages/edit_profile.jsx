@@ -1,35 +1,14 @@
 import { Inter } from "@next/font/google";
 import Navbar from "@/components/Navabar/Navbar";
 import { Box } from "@mui/system";
-import {
-  Avatar,
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Container,
-  Grid,
-  IconButton,
-  Input,
-  TextField,
-} from "@mui/material";
+import { Button, Grid, Input, TextField } from "@mui/material";
 import Notifications from "@/components/Notifications/Notification";
 import Messages from "@/components/Messages/Message";
-import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
-import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlined";
-import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
-import Collapse from "@mui/material/Collapse";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { userDetails } from "@/redux/user";
-import HomeIcon from "@mui/icons-material/Home";
 import { isAuthApi, ProfileEdit, ProfilePhotoRemove } from "@/Apis/userApi";
-import Posts from "@/components/Posts/Post";
-import { GetAllPosts } from "@/Apis/vendorApi";
 import { AccountCircle } from "@mui/icons-material";
 import AddAPhotoOutlinedIcon from "@mui/icons-material/AddAPhotoOutlined";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
@@ -174,7 +153,9 @@ const EditProfile = () => {
                         theme: "colored",
                       });
                     }
-                  }             
+                  }else{
+                    router.push('/404')
+                  }       
                 
               }else{
                 setEmail(true)
@@ -195,6 +176,8 @@ const EditProfile = () => {
         const res = await ProfilePhotoRemove(user._id, token)
           if (res) {
             router.back()
+          }else{
+            router.push('/404')
           }
       }
 

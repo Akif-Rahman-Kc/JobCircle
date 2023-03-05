@@ -1,10 +1,9 @@
 import { Inter } from "@next/font/google";
 import { Box } from "@mui/system";
-import { Avatar, Button, Grid, Input, TextField } from "@mui/material";
+import { Button, Grid, Input, TextField } from "@mui/material";
 import Notifications from "@/components/Notifications/Notification";
 import Messages from "@/components/Messages/Message";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useRouter } from "next/router";
 import VendorNavbar from "@/components/Navabar/VendorNavbar";
 import AddAPhotoOutlinedIcon from "@mui/icons-material/AddAPhotoOutlined";
@@ -14,7 +13,7 @@ import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { storage } from "@/firebase/config";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { ProfilePhotoRemove, VendorisAuthApi, VendorProfileEdit, VendorProfilePhotoRemove } from "@/Apis/vendorApi";
+import { VendorisAuthApi, VendorProfileEdit, VendorProfilePhotoRemove } from "@/Apis/vendorApi";
 import VendorBottomNavbar from "@/components/Navabar/VendorBottomNavbar";
 import Swal from "sweetalert2";
 
@@ -160,7 +159,9 @@ export default function VendorEditProfile() {
                         theme: "colored",
                       });
                     }
-                  }        
+                  }else{
+                    router.push('/404')
+                  }       
                 } else {
                   setExperiance(true)
                   setExperianceError('Please enter the No.of Year')
@@ -184,6 +185,8 @@ export default function VendorEditProfile() {
         const res = await VendorProfilePhotoRemove(vendor._id, token)
           if (res) {
             router.back()
+          }else{
+            router.push('/404')
           }
       }
 

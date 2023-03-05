@@ -1,8 +1,5 @@
-import { Inter } from "@next/font/google";
-import Navbar from "@/components/Navabar/Navbar";
 import { Box } from "@mui/system";
 import {
-  Avatar,
   Button,
   Collapse,
   Grid,
@@ -11,24 +8,13 @@ import {
   TextareaAutosize,
   TextField,
 } from "@mui/material";
-import Notifications from "@/components/Notifications/Notification";
-import Messages from "@/components/Messages/Message";
 import { useContext, useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
-import { userDetails } from "@/redux/user";
-import EngineeringIcon from "@mui/icons-material/Engineering";
-import { AddNotification, Booking, ConnectWithPeople, getAllConnectors, GetJobs, GetWorkers, isAuthApi, ReportVendor } from "@/Apis/userApi";
-import MailIcon from '@mui/icons-material/Mail';
+import { AddNotification, Booking, ConnectWithPeople, getAllConnectors, ReportVendor } from "@/Apis/userApi";
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
-import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
-import axios from "axios";
 import PhotoSizeSelectActualIcon from "@mui/icons-material/PhotoSizeSelectActual";
 import SmartDisplayIcon from "@mui/icons-material/SmartDisplay";
-import Link from "next/link";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
-import { BsFillChatDotsFill, IconName } from "react-icons/bs";
+import { BsFillChatDotsFill } from "react-icons/bs";
 import Posts from "@/components/Posts/Post";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -85,6 +71,8 @@ const WorkerProfile = (props) => {
               doc.Comments = await doc.Comments.reverse()
             })
             setPosts(response);
+          }else{
+            router.push('/404')
           }
         }
         invokePosts();
@@ -107,6 +95,8 @@ const WorkerProfile = (props) => {
               setConnected(false)
             }
             
+          }else{
+            router.push('/404')
           }
           const res = await getAllConnectors(props.worker._id)
           if (res) {
@@ -137,6 +127,8 @@ const WorkerProfile = (props) => {
           const res = await GetBookingDates(props.worker._id)
           if (res) {
             setBookings(res.bookings?.bookings)
+          }else{
+            router.push('/404')
           }
         }
         invoke()
@@ -159,6 +151,8 @@ const WorkerProfile = (props) => {
           const res = await Booking(data, props.worker._id, props.user._id)
           if (res) {
             setBooked(!booked)
+          }else{
+            router.push('/404')
           }
         } else {
           if (data.location =='') {

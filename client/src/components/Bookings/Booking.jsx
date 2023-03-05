@@ -10,6 +10,8 @@ const Bookings = ({user}) => {
     //         const res = await GetUserBookings(user._id)
     //         if (res) {
     //             setBookings(res.bookings.bookings)
+    //         }else{
+    //              router.push('/404')
     //         }
     //     }
     //     invoke()

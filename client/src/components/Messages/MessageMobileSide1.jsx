@@ -1,5 +1,4 @@
 import Box from '@mui/material/Box';
-import { Avatar, Grid, IconButton, Input } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { GetUser } from '@/Apis/userApi';
 
@@ -14,6 +13,8 @@ const MessageMobileSideOne = ({data, currentUserId, online}) => {
             const response = await GetUser(userId)
             if (response) {
                 setUserData(response)
+            }else{
+                router.push('/404')
             }
         }
         invoke()

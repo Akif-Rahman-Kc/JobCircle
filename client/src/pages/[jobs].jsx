@@ -1,12 +1,7 @@
 import { Inter } from "@next/font/google";
 import Navbar from "@/components/Navabar/Navbar";
 import { Box } from "@mui/system";
-import {
-  Avatar,
-  Button,
-  Grid,
-  IconButton,
-} from "@mui/material";
+import { Grid, IconButton } from "@mui/material";
 import Notifications from "@/components/Notifications/Notification";
 import Messages from "@/components/Messages/Message";
 import { useEffect, useState } from "react";
@@ -14,9 +9,7 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { userDetails } from "@/redux/user";
 import EngineeringIcon from "@mui/icons-material/Engineering";
-import { GetJobs, GetWorkers, isAuthApi, SavedVendors } from "@/Apis/userApi";
-import MailIcon from '@mui/icons-material/Mail';
-import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import { isAuthApi, SavedVendors } from "@/Apis/userApi";
 import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
 import TurnedInIcon from '@mui/icons-material/TurnedIn';
 import axios from "axios";
@@ -84,6 +77,8 @@ export default function Workers({workers}) {
     const res = await SavedVendors(vendorId, user._id, token)
     if (res) {
       setRefresh(!refresh)
+    }else{
+      router.push('/404')
     }
   }
 

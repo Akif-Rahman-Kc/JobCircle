@@ -29,6 +29,8 @@ const EditPostModal = (props) => {
     if (res) {
       props.setRefresh(!props.refresh)
       props.close(false)
+    }else{
+      router.push('/404')
     }
   }
   

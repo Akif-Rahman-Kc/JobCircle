@@ -1,23 +1,12 @@
 import { Inter } from "@next/font/google";
-import Navbar from "@/components/Navabar/Navbar";
 import { Box } from "@mui/system";
-import {
-  Avatar,
-  Button,
-  Grid,
-  IconButton,
-} from "@mui/material";
+import { Grid } from "@mui/material";
 import Notifications from "@/components/Notifications/Notification";
 import Messages from "@/components/Messages/Message";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import { userDetails } from "@/redux/user";
 import EngineeringIcon from "@mui/icons-material/Engineering";
-import { GetJobs, GetWorkers, isAuthApi } from "@/Apis/userApi";
-import MailIcon from '@mui/icons-material/Mail';
-import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
-import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
 import axios from "axios";
 import Link from "next/link";
 import { VendorisAuthApi } from "@/Apis/vendorApi";
@@ -72,7 +61,7 @@ export default function VendorWorkers({workers}) {
             sx={{ justifyContent: "center", mt: 10, display: "flex" }}
           >
             <Grid md={3}>
-              <Notifications />
+              <Notifications user={vendor} />
             </Grid>
             <Grid sm={12} md={5}>
               <Grid sm={12} md={12}>

@@ -1,19 +1,14 @@
 import { Inter } from "@next/font/google";
 import { Box } from "@mui/system";
-import {
-  Button,
-  Grid,
-} from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import Notifications from "@/components/Notifications/Notification";
 import Messages from "@/components/Messages/Message";
 import { useContext, useEffect, useState } from "react";
-import axios from "axios";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { vendorDetails } from "@/redux/vendor";
 import VendorNavbar from "@/components/Navabar/VendorNavbar";
-import EngineeringIcon from "@mui/icons-material/Engineering";
-import { AcceptBooking, DeclineBooking, GetBookings, VendorGetJobs, VendorisAuthApi } from "@/Apis/vendorApi";
+import { AcceptBooking, DeclineBooking, GetBookings, VendorisAuthApi } from "@/Apis/vendorApi";
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import Link from "next/link";
 import VendorBottomNavbar from "@/components/Navabar/VendorBottomNavbar";
@@ -69,6 +64,8 @@ export default function VendorWorks() {
         const res = await GetBookings(vendor._id, vendorToken)
         if (res) {
             setBookings(res.bookings.bookings)
+        }else{
+          router.push('/404')
         }
     }
     invoke()
@@ -81,6 +78,8 @@ export default function VendorWorks() {
       const res = await AddNotification({senderId:vendor._id, recieverId:response.currentBookerId, content:`${vendor.firstName + ' ' + vendor.lastName} Accepted your Job request`})
       setSendNotification({recieverId:response.currentBookerId, notification:`${vendor.firstName + ' ' + vendor.lastName} Accepted your Job request`})
       setRefresh(!refresh)
+    }else{
+      router.push('/404')
     }
   }
 
@@ -91,6 +90,8 @@ export default function VendorWorks() {
       const res = await AddNotification({senderId:vendor._id, recieverId:response.currentBookerId, content:`${vendor.firstName + ' ' + vendor.lastName} Declined your Job request`})
       setSendNotification({recieverId:response.currentBookerId, notification:`${vendor.firstName + ' ' + vendor.lastName} Declined your Job request`})
       setRefresh(!refresh)
+    }else{
+      router.push('/404')
     }
   }
 

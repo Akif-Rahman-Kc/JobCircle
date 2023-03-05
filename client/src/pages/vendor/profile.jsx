@@ -1,18 +1,7 @@
 import React, { useRef } from 'react';
 import { Inter } from "@next/font/google";
 import { Box } from "@mui/system";
-import {
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Grid,
-  IconButton,
-  Collapse,
-  Input,
-  Modal,
-  TextareaAutosize,
-} from "@mui/material";
+import { Button, Grid, IconButton, Modal, TextareaAutosize } from "@mui/material";
 import Messages from "@/components/Messages/Message";
 import Notifications from "@/components/Notifications/Notification";
 import Link from "next/link";
@@ -20,26 +9,15 @@ import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import PhotoSizeSelectActualIcon from "@mui/icons-material/PhotoSizeSelectActual";
 import SmartDisplayIcon from "@mui/icons-material/SmartDisplay";
-import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
-import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlined";
-import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import VendorNavbar from "@/components/Navabar/VendorNavbar";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
 import { vendorDetails } from "@/redux/vendor";
 import { AccountCircle } from "@mui/icons-material";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { BsFillTrashFill, IconName } from "react-icons/bs";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { storage } from "@/firebase/config";
-import { DeletePost, EditPost, VendorAddPost, VendorGetAllConnectors, VendorGetPosts, VendorisAuthApi } from "@/Apis/vendorApi";
-import ModeIcon from '@mui/icons-material/Mode';
-import ReportIcon from '@mui/icons-material/Report';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditPostModal from "@/components/Modal/EditPostModal";
+import { VendorAddPost, VendorGetAllConnectors, VendorGetPosts, VendorisAuthApi } from "@/Apis/vendorApi";
 import Posts from "@/components/Posts/Post";
 import VendorBottomNavbar from "@/components/Navabar/VendorBottomNavbar";
 import Swal from "sweetalert2";
@@ -48,7 +26,6 @@ import "react-toastify/dist/ReactToastify.css";
 import Carousel from 'react-material-ui-carousel'
 import { MdCloudUpload } from "react-icons/md";
 import Connections from '@/components/Connections/connection';
-import { getAllConnectors } from '@/Apis/userApi';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -75,10 +52,8 @@ export default function VendorProfile() {
   const [urls, setUrls] = useState([]);
   const [posts, setPosts] = useState([]);
   const [refreshPost, setrefreshPost] = useState(false);
-  const [ openMoreBox, setOpenMoreBox] = useState(null)
   const [ connectionLength, setConnectionLength] = useState()
   const [ openConnectionBox, setOpenConnectionBox] = useState(false)
-  const [ modalPost, setModalPost] = useState({})
   const uploadImg = useRef()
 
   useEffect(() => {
@@ -130,6 +105,8 @@ export default function VendorProfile() {
           doc.Comments = await doc.Comments.reverse()
         })
         setPosts(response);
+      }else{
+        router.push('/404')
       }
       const resp = await VendorGetAllConnectors(vendor._id)
       if (resp) {
@@ -188,6 +165,8 @@ export default function VendorProfile() {
           progress: undefined,
           theme: "colored",
         });
+      }else{
+        router.push('/404')
       }
       
       setImage(null);
@@ -208,14 +187,6 @@ export default function VendorProfile() {
   };
 
   const [open, setOpen] = useState(false);
-  const [openEditPostModal, setOpenEditPostModal] = useState(false);
-  const [ openComment, setOpenComment] = useState(null)
-
-  const handleEditPostModalOpen = (post) => {
-    setModalPost(post)
-    setOpenEditPostModal(true)
-  }
-  const handleEditPostModalClose = () => setOpenEditPostModal(false)
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {

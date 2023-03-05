@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box';
-import { Grid, IconButton, Input } from '@mui/material';
+import { IconButton } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useEffect, useRef, useState } from 'react';
@@ -32,6 +32,8 @@ const MessageMobileSideTwo = ({ chat, currentUserId, setSendMessage, recieveMess
                 const response = await GetUser(userId)
                 if (response) {
                     setUserData(response)
+                }else{
+                    router.push('/404')
                 }
             }
             
@@ -45,6 +47,8 @@ const MessageMobileSideTwo = ({ chat, currentUserId, setSendMessage, recieveMess
                 const response = await GetMessages(chat._id)
                 if (response) {
                     setMessages(response)
+                }else{
+                    router.push('/404')
                 }
             }
         }
@@ -75,6 +79,8 @@ const MessageMobileSideTwo = ({ chat, currentUserId, setSendMessage, recieveMess
         if (res) {
             setMessages([...messages, res])
             setNewMessage("")
+        }else{
+            router.push('/404')
         }
         const recieverId = chat.members.find((id) => id !== currentUserId)
         setSendMessage({...message, recieverId})

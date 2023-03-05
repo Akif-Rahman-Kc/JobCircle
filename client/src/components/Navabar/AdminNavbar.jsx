@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
-import { Avatar, Button, Drawer, Grid } from "@mui/material";
+import { Avatar, Drawer, Grid } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -14,8 +14,6 @@ import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import PeopleAltRoundedIcon from '@mui/icons-material/PeopleAltRounded';
 import EngineeringRoundedIcon from '@mui/icons-material/EngineeringRounded';
 import PlaylistAddCheckCircleRoundedIcon from '@mui/icons-material/PlaylistAddCheckCircleRounded';
-import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
-import ManageAccountsRoundedIcon from '@mui/icons-material/ManageAccountsRounded';
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 
 const drawerWidth = '50%';

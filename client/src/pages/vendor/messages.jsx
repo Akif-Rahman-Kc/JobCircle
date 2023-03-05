@@ -1,22 +1,13 @@
 import Box from '@mui/material/Box';
-import { Avatar, Button, Grid, IconButton, Input } from '@mui/material';
-import Sidebar from '@/components/Navabar/Sidebar';
-import AdminNavbar from '@/components/Navabar/AdminNavbar';
+import { Avatar, Grid, IconButton, Input } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useRef, useState } from 'react';
-import SendIcon from '@mui/icons-material/Send';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { AdminisAuthApi } from '@/Apis/adminApi';
-import Navbar from '@/components/Navabar/Navbar';
 import MailIcon from "@mui/icons-material/Mail";
-import HomeIcon from "@mui/icons-material/Home";
-import BottomNavbar from '@/components/Navabar/BottomNavbar';
 import { useDispatch, useSelector } from 'react-redux';
-import { AddChat, GetChats, GetNotifications, isAuthApi, SearchAllPeople } from '@/Apis/userApi';
-import { userDetails } from '@/redux/user';
+import { AddChat, GetChats, GetNotifications, SearchAllPeople } from '@/Apis/userApi';
 import MessageSideOne from '@/components/Messages/MessageSide1';
 import MessageSideTwo from '@/components/Messages/MessageSide2';
-import { io } from 'socket.io-client';
 import { AuthContext } from '@/store/Context';
 import MessageMobileSideOne from '@/components/Messages/MessageMobileSide1';
 import MessageMobileSideTwo from '@/components/Messages/MessageMobileSide2';
@@ -89,8 +80,9 @@ useEffect(()=>{
       const res = await GetChats(vendor._id)
       if (res) {
         setChats(res)
+      }else{
+        router.push('/404')
       }
-
     }
     invoke()
   },[])
@@ -100,8 +92,9 @@ useEffect(()=>{
       const res = await GetChats(vendor._id)
       if (res) {
         setChats(res)
+      }else{
+        router.push('/404')
       }
-
     }
     invoke()
   },[vendor, refresh])
@@ -110,6 +103,8 @@ useEffect(()=>{
     const response = await SearchAllPeople(value)
     if (response) {
       setAllPeople(response.allPeople)
+    }else{
+      router.push('/404')
     }
   }
 
@@ -121,6 +116,8 @@ useEffect(()=>{
     const res = await AddChat(ids)
     if (res) {
         setChats([...chats, res])
+    }else{
+      router.push('/404')
     }
   }
 
@@ -135,8 +132,9 @@ useEffect(()=>{
       const res = await GetNotifications(vendor._id)
       if (res) {
           setNotifications(res)
+      }else{
+        router.push('/404')
       }
-
       }
     invoke()
   },[vendor])

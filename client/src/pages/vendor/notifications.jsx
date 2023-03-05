@@ -1,22 +1,14 @@
 import Box from '@mui/material/Box';
-import { Avatar, Button, Grid, IconButton, Input } from '@mui/material';
-import Sidebar from '@/components/Navabar/Sidebar';
-import AdminNavbar from '@/components/Navabar/AdminNavbar';
+import { Grid, IconButton } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
-import SendIcon from '@mui/icons-material/Send';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { AdminisAuthApi } from '@/Apis/adminApi';
-import Navbar from '@/components/Navabar/Navbar';
 import MailIcon from "@mui/icons-material/Mail";
-import HomeIcon from "@mui/icons-material/Home";
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import BottomNavbar from '@/components/Navabar/BottomNavbar';
-import { GetChats, GetNotifications, isAuthApi } from '@/Apis/userApi';
+import { GetChats, GetNotifications } from '@/Apis/userApi';
 import { AuthContext } from '@/store/Context';
 import { useDispatch, useSelector } from 'react-redux';
 import MessageSideOne from '@/components/Messages/MessageSide1';
-import { userDetails } from '@/redux/user';
 import { VendorisAuthApi } from '@/Apis/vendorApi';
 import { vendorDetails } from '@/redux/vendor';
 import VendorNavbar from '@/components/Navabar/VendorNavbar';
@@ -64,22 +56,24 @@ const VendorNotifications = () => {
 
     useEffect(()=>{
         async function invoke(){
-        const res = await GetChats(vendor._id)
-        if (res) {
-            setChats(res)
-        }
-
+            const res = await GetChats(vendor._id)
+            if (res) {
+                setChats(res)
+            }else{
+                router.push('/404')
+            }
         }
         invoke()
     },[vendor])
 
     useEffect(()=>{
         async function invoke(){
-        const res = await GetNotifications(vendor._id)
-        if (res) {
-            setNotifications(res)
-        }
-
+            const res = await GetNotifications(vendor._id)
+            if (res) {
+                setNotifications(res)
+            }else{
+                router.push('/404')
+            }
         }
         invoke()
     },[vendor])

@@ -5,13 +5,11 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Fab from '@mui/material/Fab';
-import MenuIcon from '@mui/icons-material/Menu';
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import HomeIcon from "@mui/icons-material/Home";
 import Link from "next/link";
-import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { Grid } from '@mui/material';
 import { useSelector } from 'react-redux';
 

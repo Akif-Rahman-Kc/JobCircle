@@ -1,34 +1,14 @@
 import { Inter } from "@next/font/google";
 import Navbar from "@/components/Navabar/Navbar";
 import { Box } from "@mui/system";
-import {
-  Avatar,
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Container,
-  Grid,
-  IconButton,
-  Typography,
-} from "@mui/material";
+import { Button, Grid, IconButton } from "@mui/material";
 import Notifications from "@/components/Notifications/Notification";
 import Messages from "@/components/Messages/Message";
-import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
-import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlined";
-import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
-import Collapse from "@mui/material/Collapse";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { userDetails } from "@/redux/user";
-import HomeIcon from "@mui/icons-material/Home";
 import { isAuthApi, SavedVendors } from "@/Apis/userApi";
-import Posts from "@/components/Posts/Post";
-import { GetAllPosts } from "@/Apis/vendorApi";
 import { AccountCircle } from "@mui/icons-material";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
@@ -36,9 +16,7 @@ import Link from "next/link";
 import BottomNavbar from "@/components/Navabar/BottomNavbar";
 import Swal from "sweetalert2";
 import Connections from "@/components/Connections/connection";
-import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
 import TurnedInIcon from '@mui/icons-material/TurnedIn';
-import { useTheme } from "styled-components";
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import ErrorIcon from '@mui/icons-material/Error';
 import Bookings from "@/components/Bookings/Booking";
@@ -89,6 +67,8 @@ const Profile = () => {
       const res = await SavedVendors(vendorId, user._id, userToken)
       if (res) {
         setRefresh(!refresh)
+      }else{
+        router.push('/404')
       }
     }
 

@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box';
-import { Grid, IconButton, Input } from '@mui/material';
+import { Grid, IconButton } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { useEffect, useRef, useState } from 'react';
 import { AddMessage, GetMessages, GetUser } from '@/Apis/userApi';
@@ -31,6 +31,8 @@ const MessageSideTwo = ({ chat, currentUserId, setSendMessage, recieveMessage, s
                 const response = await GetUser(userId)
                 if (response) {
                     setUserData(response)
+                }else{
+                    router.push('/404')
                 }
             }
             
@@ -44,6 +46,8 @@ const MessageSideTwo = ({ chat, currentUserId, setSendMessage, recieveMessage, s
                 const response = await GetMessages(chat._id)
                 if (response) {
                     setMessages(response)
+                }else{
+                    router.push('/404')
                 }
             }
         }
@@ -74,6 +78,8 @@ const MessageSideTwo = ({ chat, currentUserId, setSendMessage, recieveMessage, s
         if (res) {
             setMessages([...messages, res])
             setNewMessage("")
+        }else{
+            router.push('/404')
         }
         const recieverId = chat.members.find((id) => id !== currentUserId)
         setSendMessage({...message, recieverId})
@@ -84,7 +90,7 @@ const MessageSideTwo = ({ chat, currentUserId, setSendMessage, recieveMessage, s
         scroll.current?.scrollIntoView({ behavior: "smooth" })
     },[messages])
 
-    return ( 
+    return (
         <>
         {notSelectMsg ? 
          <Grid sx={{ p: 1 , width:'65%' , ml: 1 , height:'69vh' , borderRadius:'15px' , backgroundColor:'#e3e3e3' , color:'gray' , boxShadow: 3 , border:'1px solid lightgray' , display:'flex' , justifyContent:'center' , alignItems:'center' }}>

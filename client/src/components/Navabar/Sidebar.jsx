@@ -7,7 +7,6 @@ import PeopleAltRoundedIcon from '@mui/icons-material/PeopleAltRounded';
 import EngineeringRoundedIcon from '@mui/icons-material/EngineeringRounded';
 import PlaylistAddCheckCircleRoundedIcon from '@mui/icons-material/PlaylistAddCheckCircleRounded';
 import ReportIcon from '@mui/icons-material/Report';
-import ManageAccountsRoundedIcon from '@mui/icons-material/ManageAccountsRounded';
 
 const Sidebar = () => {
 

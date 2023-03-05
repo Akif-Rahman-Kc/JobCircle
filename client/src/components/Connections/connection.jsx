@@ -15,6 +15,8 @@ const Connections = ({user, vendor}) => {
             if (resp) {
                 const connectedConnection = resp.connections.filter((obj)=>obj.status == 'connected')
                 setConnectors(connectedConnection)
+            }else{
+                router.push('/404')
             }
         }
         invoke()

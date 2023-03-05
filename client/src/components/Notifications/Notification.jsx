@@ -1,10 +1,8 @@
 import { Box } from '@mui/system'
-import { Badge, colors, Grid, IconButton } from '@mui/material'
+import { Grid } from '@mui/material'
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useRouter } from 'next/router';
-import { useContext, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { AuthContext } from '@/store/Context';
+import { useEffect, useState } from 'react';
 import { GetNotifications } from '@/Apis/userApi';
 
 const Notifications = ({user}) => {
@@ -17,8 +15,9 @@ const Notifications = ({user}) => {
       const res = await GetNotifications(user._id)
       if (res) {
           setNotifications(res)
+      }else{
+        router.push('/404')
       }
-
       }
     invoke()
   },[user])

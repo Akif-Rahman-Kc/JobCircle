@@ -11,7 +11,6 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import HomeIcon from "@mui/icons-material/Home";
 import Link from "next/link";
-import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { Grid } from '@mui/material';
 import { useSelector } from 'react-redux';
 

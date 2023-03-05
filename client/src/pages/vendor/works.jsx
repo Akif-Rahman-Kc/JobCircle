@@ -1,20 +1,15 @@
 import { Inter } from "@next/font/google";
 import { Box } from "@mui/system";
-import {
-  Button,
-  Grid,
-} from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import Notifications from "@/components/Notifications/Notification";
 import Messages from "@/components/Messages/Message";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { vendorDetails } from "@/redux/vendor";
 import VendorNavbar from "@/components/Navabar/VendorNavbar";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import { VendorGetJobs, VendorisAuthApi } from "@/Apis/vendorApi";
-import { GetJobs } from "@/Apis/userApi";
 import Link from "next/link";
 import VendorBottomNavbar from "@/components/Navabar/VendorBottomNavbar";
 import Swal from "sweetalert2";
@@ -57,6 +52,8 @@ export default function VendorWorks() {
       const res = await VendorGetJobs(vendorToken)
       if (res) {
         setJobs(res)
+      }else{
+        router.push('/404')
       }
     }
     invoke();

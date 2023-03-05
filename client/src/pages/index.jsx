@@ -1,32 +1,16 @@
 import { Inter } from "@next/font/google";
 import Navbar from "@/components/Navabar/Navbar";
 import { Box } from "@mui/system";
-import {
-  Avatar,
-  Card,
-  CardContent,
-  CardHeader,
-  Container,
-  Grid,
-  IconButton,
-} from "@mui/material";
+import { Grid } from "@mui/material";
 import Notifications from "@/components/Notifications/Notification";
 import Messages from "@/components/Messages/Message";
-import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
-import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlined";
-import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
-import Collapse from "@mui/material/Collapse";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { userDetails } from "@/redux/user";
 import HomeIcon from "@mui/icons-material/Home";
-import { getAllConnectors, isAuthApi, UserGetAllPosts } from "@/Apis/userApi";
+import { isAuthApi, UserGetAllPosts } from "@/Apis/userApi";
 import Posts from "@/components/Posts/Post";
-import { GetAllPosts } from "@/Apis/vendorApi";
 import BottomNavbar from "@/components/Navabar/BottomNavbar";
 import Swal from "sweetalert2";
 
@@ -70,6 +54,8 @@ export default function Home() {
       const res = await UserGetAllPosts(userToken);
       if (res) {
         setPosts(res);
+      }else{
+        router.push('/404')
       }
     }
     invoke()
@@ -79,16 +65,20 @@ export default function Home() {
     async function invoke(){
       let userToken=  localStorage.getItem('usertoken')
       const res = await UserGetAllPosts(userToken);
-      if (res.auth != false) {
-        res.map(async (doc)=>{
-          doc.Likes.map((obj)=>{
-            if (obj.likerId == user._id) {
-              doc.like = true
-            }
+      if (res) {
+        if (res.auth != false) {
+          res.map(async (doc)=>{
+            doc.Likes.map((obj)=>{
+              if (obj.likerId == user._id) {
+                doc.like = true
+              }
+            })
+            doc.Comments = await doc.Comments.reverse()
           })
-          doc.Comments = await doc.Comments.reverse()
-        })
-        setPosts(res);
+          setPosts(res);
+        }
+      }else{
+        router.push('/404')
       }
     }
     invoke();

@@ -1,15 +1,10 @@
 import Box from '@mui/material/Box';
-import { Avatar, Button, Grid, IconButton, Input } from '@mui/material';
-import Sidebar from '@/components/Navabar/Sidebar';
-import AdminNavbar from '@/components/Navabar/AdminNavbar';
+import { Grid, IconButton } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
-import SendIcon from '@mui/icons-material/Send';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { AdminisAuthApi } from '@/Apis/adminApi';
 import Navbar from '@/components/Navabar/Navbar';
 import MailIcon from "@mui/icons-material/Mail";
-import HomeIcon from "@mui/icons-material/Home";
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import BottomNavbar from '@/components/Navabar/BottomNavbar';
 import { GetChats, GetNotifications, isAuthApi } from '@/Apis/userApi';
@@ -63,8 +58,9 @@ const Notifications = () => {
         const res = await GetChats(user._id)
         if (res) {
             setChats(res)
+        }else{
+            router.push('/404')
         }
-
         }
         invoke()
     },[user])
@@ -74,8 +70,9 @@ const Notifications = () => {
         const res = await GetNotifications(user._id)
         if (res) {
             setNotifications(res)
+        }else{
+            router.push('/404')
         }
-
         }
         invoke()
     },[user])

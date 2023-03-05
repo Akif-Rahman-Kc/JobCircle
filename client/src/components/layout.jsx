@@ -1,6 +1,4 @@
 import Head from "next/head";
-import Footer from "./Footer/Footer";
-import Navbar from "./Navabar/Navbar";
 
 const Layout = ({ children }) => {
     return ( 
@@ -11,7 +9,6 @@ const Layout = ({ children }) => {
             <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css"></link>
         </Head>
         {children}
-        <Footer/>
         <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
         </>
      );

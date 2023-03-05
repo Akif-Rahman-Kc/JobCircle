@@ -2,25 +2,32 @@ import { hash, compare } from 'bcrypt'
 import User from '../model/userSchema.js'
 import Vendor from '../model/vendorSchema.js'
 import jwt from 'jsonwebtoken'
+import admin from '../firebase/config.js';
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export async function userSignUp(req, res) {
     try {
-
-        const existUser = await User.findOne({ email: req.body.email })
-
-        if (existUser) {
-            res.json({status:"failed"})
-        } else {
-            let userDetails = req.body
-            userDetails.password = await hash(userDetails.password, 10)
-            await User.create(userDetails)
-            const user = await User.findOne({ email: userDetails.email })
-            const userId = user._id
-            const token = jwt.sign({ userId }, process.env.JWT_SECRET_KEY, { expiresIn: 60 * 60 * 24 })
-            res.json({auth: true, token: token,status:"success"})
-        }
+        admin.auth().verifyIdToken(req.headers.firebasetoken).then(async (decodedToken) => {
+            if(decodedToken){
+                const existUser = await User.findOne({ email: req.body.email })
+                if (existUser) {
+                    res.json({status:"failed"})
+                } else {
+                    let userDetails = req.body
+                    userDetails.password = await hash(userDetails.password, 10)
+                    await User.create(userDetails)
+                    const user = await User.findOne({ email: userDetails.email })
+                    const userId = user._id
+                    const token = jwt.sign({ userId }, process.env.JWT_SECRET_KEY, { expiresIn: 60 * 60 * 24 })
+                    res.json({auth: true, token: token,status:"success"})
+                }
+            }else{
+                res.json({status:"invalid"})
+            }
+        })
+        
     } catch (error) {
         console.log(error)
     }

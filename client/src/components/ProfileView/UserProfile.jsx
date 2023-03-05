@@ -1,34 +1,9 @@
-import { Inter } from "@next/font/google";
-import Navbar from "@/components/Navabar/Navbar";
 import { Box } from "@mui/system";
-import {
-  Avatar,
-  Button,
-  Grid,
-  IconButton,
-  Modal,
-  TextareaAutosize,
-  TextField,
-} from "@mui/material";
-import Notifications from "@/components/Notifications/Notification";
-import Messages from "@/components/Messages/Message";
+import { Button, Grid, IconButton } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
-import { userDetails } from "@/redux/user";
-import EngineeringIcon from "@mui/icons-material/Engineering";
-import { AddNotification, ConnectWithPeople, getAllConnectors, GetJobs, GetWorkers, isAuthApi } from "@/Apis/userApi";
-import MailIcon from '@mui/icons-material/Mail';
+import { AddNotification, ConnectWithPeople, getAllConnectors } from "@/Apis/userApi";
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
-import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
-import axios from "axios";
-import PhotoSizeSelectActualIcon from "@mui/icons-material/PhotoSizeSelectActual";
-import SmartDisplayIcon from "@mui/icons-material/SmartDisplay";
-import Link from "next/link";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { BsFillChatDotsFill, IconName } from "react-icons/bs";
-import Posts from "@/components/Posts/Post";
-import { VendorGetPosts } from "@/Apis/vendorApi";
+import { BsFillChatDotsFill } from "react-icons/bs";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import Connections from "../Connections/connection";
 import { AuthContext } from "@/store/Context";
@@ -73,6 +48,8 @@ const UserProfile = (props) => {
         } else{
           setConnected(false)
         }
+      }else{
+        router.push('/404')
       }
       const res = await getAllConnectors(props.worker._id)
       if (res) {

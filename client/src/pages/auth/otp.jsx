@@ -76,8 +76,8 @@ export default function OTP() {
       setOtpErr("Please Enter The Otp number");
     } else {
       try {
-        await otpConf.confirm(data.otp);
-        const response = await SignupApi(userDetails);
+        const token = await otpConf.confirm(data.otp);
+        const response = await SignupApi(userDetails,token._tokenResponse.idToken);
         if (response.status == "success") {
           toast.success("Registered", {
             position: "top-right",
@@ -93,8 +93,19 @@ export default function OTP() {
             localStorage.setItem("usertoken", response.token);
             router.push("/");
           }, 2000);
-        } else {
+        } else if(response.status == "failed") {
           toast.error("This email is already registered!", {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+        }else{
+          toast.error("Not verify the phone number!", {
             position: "top-right",
             autoClose: 4000,
             hideProgressBar: false,

@@ -1,19 +1,11 @@
-import { Inter } from "@next/font/google";
 import { Box } from "@mui/system";
 import { Avatar, Button, Card, CardContent, CardHeader, Collapse, Grid, IconButton, Input, Modal } from "@mui/material";
-import Notifications from "@/components/Notifications/Notification";
-import Messages from "@/components/Messages/Message";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlined";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
-import { useContext, useEffect, useState } from "react";
-import axios from "axios";
+import { useContext, useState } from "react";
 import { useRouter } from "next/router";
-import VendorNavbar from "@/components/Navabar/VendorNavbar";
-import { connect, useDispatch, useSelector } from "react-redux";
-import { vendorDetails } from "@/redux/vendor";
-import HomeIcon from "@mui/icons-material/Home";
-import { AddCommnet, DeleteComment, DeletePost, GetAllPosts, LikedPost, ReportPost, VendorisAuthApi } from "@/Apis/vendorApi";
+import { AddCommnet, DeleteComment, DeletePost, LikedPost, ReportPost } from "@/Apis/vendorApi";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -23,20 +15,19 @@ import SendIcon from '@mui/icons-material/Send';
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
 import Swal from "sweetalert2";
 import ModeIcon from '@mui/icons-material/Mode';
-import ReportIcon from '@mui/icons-material/Report';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditPostModal from "@/components/Modal/EditPostModal";
 import LikeModal from "@/components/Modal/LikeModal";
 import Link from "next/link";
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Carousel from "react-material-ui-carousel";
 import Moment from 'react-moment'
-import { AddNotification, ConnectWithPeople, getAllConnectors } from "@/Apis/userApi";
+import { AddNotification } from "@/Apis/userApi";
 import { AuthContext } from "@/store/Context";
 
 const Posts = (props) => {
+    const router = useRouter()
     const [comment, setComment] = useState('');
     const [ openComment, setOpenComment] = useState(null)
     const [openEditPostModal, setOpenEditPostModal] = useState(false);
@@ -61,10 +52,15 @@ const Posts = (props) => {
 
     const liked = async (postId, vendorId)=>{
         const res = await LikedPost(postId, props.user._id)
-        if (res.status === "success") {
-            const res = await AddNotification({senderId:props.user._id, recieverId:vendorId, content:`${props.user.firstName + ' ' + props.user.lastName} Liked your post`})
-            setSendNotification({recieverId:vendorId, notification:`${props.user.firstName + ' ' + props.user.lastName} Liked your post`})
+        if(res){
+          if (res.status === "success") {
+              const res = await AddNotification({senderId:props.user._id, recieverId:vendorId, content:`${props.user.firstName + ' ' + props.user.lastName} Liked your post`})
+              setSendNotification({recieverId:vendorId, notification:`${props.user.firstName + ' ' + props.user.lastName} Liked your post`})
+          }
+        }else{
+          router.push('/404')
         }
+        
         props.setrefreshComment(!props.refreshComment)
       }
     
@@ -80,6 +76,8 @@ const Posts = (props) => {
             const res = await AddNotification({senderId:props.user._id, recieverId:vendorId, content:`${props.user.firstName + ' ' + props.user.lastName} Commented your post`})
             setSendNotification({recieverId:vendorId, notification:`${props.user.firstName + ' ' + props.user.lastName} Commented your post`})
             props.setrefreshComment(!props.refreshComment)
+        }else{
+          router.push('/404')
         }
       }
       }
@@ -96,6 +94,8 @@ const Posts = (props) => {
             const res = await DeleteComment(postId, commentId)
             if (res) {
                 props.setrefreshComment(!props.refreshComment)
+            }else{
+              router.push('/404')
             }
           }
         });
@@ -105,24 +105,31 @@ const Posts = (props) => {
       const reportPost = async (msg,postId)=>{
         const res = await ReportPost(msg,postId,props.user._id)
         setOpenReportBox(null)
-        if (res.status == 'failed') {
-          toast.error('Your already reported this Post!', {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-          })
+        if (res) {
+          if (res.status == 'failed') {
+            toast.error('Your already reported this Post!', {
+              position: "top-right",
+              autoClose: 4000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            })
+          }
+        }else{
+          router.push('/404')
         }
+        
       }
 
       const deletePost = async (postId)=> {
         const res = await DeletePost(postId)
         if (res) {
           props.setrefreshComment(!props.refreshComment)
+        }else{
+          router.push('/404')
         }
       }
 

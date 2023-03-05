@@ -1,10 +1,8 @@
-import { Box } from '@mui/system'
-import { Badge, colors, Grid, IconButton } from '@mui/material'
+import { Grid, IconButton } from '@mui/material'
 import MailIcon from '@mui/icons-material/Mail';
 import { GetChats } from '@/Apis/userApi';
 import MessageSideOne from './MessageSide1';
 import { useContext, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { AuthContext } from '@/store/Context';
 import { useRouter } from 'next/router';
 
@@ -19,8 +17,9 @@ const Messages = ({user}) => {
       const res = await GetChats(user._id)
       if (res) {
         setChats(res)
+      }else{
+        router.push('/404')
       }
-
     }
     invoke()
   },[user])
