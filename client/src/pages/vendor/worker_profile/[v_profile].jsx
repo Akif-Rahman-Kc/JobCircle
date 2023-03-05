@@ -116,7 +116,7 @@ export default function VendorWorker_Profile({worker, current}) {
               </Grid>
             </Grid>
             <Grid md={3}>
-              <Messages user={vendor} />
+              <Messages user={vendor} current={'vendor'} />
             </Grid>
           </Grid>
         </Box>

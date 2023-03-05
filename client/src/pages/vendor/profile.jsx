@@ -537,7 +537,7 @@ export default function VendorProfile() {
               </Grid>
             </Grid>
             <Grid md={3}>
-              <Messages user={vendor} />
+              <Messages user={vendor} current={'vendor'} />
             </Grid>
           </Grid>
         </Box>

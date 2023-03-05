@@ -35,7 +35,6 @@ const MessageSideTwo = ({ chat, currentUserId, setSendMessage, recieveMessage, s
                     router.push('/404')
                 }
             }
-            
         }
         invoke()
     },[chat, currentUserId])
@@ -43,7 +42,8 @@ const MessageSideTwo = ({ chat, currentUserId, setSendMessage, recieveMessage, s
     useEffect(()=>{
         async function invoke(){
             if (chat !== null) {
-                const response = await GetMessages(chat._id)
+                const userId = chat?.members?.find((id) => id !== currentUserId)
+                const response = await GetMessages(chat._id, userId)
                 if (response) {
                     setMessages(response)
                 }else{
@@ -52,7 +52,7 @@ const MessageSideTwo = ({ chat, currentUserId, setSendMessage, recieveMessage, s
             }
         }
         invoke()
-    },[chat])
+    },[chat, currentUserId])
 
     useEffect(()=>{
         async function invoke(){
@@ -114,7 +114,7 @@ const MessageSideTwo = ({ chat, currentUserId, setSendMessage, recieveMessage, s
                             {message.senderId == currentUserId ?
                             <Box ref={scroll} sx={{ m: 2 , display:'flex' , ml:'auto' , width:'80%' , lineBreak:'anywhere'  }}>
                                 <Box sx={{ display:'block' , ml:'auto' , textAlign:'end' , mr: 1  }}>
-                                    <Box sx={{ ml:'auto' , mb:0.2 , p: 1 , height:'fit-content' , bgcolor:'#e9e9e9' , width:'fit-content' , borderTopLeftRadius:'9px' , borderBottomLeftRadius:'9px' , borderBottomRightRadius:'9px' }}>
+                                    <Box className='own' sx={{ ml:'auto' , mb:0.2 , p: 1.2 , height:'fit-content' , width:'fit-content' }}>
                                         {message.text}
                                     </Box>
                                     <h6 style={{ marginLeft:'auto' , fontSize:'9px' , color:'gray' }}>{moment(message.createdAt).format('LT')}</h6>
@@ -123,7 +123,7 @@ const MessageSideTwo = ({ chat, currentUserId, setSendMessage, recieveMessage, s
                             :
                             <Box ref={scroll} sx={{ m: 2 , display:'flex' , lineBreak:'anywhere'  }}>
                                 <Box sx={{ display:'block' , ml: 1  }}>
-                                    <Box sx={{ mb:0.2 , p: 1 , height:'fit-content' , bgcolor:'#a3a3a3' , width:'fit-content' , borderTopRightRadius:'10px' , borderBottomRightRadius:'10px' , borderBottomLeftRadius:'10px' }}>
+                                    <Box className='sender' sx={{ mb:0.2 , p: 1.2 , height:'fit-content' , width:'fit-content' }}>
                                         {message.text}
                                     </Box>
                                     <h6 style={{ fontSize:'9px' , color:'gray' }}>{moment(message.createdAt).format('LT')}</h6>

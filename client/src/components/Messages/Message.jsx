@@ -6,7 +6,7 @@ import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '@/store/Context';
 import { useRouter } from 'next/router';
 
-const Messages = ({user}) => {
+const Messages = ({user, current}) => {
   const router = useRouter()
   const [ chats, setChats ] = useState([])
 
@@ -36,7 +36,7 @@ const Messages = ({user}) => {
                   <>
                   <IconButton onClick={()=>{
                     setCurrentChat(chat)
-                    router.push('/messages')
+                    current == 'user' ? router.push('/messages') : router.push('/vendor/messages')
                   }} size='large' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
                       <MessageSideOne data={chat} currentUserId={user._id}/>
                   </IconButton>

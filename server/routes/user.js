@@ -5,7 +5,7 @@ import { connectWithPeople, getAllConnectors, getJobs, getWorker, getWorkers, se
 import { getAllPosts } from '../controller/postController.js';
 import { userJWT } from '../middleware/auth.js';
 import { createChat, findChat, getUser, userChats } from '../controller/chatController.js';
-import { addMessage, getMessages } from '../controller/messageController.js';
+import { addMessage, getMessages, getReadedMessages } from '../controller/messageController.js';
 import { addBooking } from '../controller/bookingController.js';
 import { addNotification, getNotifications } from '../controller/notificationController.js';
 
@@ -46,6 +46,7 @@ router.get('/get_user', getUser)
 // Messages
 router.post('/add_message', addMessage)
 router.get('/get_messages', getMessages)
+router.get('/get_readed_messages', getReadedMessages)
 
 // Notifications
 router.post('/add_notification', addNotification)

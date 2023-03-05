@@ -1,10 +1,11 @@
 import Box from '@mui/material/Box';
 import { useEffect, useState } from 'react';
-import { GetUser } from '@/Apis/userApi';
+import { GetUser, ReadedMessages } from '@/Apis/userApi';
 
-const MessageSideOne = ({data, currentUserId, online}) => {
+const MessageSideOne = ({data, currentUserId, online, refresh}) => {
     
     const [ userData, setUserData ] = useState(null)
+    const [ unreadMessages, setUnreadMessages ] = useState(null)
 
     useEffect(()=>{
         async function invoke() {
@@ -16,9 +17,15 @@ const MessageSideOne = ({data, currentUserId, online}) => {
             }else{
                 router.push('/404')
             }
+            const res = await ReadedMessages(userId)
+            if (res) {
+                setUnreadMessages(res.result)
+            } else{
+                router.push('/404')
+            }
         }
         invoke()
-    },[data])
+    },[data, refresh])
 
     const AddChat = async ()=>{
         const ids = {
@@ -37,6 +44,9 @@ const MessageSideOne = ({data, currentUserId, online}) => {
                         <h5 style={{ fontSize:'13px'  , marginLeft:'5px' }}>{userData?.firstName + ' ' + userData?.lastName}</h5>
                         {online && <h5 style={{ fontSize:'8px'  , marginLeft:'5px', color:'green' }}>Online</h5>}
                     </Box>
+                </Box>
+                <Box sx={{ ml:'auto' , display:'flex' , justifyContent:'center' , alignItems:'center' }}>
+                    {unreadMessages === 0 ? '' : <Box sx={{ width:'20px'  ,height:'20px' , borderRadius:'50%' , bgcolor:'#04cb04' , fontSize:'12px' , color:'#fff' , display:'flex' , justifyContent:'center' , alignItems:'center' }}>{unreadMessages}</Box>}
                 </Box>
             </Box>
         </>

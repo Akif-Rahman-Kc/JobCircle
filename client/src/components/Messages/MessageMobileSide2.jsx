@@ -36,7 +36,6 @@ const MessageMobileSideTwo = ({ chat, currentUserId, setSendMessage, recieveMess
                     router.push('/404')
                 }
             }
-            
         }
         invoke()
     },[chat, currentUserId])
@@ -44,7 +43,8 @@ const MessageMobileSideTwo = ({ chat, currentUserId, setSendMessage, recieveMess
     useEffect(()=>{
         async function invoke(){
             if (chat !== null) {
-                const response = await GetMessages(chat._id)
+                const userId = chat?.members?.find((id) => id !== currentUserId)
+                const response = await GetMessages(chat._id, userId)
                 if (response) {
                     setMessages(response)
                 }else{
@@ -53,7 +53,7 @@ const MessageMobileSideTwo = ({ chat, currentUserId, setSendMessage, recieveMess
             }
         }
         invoke()
-    },[chat])
+    },[chat, currentUserId])
 
     useEffect(()=>{
         async function invoke(){
@@ -116,7 +116,7 @@ const MessageMobileSideTwo = ({ chat, currentUserId, setSendMessage, recieveMess
                             {message.senderId == currentUserId ?
                             <Box ref={scroll} sx={{ my: 1 , display:'flex' , ml:'auto' , width:'80%' , lineBreak:'anywhere'  }}>
                                 <Box sx={{ display:'block' , ml:'auto' , textAlign:'end' , mr: 1  }}>
-                                    <Box sx={{ ml:'auto' , mb:0.2 , p: 1 , fontSize:'12px' , height:'fit-content' , bgcolor:'#e9e9e9' , width:'fit-content' , borderTopLeftRadius:'5px' , borderBottomLeftRadius:'5px' , borderBottomRightRadius:'5px' }}>
+                                    <Box className='ownMobile' sx={{ ml:'auto' , mb:0.2 , p: 1 , height:'fit-content' , width:'fit-content' }}>
                                         {message.text}
                                     </Box>
                                     <h6 style={{ marginLeft:'auto' , fontSize:'8px' , color:'gray' }}>{moment(message.createdAt).format('LT')}</h6>
@@ -125,7 +125,7 @@ const MessageMobileSideTwo = ({ chat, currentUserId, setSendMessage, recieveMess
                             :
                             <Box ref={scroll} sx={{ my: 1 , display:'flex' , width:'80%' , lineBreak:'anywhere'  }}>
                                 <Box sx={{ display:'block' , ml: 1 , mr: 1 }}>
-                                    <Box sx={{ mb:0.2 , p: 1 , height:'fit-content' , fontSize:'12px' , bgcolor:'#a3a3a3' , width:'fit-content' , borderTopRightRadius:'5px' , borderBottomRightRadius:'5px' , borderBottomLeftRadius:'5px' }}>
+                                    <Box className='senderMobile' sx={{ mb:0.2 , p: 1 , height:'fit-content' , width:'fit-content' }}>
                                         {message.text}
                                     </Box>
                                     <h6 style={{ fontSize:'8px' , color:'gray' }}>{moment(message.createdAt).format('LT')}</h6>

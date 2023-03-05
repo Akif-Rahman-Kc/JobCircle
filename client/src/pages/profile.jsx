@@ -227,7 +227,7 @@ const Profile = () => {
               </Grid>
             </Grid>
             <Grid md={3}>
-              <Messages user={user} />
+              <Messages user={user} current={'user'} />
             </Grid>
           </Grid>
         </Box>

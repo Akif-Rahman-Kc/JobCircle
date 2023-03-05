@@ -233,6 +233,46 @@ h1 ,h2, h3, h4, h5, h6, a, p {
   font-size: 12px;
 }
 
+.css-hn784z{
+  display: none !important;
+}
+
+.css-1abc02a{
+  display: none !important;
+}
+
+.own {
+  align-self: flex-end;
+  border-radius: 0.5rem 0.5rem 0 0.5rem;
+  background: linear-gradient(98.63deg, #f6feff 0%, #bdbdbd 100%);
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.sender {
+  align-self: flex-start;
+  border-radius: 0.5rem 0.5rem 0.5rem 0;
+  background: linear-gradient(98.63deg, #918d8d 0%, #b9b7b7 100%);
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.ownMobile{
+  align-self: flex-end;
+  border-radius: 0.5rem 0.5rem 0 0.5rem;
+  background: linear-gradient(98.63deg, #f6feff 0%, #bdbdbd 100%);
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.senderMobile{
+  align-self: flex-start;
+  border-radius: 0.5rem 0.5rem 0.5rem 0;
+  background: linear-gradient(98.63deg, #918d8d 0%, #b9b7b7 100%);
+  font-weight: bold;
+  font-size: 11px;
+}
+
 /* ///////////////////// */
 
 .map {

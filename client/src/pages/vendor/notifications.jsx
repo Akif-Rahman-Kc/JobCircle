@@ -93,7 +93,7 @@ const VendorNotifications = () => {
                         <>
                             <IconButton onClick={()=>{
                                 setCurrentChat(chat)
-                                router.push('/messages')
+                                router.push('/vendor/messages')
                             }} size='large' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
                                 <MessageSideOne data={chat} currentUserId={vendor._id}/>
                             </IconButton>

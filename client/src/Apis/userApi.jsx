@@ -167,9 +167,9 @@ export const GetUser = async (userId) => {
 
 /////////////////////////////////////////////////////////////////////////////
 
-export const GetMessages = async (chatId) => {
+export const GetMessages = async (chatId, userId) => {
     try {
-        const {data} = await UserApi.get(`/get_messages?chatId=${chatId}`)
+        const {data} = await UserApi.get(`/get_messages?chatId=${chatId}&&userId=${userId}`)
         return data;
     } catch (error) {
         return false
@@ -225,6 +225,17 @@ export const AddNotification = async (formData) => {
 export const GetNotifications = async (userId) => {
     try {
         const {data} = await UserApi.get(`/get_notifications?userId=${userId}`)
+        return data;
+    } catch (error) {
+        return false
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+export const ReadedMessages = async (userId) => {
+    try {
+        const {data} = await UserApi.get(`/get_readed_messages?userId=${userId}`)
         return data;
     } catch (error) {
         return false

@@ -9,6 +9,10 @@ const messageSchema = new Schema({
     },
     text:{
         type:String
+    },
+    readed:{
+        type:Boolean,
+        default:false
     }
     
 },{ timestamps: true })

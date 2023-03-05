@@ -12,7 +12,6 @@ export async function addBooking(req, res) {
         const bookerVendor = await Vendor.findById(req.query.userId)
         if (vendor) {
             const existVendor = await Booking.findOne({vendorId:req.query.vendorId})
-            console.log(existVendor,"====");
             if (existVendor == null) {
                 const newBooking = new Booking({
                     vendorId:req.query.vendorId,
