@@ -13,7 +13,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 import { auth } from '@/firebase/config';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
-import { City, State } from 'country-state-city';
 
 
 const theme = createTheme();
@@ -32,24 +31,14 @@ export default function SignUpDetails() {
 
   const [ locality, setLocality ] = useState(false)
   const [ localityError, setLocalityError ] = useState('')
-  const [ cityErr, setCityErr ] = useState(false)
+  const [ city, setCity ] = useState(false)
   const [ cityError, setCityError ] = useState('')
-  const [ stateErr, setStateErr ] = useState(false)
+  const [ state, setState ] = useState(false)
   const [ stateError, setStateError ] = useState('')
   const [ phoneNo, setPhoneNo ] = useState(false)
   const [ phoneNoError, setPhoneNoError ] = useState('')
   const [ flag, setFlag ] = useState(false)
-  const [states, setStates] = useState([]);
-  const [cities, setCities] = useState([]);
-  const [state, setState] = useState('');
-  const [city, setCity] = useState('');
-
-  useEffect(() => {
-    setStates(State?.getStatesOfCountry('IN'))
-    if (state != '') {
-      setCities(City.getCitiesOfState(state?.countryCode,state?.isoCode))
-    }
-  }, [states, state]);
+  const [age, setAge] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -57,8 +46,8 @@ export default function SignUpDetails() {
     data = {
       phoneNo: data.get('phoneNo'),
       locality: data.get('locality'),
-      city: city.name,
-      state: state.name,
+      city: data.get('city'),
+      state: data.get('state'),
       ...userDetails
     }
 
@@ -109,11 +98,11 @@ export default function SignUpDetails() {
         setLocalityError('Please enter your Locality')
       }
       if (data.city == '') {
-        setCityErr(true)
+        setCity(true)
         setCityError('Please enter your City')
       }
       if (data.state == '') {
-        setStateErr(true)
+        setState(true)
         setStateError('Please enter your State')
       }
     }
@@ -128,6 +117,10 @@ export default function SignUpDetails() {
     recaptchaVerifier.render();
     return signInWithPhoneNumber(auth, number, recaptchaVerifier)
   }
+
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
 
   return (
     <>
@@ -153,53 +146,6 @@ export default function SignUpDetails() {
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
                         <Grid item xs={12}>
-                          <FormControl sx={{ width:'100%' }}>
-                            <InputLabel id="state">State *</InputLabel>
-                            <Select
-                              labelId="state"
-                              fullWidth
-                              id="state"
-                              value={state}
-                              name='state'
-                              label="State"
-                              onChange={(e)=>setState(e.target.value)}
-                            >
-                              <MenuItem value="">
-                                <em>None</em>
-                              </MenuItem>
-                              {
-                                states.map((state)=>(
-                                  <MenuItem value={state}>{state.name}</MenuItem>
-                                ))
-                              }
-                            </Select>
-                          </FormControl>
-                        </Grid>
-                        <Grid item xs={12}>
-                          <FormControl sx={{ width:'100%' }}>
-                            <InputLabel id="city">City *</InputLabel>
-                            <Select
-                              labelId="city"
-                              fullWidth
-                              id="city"
-                              value={city}
-                              name='city'
-                              label="City"
-                              onChange={(e)=>setCity(e.target.value)}
-                            >
-                              <MenuItem value="">
-                                <em>None</em>
-                              </MenuItem>
-                              {
-                                cities.map((city)=>(
-                                  <MenuItem value={city}>{city.name}</MenuItem>
-                                ))
-                              }
-                              
-                            </Select>
-                          </FormControl>
-                        </Grid>
-                        <Grid item xs={12}>
                             <TextField
                             required
                             fullWidth
@@ -210,6 +156,49 @@ export default function SignUpDetails() {
                             helperText={localityError}
                             autoComplete="family-name"
                             autoFocus
+                            />
+                            {/* <FormControl sx={{ width:'100%' }}>
+                            <InputLabel id="locality">Locality *</InputLabel>
+                            <Select
+                              labelId="locality"
+                              fullWidth
+                              id="locality"
+                              value={age}
+                              name='locality'
+                              label="locality"
+                              onChange={handleChange}
+                            >
+                              <MenuItem value="">
+                                <em>None</em>
+                              </MenuItem>
+                              <MenuItem value={10}>Malappuram</MenuItem>
+                              <MenuItem value={20}>Valapattanam</MenuItem>
+                              <MenuItem value={30}>Madakkara</MenuItem>
+                            </Select>
+                            </FormControl> */}
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                            autoComplete="given-name"
+                            name="city"
+                            required
+                            fullWidth
+                            id="city"
+                            label="City"
+                            error={city}
+                            helperText={cityError}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                            required
+                            fullWidth
+                            id="state"
+                            label="State"
+                            name="state"
+                            autoComplete="family-name"
+                            error={state}
+                            helperText={stateError}
                             />
                         </Grid>
                         <Grid item xs={12}>
