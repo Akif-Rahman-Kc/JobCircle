@@ -15,9 +15,9 @@ app.use(logger('dev'));
 app.use(express.json())
 app.use(cors())
 
-app.use('/', userRouter)
-app.use('/vendor', vendorRouter)
-app.use('/admin', adminRouter)
+app.use('/api/', userRouter)
+app.use('/api/vendor', vendorRouter)
+app.use('/api/admin', adminRouter)
 
 app.use(dbConnection)
 
