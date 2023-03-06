@@ -5,8 +5,10 @@ import { getAllConnectors, SavedVendors } from "@/Apis/userApi";
 import { useEffect, useState } from "react";
 import ErrorIcon from '@mui/icons-material/Error';
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const Connections = ({user, vendor}) => {
+    const router = useRouter()
     const [ connectors, setConnectors ] = useState([])
 
     useEffect(()=>{
@@ -15,8 +17,6 @@ const Connections = ({user, vendor}) => {
             if (resp) {
                 const connectedConnection = resp.connections.filter((obj)=>obj.status == 'connected')
                 setConnectors(connectedConnection)
-            }else{
-                router.push('/404')
             }
         }
         invoke()

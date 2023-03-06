@@ -61,7 +61,6 @@ export default function SignUpDetails() {
       state: state.name,
       ...userDetails
     }
-    console.log(data,"pppp");
 
     if(data.phoneNo && data.locality && data.city && data.state){
       let regPhone =/^[0-9]+$/;
@@ -76,7 +75,6 @@ export default function SignUpDetails() {
           try {
             setUpRecaptcha("+91" + data.phoneNo).then((res)=>{
               setFlag(true)
-              setCities([])
               setOtpConf(res)
               router.push('/auth/otp')
             })

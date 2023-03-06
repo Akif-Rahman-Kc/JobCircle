@@ -16,8 +16,18 @@ a {
 }
 
 .css-11b3ww9-MuiPaper-root-MuiAppBar-root{
-  background-color: #fff;
-  color: #111;
+  background-color: #fff !important;
+  color: #111 !important;
+}
+
+.css-5poeop{
+  background-color: #fff !important;
+  color: #111 !important;
+}
+
+.css-15b8h2o{
+  background-color: #fff !important;
+  color: #111 !important;
 }
 
 .css-xdmu94-MuiContainer-root{
@@ -56,8 +66,18 @@ h1 ,h2, h3, h4, h5, h6, a, p {
   box-shadow: -3px 3px 3px 1px rgb(0 0 0 / 20%), 1px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
 }
 
+.css-13xy2my{
+  background-color: transparent !important;
+  border-radius: 15px !important;
+  box-shadow: -3px 3px 3px 1px rgb(0 0 0 / 20%), 1px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%) !important;
+}
+
 .css-132a6sb-MuiTableCell-root , .css-1bhpkcd-MuiTableCell-root , .css-1dydcym-MuiTableCell-root{
   color: #fff;
+}
+
+.css-78uvs3{
+  color: #fff !important;
 }
 
 .css-1wc848c-MuiFormHelperText-root{

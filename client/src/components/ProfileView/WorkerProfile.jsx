@@ -98,8 +98,6 @@ const WorkerProfile = (props) => {
               setConnected(false)
             }
             
-          }else{
-            router.push('/404')
           }
           const res = await getAllConnectors(props.worker._id)
           if (res) {

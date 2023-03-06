@@ -26,7 +26,7 @@ const Messages = ({user, current}) => {
 
     return ( 
         <>
-        <Grid sx={{ position:'fixed' , boxShadow: 3 , border:'1px solid lightgray', borderRadius:'15px' , height: '39.1vw' , backgroundColor:'#fff' , display: { xs: 'none', sm: 'none', md: 'block' } }} md={3}>
+        <Grid sx={{ position:'fixed' , boxShadow: 3 ,  width: '-webkit-fill-available' , border:'1px solid lightgray', borderRadius:'15px' , height: '39.1vw' , backgroundColor:'#fff' , display: { xs: 'none', sm: 'none', md: 'block' } }} md={3}>
               <Grid sx={{ boxShadow: 3 , m: 3 , p: 1.9 , width: '-webkit-fill-available', height:'50px' , backgroundColor:'lightgray' , borderRadius:'10px' , display:'flex' , justifyContent:'center' }}>
                   <MailIcon />
                 <h3 style={{marginLeft:'6px' , fontWeight:'revert' }}>MESSAGES</h3>

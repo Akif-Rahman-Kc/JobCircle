@@ -32,9 +32,12 @@ const MessageSideOne = ({data, currentUserId, online, refresh}) => {
                         {online && <h5 style={{ fontSize:'8px'  , marginLeft:'5px', color:'green' }}>Online</h5>}
                     </Box>
                 </Box>
+                {unreadMessages ?
                 <Box sx={{ ml:'auto' , display:'flex' , justifyContent:'center' , alignItems:'center' }}>
-                    {unreadMessages === 0 ? '' : <Box sx={{ width:'20px'  ,height:'20px' , borderRadius:'50%' , bgcolor:'#04cb04' , fontSize:'12px' , color:'#fff' , display:'flex' , justifyContent:'center' , alignItems:'center' }}>{unreadMessages}</Box>}
+                    {unreadMessages == 0 ? '' : <Box sx={{ width:'20px'  ,height:'20px' , borderRadius:'50%' , bgcolor:'#04cb04' , fontSize:'12px' , color:'#fff' , display:'flex' , justifyContent:'center' , alignItems:'center' }}>{unreadMessages}</Box>}
                 </Box>
+                : ''
+                }
             </Box>
         </>
      );

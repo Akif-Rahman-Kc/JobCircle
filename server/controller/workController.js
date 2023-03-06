@@ -142,7 +142,6 @@ export async function connectWithPeople(req, res) {
 export async function getAllConnectors(req, res) {
     try {
         let connection = await Connection.findOne({userId:req.query.userId})
-        
         res.json(connection);
     } catch (error) {
         console.log(error)

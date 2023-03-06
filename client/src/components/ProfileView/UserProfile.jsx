@@ -50,8 +50,6 @@ const UserProfile = (props) => {
         } else{
           setConnected(false)
         }
-      }else{
-        router.push('/404')
       }
       const res = await getAllConnectors(props.worker._id)
       if (res) {

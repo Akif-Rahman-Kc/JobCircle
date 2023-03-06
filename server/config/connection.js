@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { set, connect } from "mongoose";
 const router = Router();
 
-const mongoDB = "mongodb://127.0.0.1/JobCircle";
+const mongoDB = "mongodb+srv://Akif:akif1011@cluster0.b6f7vug.mongodb.net/JobCircle";
 set('strictQuery', false);
 connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true }).then(()=>{
     console.log("Connected");

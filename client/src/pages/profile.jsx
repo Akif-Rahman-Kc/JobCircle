@@ -4,7 +4,7 @@ import { Box } from "@mui/system";
 import { Button, Grid, IconButton } from "@mui/material";
 import Notifications from "@/components/Notifications/Notification";
 import Messages from "@/components/Messages/Message";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { userDetails } from "@/redux/user";
@@ -54,7 +54,6 @@ const Profile = () => {
                     router.push('/auth/signin')
                 }
                 }
-                
             } else {
                 router.push('/auth/signin')
             }
@@ -144,9 +143,9 @@ const Profile = () => {
                             alt=""
                           />
                           <h4 style={{ fontWeight: "900" , lineBreak:'auto' }}>
-                            Akif Rahman KC
+                            {user.firstName + ' ' + user.lastName}
                           </h4>
-                          <h6 style={{ lineBreak:'auto' }}>Madakkara, Kannur</h6>
+                          <h6 style={{ lineBreak:'auto' }}>{user.locality}, {user.city}</h6>
                           <a
                           onClick={()=> setFlag(!flag)}
                             style={{
@@ -161,9 +160,9 @@ const Profile = () => {
                           </a>
                         </Box>
                         { flag ? <Box sx={{ mt: 1 , p: 1 , borderRadius:'5px' , border:'4px double gray' , fontFamily: 'monospace' }}>
-                            <h6>Place : <span style={{ color:'blue' , lineBreak:'auto' }}>Kannur</span></h6>
-                            <h6>Phone No : <a href={`tel:${988898989}`}><span style={{ color:'blue' , lineBreak:'auto' }}>588888888888</span></a></h6>
-                            <h6>Email :<a href={8989898998989}><span style={{ color:'blue' , lineBreak:'auto' }}>akif90@gmail.com</span></a></h6>
+                            <h6>Place : <span style={{ color:'blue' , lineBreak:'auto' }}>{user.locality}, {user.city}</span></h6>
+                            <h6>Phone No : <a href={`tel:${user.phoneNo}`}><span style={{ color:'blue' , lineBreak:'auto' }}>{user.phoneNo}</span></a></h6>
+                            <h6>Email :<a href={user.email}><span style={{ color:'blue' , lineBreak:'auto' }}>{user.email}</span></a></h6>
                         </Box> : ''}
                         <Link href='/edit_profile'>
                         <Grid
