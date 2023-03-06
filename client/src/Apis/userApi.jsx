@@ -156,9 +156,9 @@ export const AddChat = async (ids) => {
 
 /////////////////////////////////////////////////////////////////////////////
 
-export const GetUser = async (userId) => {
+export const GetUser = async (userId, chatId) => {
     try {
-        const {data} = await UserApi.get(`/get_user?userId=${userId}`)
+        const {data} = await UserApi.get(`/get_user?userId=${userId}&&chatId=${chatId}`)
         return data;
     } catch (error) {
         return false
@@ -225,17 +225,6 @@ export const AddNotification = async (formData) => {
 export const GetNotifications = async (userId) => {
     try {
         const {data} = await UserApi.get(`/get_notifications?userId=${userId}`)
-        return data;
-    } catch (error) {
-        return false
-    }
-}
-
-/////////////////////////////////////////////////////////////////////////////
-
-export const ReadedMessages = async (userId) => {
-    try {
-        const {data} = await UserApi.get(`/get_readed_messages?userId=${userId}`)
         return data;
     } catch (error) {
         return false

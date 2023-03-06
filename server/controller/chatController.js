@@ -1,4 +1,5 @@
 import Chat from '../model/chatSchema.js'
+import Message from '../model/messageSchema.js'
 import User from '../model/userSchema.js'
 import Vendor from '../model/vendorSchema.js'
 
@@ -54,7 +55,8 @@ export async function getUser(req, res) {
         const user = await User.findById(req.query.userId)
         const vendor = await Vendor.findById(req.query.userId)
         const details = user ? user : vendor
-        res.json(details)
+        const result = await Message.find({chatId:req.query.chatId, senderId:req.query.userId, readed:false})
+        res.json({details,result:result.length })
     } catch (error) {
         console.log(error)
     }

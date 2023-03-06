@@ -196,8 +196,11 @@ useEffect(()=>{
                                     {allPeople.length > 0 ? <hr/> : ''}
                                     {chats.map((chat)=>(
                                         <>
-                                        <IconButton onClick={()=>setCurrentChat(chat)} size='large' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
-                                            <MessageSideOne data={chat} currentUserId={vendor._id} online={checkOnlineStatus(chat)}/>
+                                        <IconButton onClick={()=>{
+                                          setRefresh(!refresh)
+                                          setCurrentChat(chat)
+                                        }} size='large' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
+                                            <MessageSideOne data={chat} currentUserId={vendor._id} online={checkOnlineStatus(chat)} refresh={refresh}/>
                                         </IconButton>
                                         <hr />
                                         </>
@@ -241,10 +244,11 @@ useEffect(()=>{
                                     {chats.map((chat)=>(
                                         <>
                                         <IconButton onClick={()=>{
+                                            setRefresh(!refresh)
                                             setCurrentChat(chat)
                                             setMessageTwo(true)
                                             }} size='large' sx={{p: 1 , color:'blue' , borderRadius:'0' , width:'100% '}}>
-                                            <MessageMobileSideOne data={chat} currentUserId={vendor._id}  online={checkOnlineStatus(chat)} />
+                                            <MessageMobileSideOne data={chat} currentUserId={vendor._id}  online={checkOnlineStatus(chat)} refresh={refresh}/>
                                         </IconButton>
                                         <hr />
                                         </>

@@ -28,9 +28,9 @@ const MessageSideTwo = ({ chat, currentUserId, setSendMessage, recieveMessage, s
             } else {
                 setNotSelectMessage(false)
                 const userId = chat?.members?.find((id) => id !== currentUserId)
-                const response = await GetUser(userId)
+                const response = await GetUser(userId, chat._id)
                 if (response) {
-                    setUserData(response)
+                    setUserData(response.details)
                 }else{
                     router.push('/404')
                 }

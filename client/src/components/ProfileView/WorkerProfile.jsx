@@ -148,11 +148,35 @@ const WorkerProfile = (props) => {
           setLocationErr('')
           setDateErr('')
           handleClose()
-          const res = await Booking(data, props.worker._id, props.user._id)
-          if (res) {
-            setBooked(!booked)
-          }else{
-            router.push('/404')
+          const existDate = bookings.find((obj)=> moment(obj.date).format('ll') == moment(data.date).format('ll'))
+          if (existDate) {
+            toast.error('Already booked this date', {
+              position: "top-right",
+              autoClose: 4000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            })
+          } else {
+            const res = await Booking(data, props.worker._id, props.user._id)
+            if (res) {
+              setBooked(!booked)
+              toast.success('Booking Successfully', {
+                position: "top-right",
+                autoClose: 4000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+              })
+            }else{
+              router.push('/404')
+            }
           }
         } else {
           if (data.location =='') {

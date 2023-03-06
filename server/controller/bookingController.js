@@ -31,9 +31,7 @@ export async function addBooking(req, res) {
                     }
                 }
             })
-
         }
-        
         res.json(true)
     } catch (error) {
         console.log(error)

@@ -11,16 +11,11 @@ const MessageMobileSideOne = ({data, currentUserId, online, refresh}) => {
         async function invoke() {
             
             const userId = data?.members?.find((id) => id !== currentUserId)
-            const response = await GetUser(userId)
+            const response = await GetUser(userId, data._id)
             if (response) {
-                setUserData(response)
+                setUserData(response.details)
+                setUnreadMessages(response.result)
             }else{
-                router.push('/404')
-            }
-            const res = await ReadedMessages(userId)
-            if (res) {
-                setUnreadMessages(res.result)
-            } else{
                 router.push('/404')
             }
         }

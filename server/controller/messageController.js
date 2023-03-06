@@ -35,17 +35,3 @@ export async function getMessages(req, res) {
         console.log(error)
     }
 }
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-export async function getReadedMessages(req, res) {
-    try {
-        const { userId } = req.query
-        console.log("-++++++--");
-        console.log(userId,"---");
-        const result = await Message.find({senderId:userId, readed:false})
-        res.json({result:result.length})
-    } catch (error) {
-        console.log(error)
-    }
-}
