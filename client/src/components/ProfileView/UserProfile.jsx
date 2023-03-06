@@ -1,12 +1,13 @@
 import { Box } from "@mui/system";
 import { Button, Grid, IconButton } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import { AddNotification, ConnectWithPeople, getAllConnectors } from "@/Apis/userApi";
+import { AddChat, AddNotification, ConnectWithPeople, getAllConnectors } from "@/Apis/userApi";
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import { BsFillChatDotsFill } from "react-icons/bs";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import Connections from "../Connections/connection";
 import { AuthContext } from "@/store/Context";
+import { useRouter } from "next/router";
 
 const style = {
     position: "absolute",
@@ -23,13 +24,14 @@ const style = {
   };
 
 const UserProfile = (props) => {
-
+  const router = useRouter()
   const [connected, setConnected] = useState(null);
   const [status, setStatus] = useState("");
   const [refreshPost, setrefreshPost] = useState(false);
   const [ connectionLength, setConnectionLength] = useState()
   const [ openConnectionBox, setOpenConnectionBox] = useState(false)
 
+  const { setCurrentChat, currentChat } = useContext(AuthContext)
   const { sendNotification, setSendNotification } = useContext(AuthContext)
 
   useEffect(() => {
@@ -82,6 +84,20 @@ const UserProfile = (props) => {
       setSendNotification({recieverId:props.worker._id, notification:`${props.user.firstName + ' ' + props.user.lastName} Connected you`})
     }
     setrefreshPost(!refreshPost)
+  }
+
+  const addChat = async ()=>{
+    const ids = {
+        senderId:props.user._id,
+        recieverId:props.worker._id
+    }
+    const res = await AddChat(ids)
+    if (res) {
+      setCurrentChat(res.result)
+      props.vendor ? router.push('/vendor/messages') : router.push('/messages')
+    }else{
+      router.push('/404')
+    }
   }
 
     return ( 
@@ -168,7 +184,7 @@ const UserProfile = (props) => {
                             }
                             <br/>
                             <Box sx={{ mt: 0.2 , width:'113px' , display:'flex' }}>
-                              <IconButton sx={{ backgroundColor:'#1976d2' , color:'#fff' , ":hover":{ backgroundColor:'#1976d2' } , width:'50px' , height:'25px' , borderRadius:'15px' }}>
+                              <IconButton onClick={addChat} sx={{ backgroundColor:'#1976d2' , color:'#fff' , ":hover":{ backgroundColor:'#1976d2' } , width:'50px' , height:'25px' , borderRadius:'15px' }}>
                                 <BsFillChatDotsFill style={{ width:'17px' }}/>
                               </IconButton>
                               <IconButton href={`tel:${props.worker.phoneNo}`} sx={{ ml: 'auto' , backgroundColor:'#1976d2' , color:'#fff' , ":hover":{ backgroundColor:'#1976d2' } , width:'50px' , height:'25px' , borderRadius:'15px' }}>

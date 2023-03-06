@@ -9,7 +9,7 @@ import {
   TextField,
 } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import { AddNotification, Booking, ConnectWithPeople, getAllConnectors, ReportVendor } from "@/Apis/userApi";
+import { AddChat, AddNotification, Booking, ConnectWithPeople, getAllConnectors, ReportVendor } from "@/Apis/userApi";
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import PhotoSizeSelectActualIcon from "@mui/icons-material/PhotoSizeSelectActual";
 import SmartDisplayIcon from "@mui/icons-material/SmartDisplay";
@@ -24,6 +24,7 @@ import BeenhereIcon from '@mui/icons-material/Beenhere';
 import Connections from "../Connections/connection";
 import moment from "moment/moment";
 import { AuthContext } from "@/store/Context";
+import { useRouter } from "next/router";
 
 const style = {
     position: "absolute",
@@ -40,6 +41,7 @@ const style = {
   };
 
 const WorkerProfile = (props) => {
+    const router = useRouter()
     const [ location, setLocation ] = useState(false)
     const [ locationErr, setLocationErr ] = useState('')
     const [ date, setDate ] = useState(false)
@@ -56,6 +58,7 @@ const WorkerProfile = (props) => {
     const [ booked, setBooked] = useState(false)
     const [ bookings, setBookings] = useState([])
 
+    const { setCurrentChat, currentChat } = useContext(AuthContext)
     const { sendNotification, setSendNotification } = useContext(AuthContext)
 
     useEffect(() => {
@@ -221,6 +224,20 @@ const WorkerProfile = (props) => {
         }
       }
 
+      const addChat = async ()=>{
+        const ids = {
+            senderId:props.user._id,
+            recieverId:props.worker._id
+        }
+        const res = await AddChat(ids)
+        if (res) {
+          setCurrentChat(res.result)
+          props.vendor ? router.push('/vendor/messages') : router.push('/messages')
+        }else{
+          router.push('/404')
+        }
+      }
+
     return ( 
         <>
           <ToastContainer/>
@@ -351,7 +368,7 @@ const WorkerProfile = (props) => {
                       <Button onClick={handleOpen} sx={{ boxShadow: 3 , float:'right' , backgroundColor:'#1976d2' , color:'#fff' , fontSize:'10px' , py: 0 , px: 4 , pt: 0.3 , ":hover":{ backgroundColor:'#1976d2' } }}><BeenhereIcon sx={{ width:'16px' , mt: -0.3 , mr: 0.2 }}/>Booking</Button>
                       <br/>
                       <Box sx={{ width:'113px' , display:'flex' }}>
-                        <IconButton sx={{ boxShadow: 3 , backgroundColor:'#1976d2' , color:'#fff' , ":hover":{ backgroundColor:'#1976d2' } , width:'50px' , height:'25px' , borderRadius:'15px' }}>
+                        <IconButton onClick={addChat} sx={{ boxShadow: 3 , backgroundColor:'#1976d2' , color:'#fff' , ":hover":{ backgroundColor:'#1976d2' } , width:'50px' , height:'25px' , borderRadius:'15px' }}>
                           <BsFillChatDotsFill style={{ width:'17px' }}/>
                         </IconButton>
                         <IconButton href={`tel:${props.worker.phoneNo}`} sx={{ boxShadow: 3 , ml: 'auto' , backgroundColor:'#1976d2' , color:'#fff' , ":hover":{ backgroundColor:'#1976d2' } , width:'50px' , height:'25px' , borderRadius:'15px' }}>

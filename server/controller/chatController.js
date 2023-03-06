@@ -13,9 +13,10 @@ export async function createChat(req, res) {
                 members: [req.body.senderId,req.body.recieverId]
             })
             const result = await newChat.save()
-            res.json(result)
+            res.json({status:'success' , result})
         }else{
-            res.json(false)
+            const chaat = await Chat.findOne({members:{$all:[req.body.senderId,req.body.recieverId]}})
+            res.json({status:'failed', result:chaat})
         }
     } catch (error) {
         console.log(error)

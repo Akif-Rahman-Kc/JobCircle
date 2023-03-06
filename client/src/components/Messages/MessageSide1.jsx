@@ -22,14 +22,6 @@ const MessageSideOne = ({data, currentUserId, online, refresh}) => {
         invoke()
     },[data, refresh])
 
-    const AddChat = async ()=>{
-        const ids = {
-            senderId:user._id,
-            recieverId:people._id
-        }
-        const res = await AddChat(ids)
-    }
-
     return ( 
         <>
             <Box sx={{width: '-webkit-fill-available' , color:'#111' , display:'flex'}}>

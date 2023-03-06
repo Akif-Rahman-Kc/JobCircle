@@ -116,7 +116,9 @@ useEffect(()=>{
     }
     const res = await AddChat(ids)
     if (res) {
-        setChats([...chats, res])
+        if (res.status == 'success') {
+          setChats([...chats, res.result])
+        }
     }else{
       router.push('/404')
     }
