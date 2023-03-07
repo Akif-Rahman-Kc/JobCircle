@@ -16,11 +16,11 @@ const MessageMobileSideOne = ({data, currentUserId, online, refresh}) => {
                 setUserData(response.details)
                 setUnreadMessages(response.result)
             }else{
-                router.push('/404')
+                // router.push('/404')
             }
         }
         invoke()
-    },[data, refresh])
+    },[data, refresh, userData])
 
     return ( 
         <>

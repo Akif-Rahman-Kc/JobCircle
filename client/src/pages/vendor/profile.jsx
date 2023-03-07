@@ -106,7 +106,7 @@ export default function VendorProfile() {
         })
         setPosts(response);
       }else{
-        router.push('/404')
+        // router.push('/404')
       }
       const resp = await VendorGetAllConnectors(vendor._id)
       if (resp) {
@@ -166,7 +166,7 @@ export default function VendorProfile() {
           theme: "colored",
         });
       }else{
-        router.push('/404')
+        // router.push('/404')
       }
       
       setImage(null);

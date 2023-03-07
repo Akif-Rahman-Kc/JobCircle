@@ -77,7 +77,7 @@ export default function Workers({workers}) {
     if (res) {
       setRefresh(!refresh)
     }else{
-      router.push('/404')
+      // router.push('/404')
     }
   }
 

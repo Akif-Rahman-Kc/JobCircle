@@ -32,7 +32,7 @@ const MessageSideTwo = ({ chat, currentUserId, setSendMessage, recieveMessage, s
                 if (response) {
                     setUserData(response.details)
                 }else{
-                    router.push('/404')
+                    // router.push('/404')
                 }
             }
         }
@@ -52,7 +52,7 @@ const MessageSideTwo = ({ chat, currentUserId, setSendMessage, recieveMessage, s
             }
         }
         invoke()
-    },[chat, currentUserId])
+    },[chat, currentUserId, messages])
 
     useEffect(()=>{
         async function invoke(){

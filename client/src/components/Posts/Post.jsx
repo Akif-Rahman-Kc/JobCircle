@@ -60,7 +60,7 @@ const Posts = (props) => {
               }
           }
         }else{
-          router.push('/404')
+          // router.push('/404')
         }
         
         props.setrefreshComment(!props.refreshComment)
@@ -79,7 +79,7 @@ const Posts = (props) => {
             setSendNotification({recieverId:vendorId, notification:`${props.user.firstName + ' ' + props.user.lastName} Commented your post`})
             props.setrefreshComment(!props.refreshComment)
         }else{
-          router.push('/404')
+          // router.push('/404')
         }
       }
       }
@@ -97,7 +97,7 @@ const Posts = (props) => {
             if (res) {
                 props.setrefreshComment(!props.refreshComment)
             }else{
-              router.push('/404')
+              // router.push('/404')
             }
           }
         });
@@ -121,7 +121,7 @@ const Posts = (props) => {
             })
           }
         }else{
-          router.push('/404')
+          // router.push('/404')
         }
         
       }
@@ -131,7 +131,7 @@ const Posts = (props) => {
         if (res) {
           props.setrefreshComment(!props.refreshComment)
         }else{
-          router.push('/404')
+          // router.push('/404')
         }
       }
 

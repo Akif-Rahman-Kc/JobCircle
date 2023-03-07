@@ -65,7 +65,7 @@ export default function VendorWorks() {
         if (res) {
             setBookings(res.bookings.bookings)
         }else{
-          router.push('/404')
+          // router.push('/404')
         }
     }
     invoke()
@@ -79,7 +79,7 @@ export default function VendorWorks() {
       setSendNotification({recieverId:response.currentBookerId, notification:`${vendor.firstName + ' ' + vendor.lastName} Accepted your Job request`})
       setRefresh(!refresh)
     }else{
-      router.push('/404')
+      // router.push('/404')
     }
   }
 
@@ -91,7 +91,7 @@ export default function VendorWorks() {
       setSendNotification({recieverId:response.currentBookerId, notification:`${vendor.firstName + ' ' + vendor.lastName} Declined your Job request`})
       setRefresh(!refresh)
     }else{
-      router.push('/404')
+      // router.push('/404')
     }
   }
 

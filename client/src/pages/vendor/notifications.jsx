@@ -60,7 +60,7 @@ const VendorNotifications = () => {
             if (res) {
                 setChats(res)
             }else{
-                router.push('/404')
+                // router.push('/404')
             }
         }
         invoke()
@@ -72,7 +72,7 @@ const VendorNotifications = () => {
             if (res) {
                 setNotifications(res)
             }else{
-                router.push('/404')
+                // router.push('/404')
             }
         }
         invoke()

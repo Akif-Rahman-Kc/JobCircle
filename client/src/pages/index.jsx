@@ -55,7 +55,7 @@ export default function Home() {
       if (res) {
         setPosts(res);
       }else{
-        router.push('/404')
+        // router.push('/404')
       }
     }
     invoke()
@@ -78,7 +78,7 @@ export default function Home() {
           setPosts(res);
         }
       }else{
-        router.push('/404')
+        // router.push('/404')
       }
     }
     invoke();

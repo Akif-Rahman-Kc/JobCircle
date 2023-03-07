@@ -16,11 +16,11 @@ const MessageSideOne = ({data, currentUserId, online, refresh}) => {
                 setUserData(response.details)
                 setUnreadMessages(response.result)
             }else{
-                router.push('/404')
+                // router.push('/404')
             }
         }
         invoke()
-    },[data, refresh])
+    },[data, refresh, userData])
 
     return ( 
         <>
@@ -29,7 +29,7 @@ const MessageSideOne = ({data, currentUserId, online, refresh}) => {
                 <Box sx={{ display:'flex' , justifyContent:'center' , alignItems:'center' }}>
                     <Box sx={{ textAlign:'start' }}>
                         <h5 style={{ fontSize:'13px'  , marginLeft:'5px' }}>{userData?.firstName + ' ' + userData?.lastName}</h5>
-                        {online && <h5 style={{ fontSize:'8px'  , marginLeft:'5px', color:'green' }}>Online</h5>}
+                        {online && <h5 style={{ fontSize:'8px' , marginLeft:'5px', color:'green' }}>Online</h5>}
                     </Box>
                 </Box>
                 {unreadMessages ?

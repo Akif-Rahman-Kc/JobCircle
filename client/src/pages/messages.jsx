@@ -93,7 +93,7 @@ useEffect(()=>{
       if (res) {
         setChats(res)
       }else{
-        router.push('/404')
+        // router.push('/404')
       }
 
     }
@@ -105,7 +105,7 @@ useEffect(()=>{
     if (response) {
       setAllPeople(response.allPeople)
     }else{
-      router.push('/404')
+      // router.push('/404')
     }
   }
 
@@ -120,7 +120,7 @@ useEffect(()=>{
           setChats([...chats, res.result])
         }
     }else{
-      router.push('/404')
+      // router.push('/404')
     }
   }
 
@@ -136,7 +136,7 @@ useEffect(()=>{
       if (res) {
           setNotifications(res)
       }else{
-        router.push('/404')
+        // router.push('/404')
       }
 
       }

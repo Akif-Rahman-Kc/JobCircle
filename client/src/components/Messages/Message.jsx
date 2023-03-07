@@ -18,7 +18,7 @@ const Messages = ({user, current}) => {
       if (res) {
         setChats(res)
       }else{
-        router.push('/404')
+        // router.push('/404')
       }
     }
     invoke()

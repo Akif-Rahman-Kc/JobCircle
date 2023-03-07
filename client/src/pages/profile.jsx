@@ -67,7 +67,7 @@ const Profile = () => {
       if (res) {
         setRefresh(!refresh)
       }else{
-        router.push('/404')
+        // router.push('/404')
       }
     }
 

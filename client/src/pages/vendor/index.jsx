@@ -54,14 +54,14 @@ export default function VendorHome() {
       if (resp) {
         setConnections(resp.connections)
       }else{
-        router.push('/404')
+        // router.push('/404')
       }
       let vendorToken = localStorage.getItem("vendortoken");
       const res = await GetAllPosts(vendorToken);
       if (res) {
         setPosts(res);
       }else{
-        router.push('/404')
+        // router.push('/404')
       }
     }
     invoke();
@@ -84,7 +84,7 @@ export default function VendorHome() {
           setPosts(res);
         }
       }else{
-        router.push('/404')
+        // router.push('/404')
       }
     }
     invoke();

@@ -160,7 +160,7 @@ export default function VendorEditProfile() {
                       });
                     }
                   }else{
-                    router.push('/404')
+                    // router.push('/404')
                   }       
                 } else {
                   setExperiance(true)
@@ -186,7 +186,7 @@ export default function VendorEditProfile() {
           if (res) {
             router.back()
           }else{
-            router.push('/404')
+            // router.push('/404')
           }
       }
 

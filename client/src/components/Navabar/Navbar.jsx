@@ -86,7 +86,7 @@ export default function Navbar() {
     if (response) {
       setAllPeople(response.allPeople)
     }else{
-      router.push('/404')
+      // router.push('/404')
     }
   }
 

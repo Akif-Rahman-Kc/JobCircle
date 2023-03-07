@@ -33,12 +33,12 @@ const MessageMobileSideTwo = ({ chat, currentUserId, setSendMessage, recieveMess
                 if (response) {
                     setUserData(response.details)
                 }else{
-                    router.push('/404')
+                    // router.push('/404')
                 }
             }
         }
         invoke()
-    },[chat, currentUserId])
+    },[chat, currentUserId, messages])
 
     useEffect(()=>{
         async function invoke(){

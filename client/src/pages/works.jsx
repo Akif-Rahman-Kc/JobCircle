@@ -53,7 +53,7 @@ export default function Works() {
       if (res) {
         setJobs(res);
       } else{
-        router.push('/404')
+        // router.push('/404')
       }
     }
     invoke();

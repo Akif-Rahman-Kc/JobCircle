@@ -154,7 +154,7 @@ const EditProfile = () => {
                       });
                     }
                   }else{
-                    router.push('/404')
+                    // router.push('/404')
                   }       
                 
               }else{
@@ -177,7 +177,7 @@ const EditProfile = () => {
           if (res) {
             router.back()
           }else{
-            router.push('/404')
+            // router.push('/404')
           }
       }
 

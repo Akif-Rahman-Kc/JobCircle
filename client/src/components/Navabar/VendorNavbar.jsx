@@ -87,7 +87,7 @@ export default function VendorNavbar() {
       console.log(response.allPeople);
       setAllPeople(response.allPeople)
     }else{
-      router.push('/404')
+      // router.push('/404')
     }
   }
 

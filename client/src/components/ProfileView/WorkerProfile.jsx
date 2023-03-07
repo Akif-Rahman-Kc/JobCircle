@@ -75,7 +75,7 @@ const WorkerProfile = (props) => {
             })
             setPosts(response);
           }else{
-            router.push('/404')
+            // router.push('/404')
           }
         }
         invokePosts();
@@ -129,7 +129,7 @@ const WorkerProfile = (props) => {
           if (res) {
             setBookings(res.bookings?.bookings)
           }else{
-            router.push('/404')
+            // router.push('/404')
           }
         }
         invoke()
@@ -176,7 +176,7 @@ const WorkerProfile = (props) => {
                 theme: "colored",
               })
             }else{
-              router.push('/404')
+              // router.push('/404')
             }
           }
         } else {
@@ -232,7 +232,7 @@ const WorkerProfile = (props) => {
           setCurrentChat(res.result)
           props.vendor ? router.push('/vendor/messages') : router.push('/messages')
         }else{
-          router.push('/404')
+          // router.push('/404')
         }
       }
 

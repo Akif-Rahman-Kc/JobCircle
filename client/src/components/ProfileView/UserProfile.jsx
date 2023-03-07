@@ -94,7 +94,7 @@ const UserProfile = (props) => {
       setCurrentChat(res.result)
       props.vendor ? router.push('/vendor/messages') : router.push('/messages')
     }else{
-      router.push('/404')
+      // router.push('/404')
     }
   }
 

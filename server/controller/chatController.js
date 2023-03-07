@@ -57,7 +57,7 @@ export async function getUser(req, res) {
         const vendor = await Vendor.findById(req.query.userId)
         const details = user ? user : vendor
         const result = await Message.find({chatId:req.query.chatId, senderId:req.query.userId, readed:false})
-        res.json({details,result:result.length })
+        res.json({details,result:result?.length })
     } catch (error) {
         console.log(error)
     }
