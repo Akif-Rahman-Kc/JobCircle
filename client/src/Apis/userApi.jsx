@@ -46,9 +46,9 @@ export const GetJobs = async (Token) => {
 
 /////////////////////////////////////////////////////////////////////////////
 
-export const GetWorkers = async (jobId) => {
+export const GetWorkers = async (jobName) => {
     try {
-        const {data} = await UserApi.get(`/get_workers?jobId=${jobId}`)
+        const {data} = await UserApi.get(`/get_workers?jobName=${jobName}`)
         return data;
     } catch (error) {
         return false

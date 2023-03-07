@@ -13,7 +13,7 @@ export default function App({ Component, pageProps }) {
   const [ otpConf, setOtpConf ] = useState({})
   const [ sendNotification, setSendNotification ] = useState(null)
   const [ recieveNotification, setRecieveNotification ] = useState(null)
-  const [ socket, setSocket ] = useState(io('http://localhost:8800'))
+  const [ socket, setSocket ] = useState(io('https://api.dorlaro.shop'))
   const [ vendorOtpConf, setVendorOtpConf ] = useState({})
   const [ currentChat, setCurrentChat ] = useState(null)
 

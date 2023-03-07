@@ -9,10 +9,9 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { userDetails } from "@/redux/user";
 import EngineeringIcon from "@mui/icons-material/Engineering";
-import { isAuthApi, SavedVendors } from "@/Apis/userApi";
+import { GetWorkers, isAuthApi, SavedVendors } from "@/Apis/userApi";
 import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
 import TurnedInIcon from '@mui/icons-material/TurnedIn';
-import axios from "axios";
 import Link from "next/link";
 import BottomNavbar from "@/components/Navabar/BottomNavbar";
 import Swal from "sweetalert2";
@@ -43,7 +42,7 @@ export default function Workers({workers}) {
               })
             }else{
               dispatch(userDetails(response.userObj))
-            workers.map((obj)=>{
+            workers?.map((obj)=>{
               if (response.userObj.Saved.length == 0) {
                 obj.saved = false
               }else{
@@ -141,7 +140,7 @@ export default function Workers({workers}) {
                   >
                     <Grid>
                       {
-                        workers.map((worker)=>(
+                        workers?.map((worker)=>(
                           <>
                           <Grid sx={{ display:'flex' }}>
                             <IconButton onClick={()=>savedVendor(worker._id)} sx={{ p:0 , my: 2 }}>
@@ -188,10 +187,11 @@ export default function Workers({workers}) {
 export const getServerSideProps = async (context) => {
   try {
     const jobs = context.params.jobs
-    const res =await axios.get(`http://localhost:4000/get_workers?jobName=${jobs}`)
+    const res = await GetWorkers(jobs)
+    // const res =await axios.get(`https://api.dorlaro.shop/api/get_workers?jobName=${jobs}`)
     return{
       props : { 
-        workers:res.data
+        workers:res
       }
     }
   } catch (error) {

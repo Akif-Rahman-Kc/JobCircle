@@ -7,12 +7,12 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import EngineeringIcon from "@mui/icons-material/Engineering";
-import axios from "axios";
 import Link from "next/link";
 import { VendorisAuthApi } from "@/Apis/vendorApi";
 import { vendorDetails } from "@/redux/vendor";
 import VendorNavbar from "@/components/Navabar/VendorNavbar";
 import VendorBottomNavbar from "@/components/Navabar/VendorBottomNavbar";
+import { GetWorkers } from "@/Apis/userApi";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -110,7 +110,7 @@ export default function VendorWorkers({workers}) {
                   >
                     <Grid>
                       {
-                        workers.map((worker)=>(
+                        workers?.map((worker)=>(
                         
                           <Link href={`/vendor/worker_profile/${worker._id}`}>
                             { vendor._id == worker._id ? '' :
@@ -149,10 +149,11 @@ export default function VendorWorkers({workers}) {
 export const getServerSideProps = async (context) => {
   try {
     const jobs = context.params.jobs
-    const res =await axios.get(`http://localhost:4000/get_workers?jobName=${jobs}`)
+    const res = await GetWorkers(jobs)
+    // const res =await axios.get(`https://api.dorlaro.shop/api/get_workers?jobName=${jobs}`)
     return{
       props : { 
-        workers:res.data
+        workers:res
       }
     }
   } catch (error) {
