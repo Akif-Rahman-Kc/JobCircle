@@ -57,6 +57,17 @@ export const GetWorkers = async (jobName) => {
 
 /////////////////////////////////////////////////////////////////////////////
 
+export const GetWorker = async (vendorId) => {
+    try {
+        const {data} = await UserApi.get(`/get_worker?vendorId=${vendorId}`)
+        return data;
+    } catch (error) {
+        return false
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
 export const ProfileEdit = async (userId , formData, Token) => {
     try {
         const {data} = await UserApi.put(`/edit_profile?userId=${userId}`, formData , {headers:{"usertoken":Token}})

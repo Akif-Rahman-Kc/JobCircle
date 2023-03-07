@@ -17,7 +17,7 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { userDetails } from "@/redux/user";
 import EngineeringIcon from "@mui/icons-material/Engineering";
-import { GetJobs, GetWorkers, isAuthApi } from "@/Apis/userApi";
+import { GetJobs, GetWorker, GetWorkers, isAuthApi } from "@/Apis/userApi";
 import MailIcon from '@mui/icons-material/Mail';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
@@ -137,18 +137,18 @@ export default function Worker_Profile({worker, current}) {
 export const getServerSideProps = async (context) => {
   try {
     const workerId = context.params.v_profile
-    const res =await axios.get(`http://localhost:4000/get_worker?vendorId=${workerId}`)
-    if (res.data.vendor) {
+    const res = await GetWorker(workerId)
+    if (res.vendor) {
       return{
         props : { 
-          worker:res.data.vendor,
+          worker:res.vendor,
           current:'vendor'
         }
       }
     } else{
       return{
         props : { 
-          worker:res.data.user,
+          worker:res.user,
           current:'user'
         }
       }

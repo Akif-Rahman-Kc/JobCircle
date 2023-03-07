@@ -8,13 +8,13 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import EngineeringIcon from "@mui/icons-material/Engineering";
-import axios from "axios";
 import WorkerProfile from "@/components/ProfileView/WorkerProfile";
 import { VendorisAuthApi } from "@/Apis/vendorApi";
 import { vendorDetails } from "@/redux/vendor";
 import UserProfile from "@/components/ProfileView/UserProfile";
 import VendorBottomNavbar from "@/components/Navabar/VendorBottomNavbar";
 import Swal from "sweetalert2";
+import { GetWorker } from "@/Apis/userApi";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -130,18 +130,18 @@ export default function VendorWorker_Profile({worker, current}) {
 export const getServerSideProps = async (context) => {
   try {
     const workerId = context.params.v_profile
-    const res =await axios.get(`http://localhost:4000/get_worker?vendorId=${workerId}`)
-    if (res.data.vendor) {
+    const res = await GetWorker(workerId)
+    if (res.vendor) {
       return{
         props : { 
-          worker:res.data.vendor,
+          worker:res.vendor,
           current:'vendor'
         }
       }
     } else{
       return{
         props : { 
-          worker:res.data.user,
+          worker:res.user,
           current:'user'
         }
       }
