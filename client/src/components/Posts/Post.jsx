@@ -54,8 +54,10 @@ const Posts = (props) => {
         const res = await LikedPost(postId, props.user._id)
         if(res){
           if (res.status === "success") {
-              const res = await AddNotification({senderId:props.user._id, recieverId:vendorId, content:`${props.user.firstName + ' ' + props.user.lastName} Liked your post`})
-              setSendNotification({recieverId:vendorId, notification:`${props.user.firstName + ' ' + props.user.lastName} Liked your post`})
+              if (props.user._id != vendorId) {
+                const res = await AddNotification({senderId:props.user._id, recieverId:vendorId, content:`${props.user.firstName + ' ' + props.user.lastName} Liked your post`})
+                setSendNotification({recieverId:vendorId, notification:`${props.user.firstName + ' ' + props.user.lastName} Liked your post`})
+              }
           }
         }else{
           router.push('/404')

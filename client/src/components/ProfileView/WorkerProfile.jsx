@@ -209,7 +209,7 @@ const WorkerProfile = (props) => {
         const res = await ReportVendor(msg, vendorId, props.user._id)
         setOpenReportBox(null)
         if (res.status == 'failed') {
-          toast.error('Your already reported this Post!', {
+          toast.error('Your already reported this Vendor!', {
             position: "top-right",
             autoClose: 4000,
             hideProgressBar: false,

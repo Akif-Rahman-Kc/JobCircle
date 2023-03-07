@@ -6,12 +6,6 @@ import { useEffect } from "react";
 const NotFound = () => {
     const router = useRouter();
 
-    useEffect(()=>{
-        setTimeout(() => { 
-            router.back()       
-        }, 5000);
-    },[])
-
     return (
         <>
         <Box sx={{ width:'100%' , height:'100vh' , display:'flex' , justifyContent:'center' , alignItems:'center' }}>

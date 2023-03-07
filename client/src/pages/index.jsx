@@ -142,7 +142,7 @@ export default function Home() {
                       m: 2,
                     }}
                   >
-                    {posts.map((post)=>(
+                    {posts?.map((post)=>(
                       <Posts post = {post} setrefreshComment={setrefreshComment} refreshComment={refreshComment} user={user} vendor={false}/>
                     ))}
                   </Box>
