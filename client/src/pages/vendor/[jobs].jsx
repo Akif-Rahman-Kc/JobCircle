@@ -150,7 +150,6 @@ export const getServerSideProps = async (context) => {
   try {
     const jobs = context.params.jobs
     const res = await GetWorkers(jobs)
-    // const res =await axios.get(`https://api.dorlaro.shop/api/get_workers?jobName=${jobs}`)
     return{
       props : { 
         workers:res
