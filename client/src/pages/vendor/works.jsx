@@ -71,7 +71,7 @@ export default function VendorWorks() {
             <Grid md={3}>
               <Notifications user={vendor} />
             </Grid>
-            <Grid sm={12} md={5}>
+            <Grid sm={12} md={5} width={'inherit'}>
               <Grid sm={12} md={12}>
                 <Grid
                   md={4.74}
@@ -118,7 +118,7 @@ export default function VendorWorks() {
                       m: 2,
                     }}
                   >
-                    {jobs.map((job)=>(
+                    {jobs?.map((job)=>(
                       <>
                       <Link href={`/vendor/${job.jobName}`}><Button key={job._id} className="workerList" sx={{ p: 1.5 , m: 1 }}>{job.jobName}</Button></Link>
                       </>

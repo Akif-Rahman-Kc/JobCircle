@@ -194,7 +194,7 @@ const EditProfile = () => {
             <Grid md={3}>
               <Notifications user={user} />
             </Grid>
-            <Grid sm={12} md={5}>
+            <Grid sm={12} md={5} width={'inherit'}>
               <Grid sm={12} md={12}>
                 <Grid
                   md={4.74}
