@@ -149,7 +149,7 @@ const WorkerProfile = (props) => {
           setLocationErr('')
           setDateErr('')
           handleClose()
-          const existDate = bookings.find((obj)=> moment(obj.date).format('ll') == moment(data.date).format('ll'))
+          const existDate = bookings?.find((obj)=> moment(obj.date).format('ll') == moment(data.date).format('ll'))
           if (existDate) {
             toast.error('Already booked this date', {
               position: "top-right",
